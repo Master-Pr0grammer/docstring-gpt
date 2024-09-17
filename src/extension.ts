@@ -9,6 +9,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "docstring-gpt" is now active!');
+	vscode.window.showInformationMessage('DEBUG: Docstring-GPT Now Active!');
+	vscode.comments.createCommentController('5', 'I really dont know');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
