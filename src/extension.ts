@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 				
 				//create replacement string
 				const temp_docstring = docstring.replaceAll('"""', '').replaceAll('\n','\n'+indent); // Get rid of generated comment tags & fix tabs
-				const new_text = text_arr[0] + '\n' + indent + '"""' + temp_docstring + '"""\n' + text_arr.slice(1, text_arr.length);
+				const new_text = text_arr[0] + '\n' + indent + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join('\n');
 				const selection = editor.selection;
 				
 				//replace current text with updated text

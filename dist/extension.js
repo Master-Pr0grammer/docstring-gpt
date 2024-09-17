@@ -13669,7 +13669,7 @@ function activate(context) {
       for await (const chunk of generator) {
         docstring += chunk.choices[0].delta.content;
         const temp_docstring = docstring.replaceAll('"""', "").replaceAll("\n", "\n" + indent);
-        const new_text = text_arr[0] + "\n" + indent + '"""' + temp_docstring + '"""\n' + text_arr.slice(1, text_arr.length);
+        const new_text = text_arr[0] + "\n" + indent + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join("\n");
         const selection2 = editor.selection;
         editor.edit((editBuilder) => {
           editBuilder.replace(selection2, new_text);
