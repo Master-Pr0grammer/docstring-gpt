@@ -9,3 +9,6 @@ dist/**
 
 # Ignore local environment files (if any)
 .env
+dist/extension.js
+dist/extension.js.map
+node_modules/.package-lock.json
