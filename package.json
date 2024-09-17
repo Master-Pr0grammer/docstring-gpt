@@ -16,8 +16,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "docstring-gpt.helloWorld",
-        "title": "Hello World"
+        "command": "docstring-gpt.generateDocstring",
+        "title": "Generate Docstring"
       }
     ]
   },

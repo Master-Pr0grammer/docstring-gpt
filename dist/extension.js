@@ -13645,23 +13645,36 @@ var apikey = "ollama";
 var model = "llama3.1";
 var openai = new openai_default({ apiKey: apikey, baseURL: endpoint });
 function activate(context) {
-  console.log('Congratulations, your extension "docstring-gpt" is now active!');
-  vscode.window.showInformationMessage("DEBUG: Docstring-GPT Now Active!");
-  const disposable2 = vscode.commands.registerCommand("docstring-gpt.helloWorld", async () => {
+  console.log("docstring-gpt is now active!");
+  vscode.window.showInformationMessage("Docstring-GPT Now Active!");
+  const disposable2 = vscode.commands.registerCommand("docstring-gpt.generateDocstring", async () => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
+      const { insertSpaces, tabSize } = editor.options;
+      var indent = "";
+      if (typeof insertSpaces === "boolean") {
+        const indentStyle = insertSpaces ? "Spaces" : "Tabs";
+        if (indentStyle === "Tabs") {
+          indent = "	";
+        } else if (typeof tabSize === "number") {
+          indent = " ".repeat(tabSize);
+        }
+      }
       const document = editor.document;
       const selection = editor.selection;
       const text = document.getText(selection);
-      vscode.window.showInformationMessage("Generating Docstring...");
-      const temp = await api_call(text);
-      const docstring = temp.replace("\n", "\n	");
       const text_arr = text.split("\n");
-      const new_text = text_arr[0] + '\n    """' + docstring + '"""\n' + text_arr.slice(1, text_arr.length);
-      vscode.window.showInformationMessage("Done!");
-      editor.edit((editBuilder) => {
-        editBuilder.replace(selection, new_text);
-      });
+      const generator = await api_call(text);
+      var docstring = "";
+      for await (const chunk of generator) {
+        docstring += chunk.choices[0].delta.content;
+        const temp_docstring = docstring.replaceAll('"""', "").replaceAll("\n", "\n" + indent);
+        const new_text = text_arr[0] + "\n" + indent + '"""' + temp_docstring + '"""\n' + text_arr.slice(1, text_arr.length);
+        const selection2 = editor.selection;
+        editor.edit((editBuilder) => {
+          editBuilder.replace(selection2, new_text);
+        });
+      }
     }
   });
   context.subscriptions.push(disposable2);
@@ -13671,15 +13684,12 @@ async function api_call(function_definition) {
     model,
     messages: [
       { "role": "system", "content": "You are a expert docstring generator. You are given a function, and tasked with generating a docstring for the function. Only output the content of the docstring, nothing else." },
-      //{"role":"system", "content":"you are a helpfull assistant"},
       { "role": "user", "content": function_definition }
-    ]
+    ],
+    stream: true,
+    temperature: 0
   });
-  if (completion.choices[0].message.content !== null) {
-    return completion.choices[0].message.content;
-  } else {
-    return "Error occured with generation.";
-  }
+  return completion;
 }
 function deactivate() {
 }
