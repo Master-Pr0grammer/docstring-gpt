@@ -40,6 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// Get the word within the selection
 			var text = document.getText(selection);
 			const text_arr = text.split('\n');
+			const num_indent = text_arr[1].split(indent).length - 1;
 
 			const generator = await api_call(text);
 			var docstring = "";
@@ -55,8 +56,8 @@ export function activate(context: vscode.ExtensionContext) {
             	const selection_range = new vscode.Range(selection.start, newEndPosition);
 				
 				//create replacement string
-				const temp_docstring = docstring.replaceAll('"""', '').replaceAll('\n','\n'+indent); // Get rid of generated comment tags & fix tabs
-				const new_text = text_arr[0] + '\n' + indent + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join('\n');
+				const temp_docstring = docstring.replaceAll('"""', '').replaceAll('\n','\n'+indent.repeat(num_indent)); // Get rid of generated comment tags & fix tabs
+				const new_text = text_arr[0] + '\n' + indent.repeat(num_indent) + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join('\n');
 				
 				//replace current text with updated text
 				editor.edit(editBuilder => {
