@@ -2,6 +2,7 @@
   "name": "docstring-gpt",
   "displayName": "Docstring-GPT",
   "description": "An extension to automaticially generate docstrings for functions and classes with AI.",
+  "icon": "images/icon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.93.0"
@@ -17,7 +18,37 @@
     "commands": [
       {
         "command": "docstring-gpt.generateDocstring",
-        "title": "Generate Docstring"
+        "title": "Generate Docstring",
+        "category": "Generate",
+        "icon": {
+          "light": "images/light_button.png",
+          "dark": "images/dark_button.png"
+        }
+      }
+    ],
+    "keybindings":[
+      {
+        "command": "docstring-gpt.generateDocstring",
+        "key": "ctrl+shift+.",
+        "mac": "cmd+shift+.",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "docstring-gpt.generateDocstring",
+          "group": "navigation"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "chat-ollama.ollama",
+        "name": "ollama",
+        "fullName": "Ollama",
+        "description": "Hi! What can I help you with?",
+        "isSticky": true
       }
     ]
   },
@@ -49,6 +80,6 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "openai": "^4.61.1"
+    "openai": "^4.0.0"
   }
 }
