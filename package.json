@@ -26,6 +26,27 @@
         }
       }
     ],
+    "chatParticipants": [
+      {
+        "id": "chat-sample.llm",
+        "name": "llm",
+        "fullName": "Language Model",
+        "description": "Ask me anything related to your project or code",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "ask",
+            "description": "Ask the model a question"
+          },
+          {
+            "name": "clear",
+            "description": "Clear the chat history"
+          }
+        ]
+      }
+    ],
+
+
     "keybindings":[
       {
         "command": "docstring-gpt.generateDocstring",
@@ -38,19 +59,35 @@
       "editor/title": [
         {
           "command": "docstring-gpt.generateDocstring",
-          "group": "navigation"
+          "group": "navigation",
+          "when": "resourceLangId == python"
         }
       ]
     },
-    "chatParticipants": [
-      {
-        "id": "chat-ollama.ollama",
-        "name": "ollama",
-        "fullName": "Ollama",
-        "description": "Hi! What can I help you with?",
-        "isSticky": true
+    "configuration": {
+      "title": "Docstring-GPT",
+      "properties": {
+        "Docstring-GPT.systemPrompt": {
+          "title": "System1 Prompt",
+          "type": "string",
+          "default": "You are a expert docstring generator. You are given a function, and tasked with generating a docstring for the function. Only output the content of the docstring, nothing else. Generate the docstrings according to the following specification:",
+          "markdownDescription": "Specifies the system prompt for Docstring-GPT. It is recomended to keep the default setting, with minor modifications."
+        },
+        "Docstring-GPT.documentationSpecification": {
+          "title": "Docstring1 Specification",
+          "type": "string",
+          "default": "Standard VS-Code docstring formatting. Make sure no line is too long.",
+          "markdownDescription": "Specifies the specification for the docstrings to follow. Default is none."
+        },
+        
+        "Docstring-GPT.advanced.temperature": {
+          "title": "LLM Temperature",
+          "type": "number",
+          "default": 1.0,
+          "markdownDescription": "Temperature for LLM. The lower the temperature, the less random and better the responses. The higher the temperature, the higher the randomness, and the worse the responses. 0 gives optimal responses, giving the same response every time, and 2 is the recomended temperature upper limit."
+        }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

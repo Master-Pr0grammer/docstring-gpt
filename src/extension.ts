@@ -74,11 +74,19 @@ export function activate(context: vscode.ExtensionContext) {
 
 //Make api call
 async function api_call(function_definition: string): Promise<AsyncIterable<any>>{
+	const config = vscode.workspace.getConfiguration('Docstring-GPT');
+	const system_prompt:string = String(config.get('systemPrompt'));
+	const format_specs:string = String(config.get("documentationSpecification"));
+	const temperature:Number = Number(config.get('advanced.temperature'));
+
+	console.log('System Prompt:', system_prompt);
+	console.log('Documentation Specification:', format_specs);
+    console.log('Temperature:', temperature);
 
 	const completion = await openai.chat.completions.create({
 		model: model,
 		messages: [
-			{"role": "system", "content": "You are a expert docstring generator. You are given a function, and tasked with generating a docstring for the function. Only output the content of the docstring, nothing else."},
+			{"role": "system", "content": system_prompt + "\n\n" + format_specs},
 			{"role":"user", "content":function_definition}
 		],
 		stream:true,
