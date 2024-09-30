@@ -26,26 +26,6 @@
         }
       }
     ],
-    "chatParticipants": [
-      {
-        "id": "chat-sample.llm",
-        "name": "llm",
-        "fullName": "Language Model",
-        "description": "Ask me anything related to your project or code",
-        "isSticky": true,
-        "commands": [
-          {
-            "name": "ask",
-            "description": "Ask the model a question"
-          },
-          {
-            "name": "clear",
-            "description": "Clear the chat history"
-          }
-        ]
-      }
-    ],
-
 
     "keybindings":[
       {
