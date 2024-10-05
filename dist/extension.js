@@ -5,6 +5,9 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -29,1210 +32,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// node_modules/ms/index.js
-var require_ms = __commonJS({
-  "node_modules/ms/index.js"(exports2, module2) {
-    var s2 = 1e3;
-    var m2 = s2 * 60;
-    var h2 = m2 * 60;
-    var d2 = h2 * 24;
-    var w2 = d2 * 7;
-    var y2 = d2 * 365.25;
-    module2.exports = function(val, options) {
-      options = options || {};
-      var type = typeof val;
-      if (type === "string" && val.length > 0) {
-        return parse(val);
-      } else if (type === "number" && isFinite(val)) {
-        return options.long ? fmtLong(val) : fmtShort(val);
-      }
-      throw new Error(
-        "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
-      );
-    };
-    function parse(str) {
-      str = String(str);
-      if (str.length > 100) {
-        return;
-      }
-      var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-        str
-      );
-      if (!match) {
-        return;
-      }
-      var n2 = parseFloat(match[1]);
-      var type = (match[2] || "ms").toLowerCase();
-      switch (type) {
-        case "years":
-        case "year":
-        case "yrs":
-        case "yr":
-        case "y":
-          return n2 * y2;
-        case "weeks":
-        case "week":
-        case "w":
-          return n2 * w2;
-        case "days":
-        case "day":
-        case "d":
-          return n2 * d2;
-        case "hours":
-        case "hour":
-        case "hrs":
-        case "hr":
-        case "h":
-          return n2 * h2;
-        case "minutes":
-        case "minute":
-        case "mins":
-        case "min":
-        case "m":
-          return n2 * m2;
-        case "seconds":
-        case "second":
-        case "secs":
-        case "sec":
-        case "s":
-          return n2 * s2;
-        case "milliseconds":
-        case "millisecond":
-        case "msecs":
-        case "msec":
-        case "ms":
-          return n2;
-        default:
-          return void 0;
-      }
-    }
-    function fmtShort(ms) {
-      var msAbs = Math.abs(ms);
-      if (msAbs >= d2) {
-        return Math.round(ms / d2) + "d";
-      }
-      if (msAbs >= h2) {
-        return Math.round(ms / h2) + "h";
-      }
-      if (msAbs >= m2) {
-        return Math.round(ms / m2) + "m";
-      }
-      if (msAbs >= s2) {
-        return Math.round(ms / s2) + "s";
-      }
-      return ms + "ms";
-    }
-    function fmtLong(ms) {
-      var msAbs = Math.abs(ms);
-      if (msAbs >= d2) {
-        return plural(ms, msAbs, d2, "day");
-      }
-      if (msAbs >= h2) {
-        return plural(ms, msAbs, h2, "hour");
-      }
-      if (msAbs >= m2) {
-        return plural(ms, msAbs, m2, "minute");
-      }
-      if (msAbs >= s2) {
-        return plural(ms, msAbs, s2, "second");
-      }
-      return ms + " ms";
-    }
-    function plural(ms, msAbs, n2, name) {
-      var isPlural = msAbs >= n2 * 1.5;
-      return Math.round(ms / n2) + " " + name + (isPlural ? "s" : "");
-    }
-  }
-});
-
-// node_modules/humanize-ms/index.js
-var require_humanize_ms = __commonJS({
-  "node_modules/humanize-ms/index.js"(exports2, module2) {
-    "use strict";
-    var util = require("util");
-    var ms = require_ms();
-    module2.exports = function(t2) {
-      if (typeof t2 === "number") return t2;
-      var r2 = ms(t2);
-      if (r2 === void 0) {
-        var err = new Error(util.format("humanize-ms(%j) result undefined", t2));
-        console.warn(err.stack);
-      }
-      return r2;
-    };
-  }
-});
-
-// node_modules/agentkeepalive/lib/constants.js
-var require_constants = __commonJS({
-  "node_modules/agentkeepalive/lib/constants.js"(exports2, module2) {
-    "use strict";
-    module2.exports = {
-      // agent
-      CURRENT_ID: Symbol("agentkeepalive#currentId"),
-      CREATE_ID: Symbol("agentkeepalive#createId"),
-      INIT_SOCKET: Symbol("agentkeepalive#initSocket"),
-      CREATE_HTTPS_CONNECTION: Symbol("agentkeepalive#createHttpsConnection"),
-      // socket
-      SOCKET_CREATED_TIME: Symbol("agentkeepalive#socketCreatedTime"),
-      SOCKET_NAME: Symbol("agentkeepalive#socketName"),
-      SOCKET_REQUEST_COUNT: Symbol("agentkeepalive#socketRequestCount"),
-      SOCKET_REQUEST_FINISHED_COUNT: Symbol("agentkeepalive#socketRequestFinishedCount")
-    };
-  }
-});
-
-// node_modules/agentkeepalive/lib/agent.js
-var require_agent = __commonJS({
-  "node_modules/agentkeepalive/lib/agent.js"(exports2, module2) {
-    "use strict";
-    var OriginalAgent = require("http").Agent;
-    var ms = require_humanize_ms();
-    var debug2 = require("util").debuglog("agentkeepalive");
-    var {
-      INIT_SOCKET,
-      CURRENT_ID,
-      CREATE_ID,
-      SOCKET_CREATED_TIME,
-      SOCKET_NAME,
-      SOCKET_REQUEST_COUNT,
-      SOCKET_REQUEST_FINISHED_COUNT
-    } = require_constants();
-    var defaultTimeoutListenerCount = 1;
-    var majorVersion = parseInt(process.version.split(".", 1)[0].substring(1));
-    if (majorVersion >= 11 && majorVersion <= 12) {
-      defaultTimeoutListenerCount = 2;
-    } else if (majorVersion >= 13) {
-      defaultTimeoutListenerCount = 3;
-    }
-    function deprecate2(message) {
-      console.log("[agentkeepalive:deprecated] %s", message);
-    }
-    var Agent = class extends OriginalAgent {
-      constructor(options) {
-        options = options || {};
-        options.keepAlive = options.keepAlive !== false;
-        if (options.freeSocketTimeout === void 0) {
-          options.freeSocketTimeout = 4e3;
-        }
-        if (options.keepAliveTimeout) {
-          deprecate2("options.keepAliveTimeout is deprecated, please use options.freeSocketTimeout instead");
-          options.freeSocketTimeout = options.keepAliveTimeout;
-          delete options.keepAliveTimeout;
-        }
-        if (options.freeSocketKeepAliveTimeout) {
-          deprecate2("options.freeSocketKeepAliveTimeout is deprecated, please use options.freeSocketTimeout instead");
-          options.freeSocketTimeout = options.freeSocketKeepAliveTimeout;
-          delete options.freeSocketKeepAliveTimeout;
-        }
-        if (options.timeout === void 0) {
-          options.timeout = Math.max(options.freeSocketTimeout * 2, 8e3);
-        }
-        options.timeout = ms(options.timeout);
-        options.freeSocketTimeout = ms(options.freeSocketTimeout);
-        options.socketActiveTTL = options.socketActiveTTL ? ms(options.socketActiveTTL) : 0;
-        super(options);
-        this[CURRENT_ID] = 0;
-        this.createSocketCount = 0;
-        this.createSocketCountLastCheck = 0;
-        this.createSocketErrorCount = 0;
-        this.createSocketErrorCountLastCheck = 0;
-        this.closeSocketCount = 0;
-        this.closeSocketCountLastCheck = 0;
-        this.errorSocketCount = 0;
-        this.errorSocketCountLastCheck = 0;
-        this.requestCount = 0;
-        this.requestCountLastCheck = 0;
-        this.timeoutSocketCount = 0;
-        this.timeoutSocketCountLastCheck = 0;
-        this.on("free", (socket) => {
-          const timeout = this.calcSocketTimeout(socket);
-          if (timeout > 0 && socket.timeout !== timeout) {
-            socket.setTimeout(timeout);
-          }
-        });
-      }
-      get freeSocketKeepAliveTimeout() {
-        deprecate2("agent.freeSocketKeepAliveTimeout is deprecated, please use agent.options.freeSocketTimeout instead");
-        return this.options.freeSocketTimeout;
-      }
-      get timeout() {
-        deprecate2("agent.timeout is deprecated, please use agent.options.timeout instead");
-        return this.options.timeout;
-      }
-      get socketActiveTTL() {
-        deprecate2("agent.socketActiveTTL is deprecated, please use agent.options.socketActiveTTL instead");
-        return this.options.socketActiveTTL;
-      }
-      calcSocketTimeout(socket) {
-        let freeSocketTimeout = this.options.freeSocketTimeout;
-        const socketActiveTTL = this.options.socketActiveTTL;
-        if (socketActiveTTL) {
-          const aliveTime = Date.now() - socket[SOCKET_CREATED_TIME];
-          const diff = socketActiveTTL - aliveTime;
-          if (diff <= 0) {
-            return diff;
-          }
-          if (freeSocketTimeout && diff < freeSocketTimeout) {
-            freeSocketTimeout = diff;
-          }
-        }
-        if (freeSocketTimeout) {
-          const customFreeSocketTimeout = socket.freeSocketTimeout || socket.freeSocketKeepAliveTimeout;
-          return customFreeSocketTimeout || freeSocketTimeout;
-        }
-      }
-      keepSocketAlive(socket) {
-        const result = super.keepSocketAlive(socket);
-        if (!result) return result;
-        const customTimeout = this.calcSocketTimeout(socket);
-        if (typeof customTimeout === "undefined") {
-          return true;
-        }
-        if (customTimeout <= 0) {
-          debug2(
-            "%s(requests: %s, finished: %s) free but need to destroy by TTL, request count %s, diff is %s",
-            socket[SOCKET_NAME],
-            socket[SOCKET_REQUEST_COUNT],
-            socket[SOCKET_REQUEST_FINISHED_COUNT],
-            customTimeout
-          );
-          return false;
-        }
-        if (socket.timeout !== customTimeout) {
-          socket.setTimeout(customTimeout);
-        }
-        return true;
-      }
-      // only call on addRequest
-      reuseSocket(...args) {
-        super.reuseSocket(...args);
-        const socket = args[0];
-        const req = args[1];
-        req.reusedSocket = true;
-        const agentTimeout = this.options.timeout;
-        if (getSocketTimeout(socket) !== agentTimeout) {
-          socket.setTimeout(agentTimeout);
-          debug2("%s reset timeout to %sms", socket[SOCKET_NAME], agentTimeout);
-        }
-        socket[SOCKET_REQUEST_COUNT]++;
-        debug2(
-          "%s(requests: %s, finished: %s) reuse on addRequest, timeout %sms",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT],
-          getSocketTimeout(socket)
-        );
-      }
-      [CREATE_ID]() {
-        const id = this[CURRENT_ID]++;
-        if (this[CURRENT_ID] === Number.MAX_SAFE_INTEGER) this[CURRENT_ID] = 0;
-        return id;
-      }
-      [INIT_SOCKET](socket, options) {
-        if (options.timeout) {
-          const timeout = getSocketTimeout(socket);
-          if (!timeout) {
-            socket.setTimeout(options.timeout);
-          }
-        }
-        if (this.options.keepAlive) {
-          socket.setNoDelay(true);
-        }
-        this.createSocketCount++;
-        if (this.options.socketActiveTTL) {
-          socket[SOCKET_CREATED_TIME] = Date.now();
-        }
-        socket[SOCKET_NAME] = `sock[${this[CREATE_ID]()}#${options._agentKey}]`.split("-----BEGIN", 1)[0];
-        socket[SOCKET_REQUEST_COUNT] = 1;
-        socket[SOCKET_REQUEST_FINISHED_COUNT] = 0;
-        installListeners(this, socket, options);
-      }
-      createConnection(options, oncreate) {
-        let called = false;
-        const onNewCreate = (err, socket) => {
-          if (called) return;
-          called = true;
-          if (err) {
-            this.createSocketErrorCount++;
-            return oncreate(err);
-          }
-          this[INIT_SOCKET](socket, options);
-          oncreate(err, socket);
-        };
-        const newSocket = super.createConnection(options, onNewCreate);
-        if (newSocket) onNewCreate(null, newSocket);
-        return newSocket;
-      }
-      get statusChanged() {
-        const changed = this.createSocketCount !== this.createSocketCountLastCheck || this.createSocketErrorCount !== this.createSocketErrorCountLastCheck || this.closeSocketCount !== this.closeSocketCountLastCheck || this.errorSocketCount !== this.errorSocketCountLastCheck || this.timeoutSocketCount !== this.timeoutSocketCountLastCheck || this.requestCount !== this.requestCountLastCheck;
-        if (changed) {
-          this.createSocketCountLastCheck = this.createSocketCount;
-          this.createSocketErrorCountLastCheck = this.createSocketErrorCount;
-          this.closeSocketCountLastCheck = this.closeSocketCount;
-          this.errorSocketCountLastCheck = this.errorSocketCount;
-          this.timeoutSocketCountLastCheck = this.timeoutSocketCount;
-          this.requestCountLastCheck = this.requestCount;
-        }
-        return changed;
-      }
-      getCurrentStatus() {
-        return {
-          createSocketCount: this.createSocketCount,
-          createSocketErrorCount: this.createSocketErrorCount,
-          closeSocketCount: this.closeSocketCount,
-          errorSocketCount: this.errorSocketCount,
-          timeoutSocketCount: this.timeoutSocketCount,
-          requestCount: this.requestCount,
-          freeSockets: inspect2(this.freeSockets),
-          sockets: inspect2(this.sockets),
-          requests: inspect2(this.requests)
-        };
-      }
-    };
-    function getSocketTimeout(socket) {
-      return socket.timeout || socket._idleTimeout;
-    }
-    function installListeners(agent, socket, options) {
-      debug2("%s create, timeout %sms", socket[SOCKET_NAME], getSocketTimeout(socket));
-      function onFree() {
-        if (!socket._httpMessage && socket[SOCKET_REQUEST_COUNT] === 1) return;
-        socket[SOCKET_REQUEST_FINISHED_COUNT]++;
-        agent.requestCount++;
-        debug2(
-          "%s(requests: %s, finished: %s) free",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT]
-        );
-        const name = agent.getName(options);
-        if (socket.writable && agent.requests[name] && agent.requests[name].length) {
-          socket[SOCKET_REQUEST_COUNT]++;
-          debug2(
-            "%s(requests: %s, finished: %s) will be reuse on agent free event",
-            socket[SOCKET_NAME],
-            socket[SOCKET_REQUEST_COUNT],
-            socket[SOCKET_REQUEST_FINISHED_COUNT]
-          );
-        }
-      }
-      socket.on("free", onFree);
-      function onClose(isError) {
-        debug2(
-          "%s(requests: %s, finished: %s) close, isError: %s",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT],
-          isError
-        );
-        agent.closeSocketCount++;
-      }
-      socket.on("close", onClose);
-      function onTimeout() {
-        const listenerCount = socket.listeners("timeout").length;
-        const timeout = getSocketTimeout(socket);
-        const req = socket._httpMessage;
-        const reqTimeoutListenerCount = req && req.listeners("timeout").length || 0;
-        debug2(
-          "%s(requests: %s, finished: %s) timeout after %sms, listeners %s, defaultTimeoutListenerCount %s, hasHttpRequest %s, HttpRequest timeoutListenerCount %s",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT],
-          timeout,
-          listenerCount,
-          defaultTimeoutListenerCount,
-          !!req,
-          reqTimeoutListenerCount
-        );
-        if (debug2.enabled) {
-          debug2("timeout listeners: %s", socket.listeners("timeout").map((f2) => f2.name).join(", "));
-        }
-        agent.timeoutSocketCount++;
-        const name = agent.getName(options);
-        if (agent.freeSockets[name] && agent.freeSockets[name].indexOf(socket) !== -1) {
-          socket.destroy();
-          agent.removeSocket(socket, options);
-          debug2("%s is free, destroy quietly", socket[SOCKET_NAME]);
-        } else {
-          if (reqTimeoutListenerCount === 0) {
-            const error = new Error("Socket timeout");
-            error.code = "ERR_SOCKET_TIMEOUT";
-            error.timeout = timeout;
-            socket.destroy(error);
-            agent.removeSocket(socket, options);
-            debug2("%s destroy with timeout error", socket[SOCKET_NAME]);
-          }
-        }
-      }
-      socket.on("timeout", onTimeout);
-      function onError(err) {
-        const listenerCount = socket.listeners("error").length;
-        debug2(
-          "%s(requests: %s, finished: %s) error: %s, listenerCount: %s",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT],
-          err,
-          listenerCount
-        );
-        agent.errorSocketCount++;
-        if (listenerCount === 1) {
-          debug2("%s emit uncaught error event", socket[SOCKET_NAME]);
-          socket.removeListener("error", onError);
-          socket.emit("error", err);
-        }
-      }
-      socket.on("error", onError);
-      function onRemove() {
-        debug2(
-          "%s(requests: %s, finished: %s) agentRemove",
-          socket[SOCKET_NAME],
-          socket[SOCKET_REQUEST_COUNT],
-          socket[SOCKET_REQUEST_FINISHED_COUNT]
-        );
-        socket.removeListener("close", onClose);
-        socket.removeListener("error", onError);
-        socket.removeListener("free", onFree);
-        socket.removeListener("timeout", onTimeout);
-        socket.removeListener("agentRemove", onRemove);
-      }
-      socket.on("agentRemove", onRemove);
-    }
-    module2.exports = Agent;
-    function inspect2(obj) {
-      const res = {};
-      for (const key in obj) {
-        res[key] = obj[key].length;
-      }
-      return res;
-    }
-  }
-});
-
-// node_modules/agentkeepalive/lib/https_agent.js
-var require_https_agent = __commonJS({
-  "node_modules/agentkeepalive/lib/https_agent.js"(exports2, module2) {
-    "use strict";
-    var OriginalHttpsAgent = require("https").Agent;
-    var HttpAgent = require_agent();
-    var {
-      INIT_SOCKET,
-      CREATE_HTTPS_CONNECTION
-    } = require_constants();
-    var HttpsAgent = class extends HttpAgent {
-      constructor(options) {
-        super(options);
-        this.defaultPort = 443;
-        this.protocol = "https:";
-        this.maxCachedSessions = this.options.maxCachedSessions;
-        if (this.maxCachedSessions === void 0) {
-          this.maxCachedSessions = 100;
-        }
-        this._sessionCache = {
-          map: {},
-          list: []
-        };
-      }
-      createConnection(options, oncreate) {
-        const socket = this[CREATE_HTTPS_CONNECTION](options, oncreate);
-        this[INIT_SOCKET](socket, options);
-        return socket;
-      }
-    };
-    HttpsAgent.prototype[CREATE_HTTPS_CONNECTION] = OriginalHttpsAgent.prototype.createConnection;
-    [
-      "getName",
-      "_getSession",
-      "_cacheSession",
-      // https://github.com/nodejs/node/pull/4982
-      "_evictSession"
-    ].forEach(function(method) {
-      if (typeof OriginalHttpsAgent.prototype[method] === "function") {
-        HttpsAgent.prototype[method] = OriginalHttpsAgent.prototype[method];
-      }
-    });
-    module2.exports = HttpsAgent;
-  }
-});
-
-// node_modules/agentkeepalive/index.js
-var require_agentkeepalive = __commonJS({
-  "node_modules/agentkeepalive/index.js"(exports2, module2) {
-    "use strict";
-    module2.exports = require_agent();
-    module2.exports.HttpsAgent = require_https_agent();
-    module2.exports.constants = require_constants();
-  }
-});
-
-// node_modules/event-target-shim/dist/event-target-shim.js
-var require_event_target_shim = __commonJS({
-  "node_modules/event-target-shim/dist/event-target-shim.js"(exports2, module2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var privateData = /* @__PURE__ */ new WeakMap();
-    var wrappers = /* @__PURE__ */ new WeakMap();
-    function pd(event) {
-      const retv = privateData.get(event);
-      console.assert(
-        retv != null,
-        "'this' is expected an Event object, but got",
-        event
-      );
-      return retv;
-    }
-    function setCancelFlag(data) {
-      if (data.passiveListener != null) {
-        if (typeof console !== "undefined" && typeof console.error === "function") {
-          console.error(
-            "Unable to preventDefault inside passive event listener invocation.",
-            data.passiveListener
-          );
-        }
-        return;
-      }
-      if (!data.event.cancelable) {
-        return;
-      }
-      data.canceled = true;
-      if (typeof data.event.preventDefault === "function") {
-        data.event.preventDefault();
-      }
-    }
-    function Event(eventTarget, event) {
-      privateData.set(this, {
-        eventTarget,
-        event,
-        eventPhase: 2,
-        currentTarget: eventTarget,
-        canceled: false,
-        stopped: false,
-        immediateStopped: false,
-        passiveListener: null,
-        timeStamp: event.timeStamp || Date.now()
-      });
-      Object.defineProperty(this, "isTrusted", { value: false, enumerable: true });
-      const keys = Object.keys(event);
-      for (let i2 = 0; i2 < keys.length; ++i2) {
-        const key = keys[i2];
-        if (!(key in this)) {
-          Object.defineProperty(this, key, defineRedirectDescriptor(key));
-        }
-      }
-    }
-    Event.prototype = {
-      /**
-       * The type of this event.
-       * @type {string}
-       */
-      get type() {
-        return pd(this).event.type;
-      },
-      /**
-       * The target of this event.
-       * @type {EventTarget}
-       */
-      get target() {
-        return pd(this).eventTarget;
-      },
-      /**
-       * The target of this event.
-       * @type {EventTarget}
-       */
-      get currentTarget() {
-        return pd(this).currentTarget;
-      },
-      /**
-       * @returns {EventTarget[]} The composed path of this event.
-       */
-      composedPath() {
-        const currentTarget = pd(this).currentTarget;
-        if (currentTarget == null) {
-          return [];
-        }
-        return [currentTarget];
-      },
-      /**
-       * Constant of NONE.
-       * @type {number}
-       */
-      get NONE() {
-        return 0;
-      },
-      /**
-       * Constant of CAPTURING_PHASE.
-       * @type {number}
-       */
-      get CAPTURING_PHASE() {
-        return 1;
-      },
-      /**
-       * Constant of AT_TARGET.
-       * @type {number}
-       */
-      get AT_TARGET() {
-        return 2;
-      },
-      /**
-       * Constant of BUBBLING_PHASE.
-       * @type {number}
-       */
-      get BUBBLING_PHASE() {
-        return 3;
-      },
-      /**
-       * The target of this event.
-       * @type {number}
-       */
-      get eventPhase() {
-        return pd(this).eventPhase;
-      },
-      /**
-       * Stop event bubbling.
-       * @returns {void}
-       */
-      stopPropagation() {
-        const data = pd(this);
-        data.stopped = true;
-        if (typeof data.event.stopPropagation === "function") {
-          data.event.stopPropagation();
-        }
-      },
-      /**
-       * Stop event bubbling.
-       * @returns {void}
-       */
-      stopImmediatePropagation() {
-        const data = pd(this);
-        data.stopped = true;
-        data.immediateStopped = true;
-        if (typeof data.event.stopImmediatePropagation === "function") {
-          data.event.stopImmediatePropagation();
-        }
-      },
-      /**
-       * The flag to be bubbling.
-       * @type {boolean}
-       */
-      get bubbles() {
-        return Boolean(pd(this).event.bubbles);
-      },
-      /**
-       * The flag to be cancelable.
-       * @type {boolean}
-       */
-      get cancelable() {
-        return Boolean(pd(this).event.cancelable);
-      },
-      /**
-       * Cancel this event.
-       * @returns {void}
-       */
-      preventDefault() {
-        setCancelFlag(pd(this));
-      },
-      /**
-       * The flag to indicate cancellation state.
-       * @type {boolean}
-       */
-      get defaultPrevented() {
-        return pd(this).canceled;
-      },
-      /**
-       * The flag to be composed.
-       * @type {boolean}
-       */
-      get composed() {
-        return Boolean(pd(this).event.composed);
-      },
-      /**
-       * The unix time of this event.
-       * @type {number}
-       */
-      get timeStamp() {
-        return pd(this).timeStamp;
-      },
-      /**
-       * The target of this event.
-       * @type {EventTarget}
-       * @deprecated
-       */
-      get srcElement() {
-        return pd(this).eventTarget;
-      },
-      /**
-       * The flag to stop event bubbling.
-       * @type {boolean}
-       * @deprecated
-       */
-      get cancelBubble() {
-        return pd(this).stopped;
-      },
-      set cancelBubble(value) {
-        if (!value) {
-          return;
-        }
-        const data = pd(this);
-        data.stopped = true;
-        if (typeof data.event.cancelBubble === "boolean") {
-          data.event.cancelBubble = true;
-        }
-      },
-      /**
-       * The flag to indicate cancellation state.
-       * @type {boolean}
-       * @deprecated
-       */
-      get returnValue() {
-        return !pd(this).canceled;
-      },
-      set returnValue(value) {
-        if (!value) {
-          setCancelFlag(pd(this));
-        }
-      },
-      /**
-       * Initialize this event object. But do nothing under event dispatching.
-       * @param {string} type The event type.
-       * @param {boolean} [bubbles=false] The flag to be possible to bubble up.
-       * @param {boolean} [cancelable=false] The flag to be possible to cancel.
-       * @deprecated
-       */
-      initEvent() {
-      }
-    };
-    Object.defineProperty(Event.prototype, "constructor", {
-      value: Event,
-      configurable: true,
-      writable: true
-    });
-    if (typeof window !== "undefined" && typeof window.Event !== "undefined") {
-      Object.setPrototypeOf(Event.prototype, window.Event.prototype);
-      wrappers.set(window.Event.prototype, Event);
-    }
-    function defineRedirectDescriptor(key) {
-      return {
-        get() {
-          return pd(this).event[key];
-        },
-        set(value) {
-          pd(this).event[key] = value;
-        },
-        configurable: true,
-        enumerable: true
-      };
-    }
-    function defineCallDescriptor(key) {
-      return {
-        value() {
-          const event = pd(this).event;
-          return event[key].apply(event, arguments);
-        },
-        configurable: true,
-        enumerable: true
-      };
-    }
-    function defineWrapper(BaseEvent, proto) {
-      const keys = Object.keys(proto);
-      if (keys.length === 0) {
-        return BaseEvent;
-      }
-      function CustomEvent(eventTarget, event) {
-        BaseEvent.call(this, eventTarget, event);
-      }
-      CustomEvent.prototype = Object.create(BaseEvent.prototype, {
-        constructor: { value: CustomEvent, configurable: true, writable: true }
-      });
-      for (let i2 = 0; i2 < keys.length; ++i2) {
-        const key = keys[i2];
-        if (!(key in BaseEvent.prototype)) {
-          const descriptor = Object.getOwnPropertyDescriptor(proto, key);
-          const isFunc = typeof descriptor.value === "function";
-          Object.defineProperty(
-            CustomEvent.prototype,
-            key,
-            isFunc ? defineCallDescriptor(key) : defineRedirectDescriptor(key)
-          );
-        }
-      }
-      return CustomEvent;
-    }
-    function getWrapper(proto) {
-      if (proto == null || proto === Object.prototype) {
-        return Event;
-      }
-      let wrapper = wrappers.get(proto);
-      if (wrapper == null) {
-        wrapper = defineWrapper(getWrapper(Object.getPrototypeOf(proto)), proto);
-        wrappers.set(proto, wrapper);
-      }
-      return wrapper;
-    }
-    function wrapEvent(eventTarget, event) {
-      const Wrapper = getWrapper(Object.getPrototypeOf(event));
-      return new Wrapper(eventTarget, event);
-    }
-    function isStopped(event) {
-      return pd(event).immediateStopped;
-    }
-    function setEventPhase(event, eventPhase) {
-      pd(event).eventPhase = eventPhase;
-    }
-    function setCurrentTarget(event, currentTarget) {
-      pd(event).currentTarget = currentTarget;
-    }
-    function setPassiveListener(event, passiveListener) {
-      pd(event).passiveListener = passiveListener;
-    }
-    var listenersMap = /* @__PURE__ */ new WeakMap();
-    var CAPTURE = 1;
-    var BUBBLE = 2;
-    var ATTRIBUTE = 3;
-    function isObject(x2) {
-      return x2 !== null && typeof x2 === "object";
-    }
-    function getListeners(eventTarget) {
-      const listeners = listenersMap.get(eventTarget);
-      if (listeners == null) {
-        throw new TypeError(
-          "'this' is expected an EventTarget object, but got another value."
-        );
-      }
-      return listeners;
-    }
-    function defineEventAttributeDescriptor(eventName) {
-      return {
-        get() {
-          const listeners = getListeners(this);
-          let node = listeners.get(eventName);
-          while (node != null) {
-            if (node.listenerType === ATTRIBUTE) {
-              return node.listener;
-            }
-            node = node.next;
-          }
-          return null;
-        },
-        set(listener) {
-          if (typeof listener !== "function" && !isObject(listener)) {
-            listener = null;
-          }
-          const listeners = getListeners(this);
-          let prev = null;
-          let node = listeners.get(eventName);
-          while (node != null) {
-            if (node.listenerType === ATTRIBUTE) {
-              if (prev !== null) {
-                prev.next = node.next;
-              } else if (node.next !== null) {
-                listeners.set(eventName, node.next);
-              } else {
-                listeners.delete(eventName);
-              }
-            } else {
-              prev = node;
-            }
-            node = node.next;
-          }
-          if (listener !== null) {
-            const newNode = {
-              listener,
-              listenerType: ATTRIBUTE,
-              passive: false,
-              once: false,
-              next: null
-            };
-            if (prev === null) {
-              listeners.set(eventName, newNode);
-            } else {
-              prev.next = newNode;
-            }
-          }
-        },
-        configurable: true,
-        enumerable: true
-      };
-    }
-    function defineEventAttribute(eventTargetPrototype, eventName) {
-      Object.defineProperty(
-        eventTargetPrototype,
-        `on${eventName}`,
-        defineEventAttributeDescriptor(eventName)
-      );
-    }
-    function defineCustomEventTarget(eventNames) {
-      function CustomEventTarget() {
-        EventTarget.call(this);
-      }
-      CustomEventTarget.prototype = Object.create(EventTarget.prototype, {
-        constructor: {
-          value: CustomEventTarget,
-          configurable: true,
-          writable: true
-        }
-      });
-      for (let i2 = 0; i2 < eventNames.length; ++i2) {
-        defineEventAttribute(CustomEventTarget.prototype, eventNames[i2]);
-      }
-      return CustomEventTarget;
-    }
-    function EventTarget() {
-      if (this instanceof EventTarget) {
-        listenersMap.set(this, /* @__PURE__ */ new Map());
-        return;
-      }
-      if (arguments.length === 1 && Array.isArray(arguments[0])) {
-        return defineCustomEventTarget(arguments[0]);
-      }
-      if (arguments.length > 0) {
-        const types = new Array(arguments.length);
-        for (let i2 = 0; i2 < arguments.length; ++i2) {
-          types[i2] = arguments[i2];
-        }
-        return defineCustomEventTarget(types);
-      }
-      throw new TypeError("Cannot call a class as a function");
-    }
-    EventTarget.prototype = {
-      /**
-       * Add a given listener to this event target.
-       * @param {string} eventName The event name to add.
-       * @param {Function} listener The listener to add.
-       * @param {boolean|{capture?:boolean,passive?:boolean,once?:boolean}} [options] The options for this listener.
-       * @returns {void}
-       */
-      addEventListener(eventName, listener, options) {
-        if (listener == null) {
-          return;
-        }
-        if (typeof listener !== "function" && !isObject(listener)) {
-          throw new TypeError("'listener' should be a function or an object.");
-        }
-        const listeners = getListeners(this);
-        const optionsIsObj = isObject(options);
-        const capture = optionsIsObj ? Boolean(options.capture) : Boolean(options);
-        const listenerType = capture ? CAPTURE : BUBBLE;
-        const newNode = {
-          listener,
-          listenerType,
-          passive: optionsIsObj && Boolean(options.passive),
-          once: optionsIsObj && Boolean(options.once),
-          next: null
-        };
-        let node = listeners.get(eventName);
-        if (node === void 0) {
-          listeners.set(eventName, newNode);
-          return;
-        }
-        let prev = null;
-        while (node != null) {
-          if (node.listener === listener && node.listenerType === listenerType) {
-            return;
-          }
-          prev = node;
-          node = node.next;
-        }
-        prev.next = newNode;
-      },
-      /**
-       * Remove a given listener from this event target.
-       * @param {string} eventName The event name to remove.
-       * @param {Function} listener The listener to remove.
-       * @param {boolean|{capture?:boolean,passive?:boolean,once?:boolean}} [options] The options for this listener.
-       * @returns {void}
-       */
-      removeEventListener(eventName, listener, options) {
-        if (listener == null) {
-          return;
-        }
-        const listeners = getListeners(this);
-        const capture = isObject(options) ? Boolean(options.capture) : Boolean(options);
-        const listenerType = capture ? CAPTURE : BUBBLE;
-        let prev = null;
-        let node = listeners.get(eventName);
-        while (node != null) {
-          if (node.listener === listener && node.listenerType === listenerType) {
-            if (prev !== null) {
-              prev.next = node.next;
-            } else if (node.next !== null) {
-              listeners.set(eventName, node.next);
-            } else {
-              listeners.delete(eventName);
-            }
-            return;
-          }
-          prev = node;
-          node = node.next;
-        }
-      },
-      /**
-       * Dispatch a given event.
-       * @param {Event|{type:string}} event The event to dispatch.
-       * @returns {boolean} `false` if canceled.
-       */
-      dispatchEvent(event) {
-        if (event == null || typeof event.type !== "string") {
-          throw new TypeError('"event.type" should be a string.');
-        }
-        const listeners = getListeners(this);
-        const eventName = event.type;
-        let node = listeners.get(eventName);
-        if (node == null) {
-          return true;
-        }
-        const wrappedEvent = wrapEvent(this, event);
-        let prev = null;
-        while (node != null) {
-          if (node.once) {
-            if (prev !== null) {
-              prev.next = node.next;
-            } else if (node.next !== null) {
-              listeners.set(eventName, node.next);
-            } else {
-              listeners.delete(eventName);
-            }
-          } else {
-            prev = node;
-          }
-          setPassiveListener(
-            wrappedEvent,
-            node.passive ? node.listener : null
-          );
-          if (typeof node.listener === "function") {
-            try {
-              node.listener.call(this, wrappedEvent);
-            } catch (err) {
-              if (typeof console !== "undefined" && typeof console.error === "function") {
-                console.error(err);
-              }
-            }
-          } else if (node.listenerType !== ATTRIBUTE && typeof node.listener.handleEvent === "function") {
-            node.listener.handleEvent(wrappedEvent);
-          }
-          if (isStopped(wrappedEvent)) {
-            break;
-          }
-          node = node.next;
-        }
-        setPassiveListener(wrappedEvent, null);
-        setEventPhase(wrappedEvent, 0);
-        setCurrentTarget(wrappedEvent, null);
-        return !wrappedEvent.defaultPrevented;
-      }
-    };
-    Object.defineProperty(EventTarget.prototype, "constructor", {
-      value: EventTarget,
-      configurable: true,
-      writable: true
-    });
-    if (typeof window !== "undefined" && typeof window.EventTarget !== "undefined") {
-      Object.setPrototypeOf(EventTarget.prototype, window.EventTarget.prototype);
-    }
-    exports2.defineEventAttribute = defineEventAttribute;
-    exports2.EventTarget = EventTarget;
-    exports2.default = EventTarget;
-    module2.exports = EventTarget;
-    module2.exports.EventTarget = module2.exports["default"] = EventTarget;
-    module2.exports.defineEventAttribute = defineEventAttribute;
-  }
-});
-
-// node_modules/abort-controller/dist/abort-controller.js
-var require_abort_controller = __commonJS({
-  "node_modules/abort-controller/dist/abort-controller.js"(exports2, module2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var eventTargetShim = require_event_target_shim();
-    var AbortSignal = class extends eventTargetShim.EventTarget {
-      /**
-       * AbortSignal cannot be constructed directly.
-       */
-      constructor() {
-        super();
-        throw new TypeError("AbortSignal cannot be constructed directly");
-      }
-      /**
-       * Returns `true` if this `AbortSignal`'s `AbortController` has signaled to abort, and `false` otherwise.
-       */
-      get aborted() {
-        const aborted = abortedFlags.get(this);
-        if (typeof aborted !== "boolean") {
-          throw new TypeError(`Expected 'this' to be an 'AbortSignal' object, but got ${this === null ? "null" : typeof this}`);
-        }
-        return aborted;
-      }
-    };
-    eventTargetShim.defineEventAttribute(AbortSignal.prototype, "abort");
-    function createAbortSignal() {
-      const signal = Object.create(AbortSignal.prototype);
-      eventTargetShim.EventTarget.call(signal);
-      abortedFlags.set(signal, false);
-      return signal;
-    }
-    function abortSignal(signal) {
-      if (abortedFlags.get(signal) !== false) {
-        return;
-      }
-      abortedFlags.set(signal, true);
-      signal.dispatchEvent({ type: "abort" });
-    }
-    var abortedFlags = /* @__PURE__ */ new WeakMap();
-    Object.defineProperties(AbortSignal.prototype, {
-      aborted: { enumerable: true }
-    });
-    if (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") {
-      Object.defineProperty(AbortSignal.prototype, Symbol.toStringTag, {
-        configurable: true,
-        value: "AbortSignal"
-      });
-    }
-    var AbortController2 = class {
-      /**
-       * Initialize this controller.
-       */
-      constructor() {
-        signals.set(this, createAbortSignal());
-      }
-      /**
-       * Returns the `AbortSignal` object associated with this object.
-       */
-      get signal() {
-        return getSignal(this);
-      }
-      /**
-       * Abort and signal to any observers that the associated activity is to be aborted.
-       */
-      abort() {
-        abortSignal(getSignal(this));
-      }
-    };
-    var signals = /* @__PURE__ */ new WeakMap();
-    function getSignal(controller) {
-      const signal = signals.get(controller);
-      if (signal == null) {
-        throw new TypeError(`Expected 'this' to be an 'AbortController' object, but got ${controller === null ? "null" : typeof controller}`);
-      }
-      return signal;
-    }
-    Object.defineProperties(AbortController2.prototype, {
-      signal: { enumerable: true },
-      abort: { enumerable: true }
-    });
-    if (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") {
-      Object.defineProperty(AbortController2.prototype, Symbol.toStringTag, {
-        configurable: true,
-        value: "AbortController"
-      });
-    }
-    exports2.AbortController = AbortController2;
-    exports2.AbortSignal = AbortSignal;
-    exports2.default = AbortController2;
-    module2.exports = AbortController2;
-    module2.exports.AbortController = module2.exports["default"] = AbortController2;
-    module2.exports.AbortSignal = AbortSignal;
-  }
-});
 
 // node_modules/webidl-conversions/lib/index.js
 var require_lib = __commonJS({
@@ -1425,8 +224,8 @@ var require_tr46 = __commonJS({
       TRANSITIONAL: 0,
       NONTRANSITIONAL: 1
     };
-    function normalize(str) {
-      return str.split("\0").map(function(s2) {
+    function normalize(str2) {
+      return str2.split("\0").map(function(s2) {
         return s2.normalize("NFC");
       }).join("\0");
     }
@@ -1592,8 +391,8 @@ var require_url_state_machine = __commonJS({
       wss: 443
     };
     var failure = Symbol("failure");
-    function countSymbols(str) {
-      return punycode.ucs2.decode(str).length;
+    function countSymbols(str2) {
+      return punycode.ucs2.decode(str2).length;
     }
     function at2(input, idx) {
       const c2 = input[idx];
@@ -1651,14 +450,14 @@ var require_url_state_machine = __commonJS({
     }
     function utf8PercentEncode(c2) {
       const buf = new Buffer(c2);
-      let str = "";
+      let str2 = "";
       for (let i2 = 0; i2 < buf.length; ++i2) {
-        str += percentEncode(buf[i2]);
+        str2 += percentEncode(buf[i2]);
       }
-      return str;
+      return str2;
     }
-    function utf8PercentDecode(str) {
-      const input = new Buffer(str);
+    function utf8PercentDecode(str2) {
+      const input = new Buffer(str2);
       const output = [];
       for (let i2 = 0; i2 < input.length; ++i2) {
         if (input[i2] !== 37) {
@@ -3020,7 +1819,7 @@ var require_lib2 = __commonJS({
     var Readable2 = Stream2.Readable;
     var BUFFER = Symbol("buffer");
     var TYPE = Symbol("type");
-    var Blob2 = class _Blob {
+    var Blob3 = class _Blob {
       constructor() {
         this[TYPE] = "";
         const blobParts = arguments[0];
@@ -3106,12 +1905,12 @@ var require_lib2 = __commonJS({
         return blob;
       }
     };
-    Object.defineProperties(Blob2.prototype, {
+    Object.defineProperties(Blob3.prototype, {
       size: { enumerable: true },
       type: { enumerable: true },
       slice: { enumerable: true }
     });
-    Object.defineProperty(Blob2.prototype, Symbol.toStringTag, {
+    Object.defineProperty(Blob3.prototype, Symbol.toStringTag, {
       value: "Blob",
       writable: false,
       enumerable: false,
@@ -3197,7 +1996,7 @@ var require_lib2 = __commonJS({
         return consumeBody.call(this).then(function(buf) {
           return Object.assign(
             // Prevent copying
-            new Blob2([], {
+            new Blob3([], {
               type: ct2.toLowerCase()
             }),
             {
@@ -3340,18 +2139,18 @@ var require_lib2 = __commonJS({
       }
       const ct2 = headers.get("content-type");
       let charset = "utf-8";
-      let res, str;
+      let res, str2;
       if (ct2) {
         res = /charset=([^;]*)/i.exec(ct2);
       }
-      str = buffer.slice(0, 1024).toString();
-      if (!res && str) {
-        res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str);
+      str2 = buffer.slice(0, 1024).toString();
+      if (!res && str2) {
+        res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str2);
       }
-      if (!res && str) {
-        res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+      if (!res && str2) {
+        res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str2);
         if (!res) {
-          res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+          res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str2);
           if (res) {
             res.pop();
           }
@@ -3360,8 +2159,8 @@ var require_lib2 = __commonJS({
           res = /charset=(.*)/i.exec(res.pop());
         }
       }
-      if (!res && str) {
-        res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str);
+      if (!res && str2) {
+        res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str2);
       }
       if (res) {
         charset = res.pop();
@@ -3475,7 +2274,7 @@ var require_lib2 = __commonJS({
       return void 0;
     }
     var MAP = Symbol("map");
-    var Headers2 = class _Headers {
+    var Headers3 = class _Headers {
       /**
        * Headers class
        *
@@ -3653,14 +2452,14 @@ var require_lib2 = __commonJS({
         return createHeadersIterator(this, "key+value");
       }
     };
-    Headers2.prototype.entries = Headers2.prototype[Symbol.iterator];
-    Object.defineProperty(Headers2.prototype, Symbol.toStringTag, {
+    Headers3.prototype.entries = Headers3.prototype[Symbol.iterator];
+    Object.defineProperty(Headers3.prototype, Symbol.toStringTag, {
       value: "Headers",
       writable: false,
       enumerable: false,
       configurable: true
     });
-    Object.defineProperties(Headers2.prototype, {
+    Object.defineProperties(Headers3.prototype, {
       get: { enumerable: true },
       forEach: { enumerable: true },
       set: { enumerable: true },
@@ -3672,22 +2471,22 @@ var require_lib2 = __commonJS({
       entries: { enumerable: true }
     });
     function getHeaders(headers) {
-      let kind = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "key+value";
+      let kind2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "key+value";
       const keys = Object.keys(headers[MAP]).sort();
-      return keys.map(kind === "key" ? function(k2) {
+      return keys.map(kind2 === "key" ? function(k2) {
         return k2.toLowerCase();
-      } : kind === "value" ? function(k2) {
+      } : kind2 === "value" ? function(k2) {
         return headers[MAP][k2].join(", ");
       } : function(k2) {
         return [k2.toLowerCase(), headers[MAP][k2].join(", ")];
       });
     }
     var INTERNAL = Symbol("internal");
-    function createHeadersIterator(target, kind) {
+    function createHeadersIterator(target, kind2) {
       const iterator = Object.create(HeadersIteratorPrototype);
       iterator[INTERNAL] = {
         target,
-        kind,
+        kind: kind2,
         index: 0
       };
       return iterator;
@@ -3698,8 +2497,8 @@ var require_lib2 = __commonJS({
           throw new TypeError("Value of `this` is not a HeadersIterator");
         }
         var _INTERNAL = this[INTERNAL];
-        const target = _INTERNAL.target, kind = _INTERNAL.kind, index = _INTERNAL.index;
-        const values = getHeaders(target, kind);
+        const target = _INTERNAL.target, kind2 = _INTERNAL.kind, index = _INTERNAL.index;
+        const values = getHeaders(target, kind2);
         const len = values.length;
         if (index >= len) {
           return {
@@ -3729,7 +2528,7 @@ var require_lib2 = __commonJS({
       return obj;
     }
     function createHeadersLenient(obj) {
-      const headers = new Headers2();
+      const headers = new Headers3();
       for (const name of Object.keys(obj)) {
         if (invalidTokenRegex.test(name)) {
           continue;
@@ -3753,13 +2552,13 @@ var require_lib2 = __commonJS({
     }
     var INTERNALS$1 = Symbol("Response internals");
     var STATUS_CODES = http.STATUS_CODES;
-    var Response2 = class _Response {
+    var Response3 = class _Response {
       constructor() {
         let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
         let opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
         Body.call(this, body, opts);
         const status = opts.status || 200;
-        const headers = new Headers2(opts.headers);
+        const headers = new Headers3(opts.headers);
         if (body != null && !headers.has("Content-Type")) {
           const contentType = extractContentType(body);
           if (contentType) {
@@ -3811,8 +2610,8 @@ var require_lib2 = __commonJS({
         });
       }
     };
-    Body.mixIn(Response2.prototype);
-    Object.defineProperties(Response2.prototype, {
+    Body.mixIn(Response3.prototype);
+    Object.defineProperties(Response3.prototype, {
       url: { enumerable: true },
       status: { enumerable: true },
       ok: { enumerable: true },
@@ -3821,7 +2620,7 @@ var require_lib2 = __commonJS({
       headers: { enumerable: true },
       clone: { enumerable: true }
     });
-    Object.defineProperty(Response2.prototype, Symbol.toStringTag, {
+    Object.defineProperty(Response3.prototype, Symbol.toStringTag, {
       value: "Response",
       writable: false,
       enumerable: false,
@@ -3845,7 +2644,7 @@ var require_lib2 = __commonJS({
       const proto = signal && typeof signal === "object" && Object.getPrototypeOf(signal);
       return !!(proto && proto.constructor.name === "AbortSignal");
     }
-    var Request2 = class _Request {
+    var Request3 = class _Request {
       constructor(input) {
         let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
         let parsedURL;
@@ -3869,7 +2668,7 @@ var require_lib2 = __commonJS({
           timeout: init.timeout || input.timeout || 0,
           size: init.size || input.size || 0
         });
-        const headers = new Headers2(init.headers || input.headers || {});
+        const headers = new Headers3(init.headers || input.headers || {});
         if (inputBody != null && !headers.has("Content-Type")) {
           const contentType = extractContentType(inputBody);
           if (contentType) {
@@ -3917,14 +2716,14 @@ var require_lib2 = __commonJS({
         return new _Request(this);
       }
     };
-    Body.mixIn(Request2.prototype);
-    Object.defineProperty(Request2.prototype, Symbol.toStringTag, {
+    Body.mixIn(Request3.prototype);
+    Object.defineProperty(Request3.prototype, Symbol.toStringTag, {
       value: "Request",
       writable: false,
       enumerable: false,
       configurable: true
     });
-    Object.defineProperties(Request2.prototype, {
+    Object.defineProperties(Request3.prototype, {
       method: { enumerable: true },
       url: { enumerable: true },
       headers: { enumerable: true },
@@ -3934,7 +2733,7 @@ var require_lib2 = __commonJS({
     });
     function getNodeRequestOptions(request) {
       const parsedURL = request[INTERNALS$2].parsedURL;
-      const headers = new Headers2(request[INTERNALS$2].headers);
+      const headers = new Headers3(request[INTERNALS$2].headers);
       if (!headers.has("Accept")) {
         headers.set("Accept", "*/*");
       }
@@ -3997,13 +2796,13 @@ var require_lib2 = __commonJS({
       const dest = new URL$1(destination).protocol;
       return orig === dest;
     };
-    function fetch(url, opts) {
-      if (!fetch.Promise) {
+    function fetch2(url, opts) {
+      if (!fetch2.Promise) {
         throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
       }
-      Body.Promise = fetch.Promise;
-      return new fetch.Promise(function(resolve, reject) {
-        const request = new Request2(url, opts);
+      Body.Promise = fetch2.Promise;
+      return new fetch2.Promise(function(resolve, reject) {
+        const request = new Request3(url, opts);
         const options = getNodeRequestOptions(request);
         const send = (options.protocol === "https:" ? https : http).request;
         const signal = request.signal;
@@ -4073,7 +2872,7 @@ var require_lib2 = __commonJS({
         req.on("response", function(res) {
           clearTimeout(reqTimeout);
           const headers = createHeadersLenient(res.headers);
-          if (fetch.isRedirect(res.statusCode)) {
+          if (fetch2.isRedirect(res.statusCode)) {
             const location = headers.get("Location");
             let locationURL = null;
             try {
@@ -4109,7 +2908,7 @@ var require_lib2 = __commonJS({
                   return;
                 }
                 const requestOpts = {
-                  headers: new Headers2(request.headers),
+                  headers: new Headers3(request.headers),
                   follow: request.follow,
                   counter: request.counter + 1,
                   agent: request.agent,
@@ -4135,7 +2934,7 @@ var require_lib2 = __commonJS({
                   requestOpts.body = void 0;
                   requestOpts.headers.delete("content-length");
                 }
-                resolve(fetch(new Request2(locationURL, requestOpts)));
+                resolve(fetch2(new Request3(locationURL, requestOpts)));
                 finalize();
                 return;
             }
@@ -4155,7 +2954,7 @@ var require_lib2 = __commonJS({
           };
           const codings = headers.get("Content-Encoding");
           if (!request.compress || request.method === "HEAD" || codings === null || res.statusCode === 204 || res.statusCode === 304) {
-            response = new Response2(body, response_options);
+            response = new Response3(body, response_options);
             resolve(response);
             return;
           }
@@ -4165,7 +2964,7 @@ var require_lib2 = __commonJS({
           };
           if (codings == "gzip" || codings == "x-gzip") {
             body = body.pipe(zlib.createGunzip(zlibOptions));
-            response = new Response2(body, response_options);
+            response = new Response3(body, response_options);
             resolve(response);
             return;
           }
@@ -4177,12 +2976,12 @@ var require_lib2 = __commonJS({
               } else {
                 body = body.pipe(zlib.createInflateRaw());
               }
-              response = new Response2(body, response_options);
+              response = new Response3(body, response_options);
               resolve(response);
             });
             raw.on("end", function() {
               if (!response) {
-                response = new Response2(body, response_options);
+                response = new Response3(body, response_options);
                 resolve(response);
               }
             });
@@ -4190,11 +2989,11 @@ var require_lib2 = __commonJS({
           }
           if (codings == "br" && typeof zlib.createBrotliDecompress === "function") {
             body = body.pipe(zlib.createBrotliDecompress());
-            response = new Response2(body, response_options);
+            response = new Response3(body, response_options);
             resolve(response);
             return;
           }
-          response = new Response2(body, response_options);
+          response = new Response3(body, response_options);
           resolve(response);
         });
         writeToStream(req, request);
@@ -4227,409 +3026,33 @@ var require_lib2 = __commonJS({
         stream.end();
       }
     }
-    fetch.isRedirect = function(code) {
+    fetch2.isRedirect = function(code) {
       return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
     };
-    fetch.Promise = global.Promise;
-    module2.exports = exports2 = fetch;
+    fetch2.Promise = global.Promise;
+    module2.exports = exports2 = fetch2;
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.default = exports2;
-    exports2.Headers = Headers2;
-    exports2.Request = Request2;
-    exports2.Response = Response2;
+    exports2.Headers = Headers3;
+    exports2.Request = Request3;
+    exports2.Response = Response3;
     exports2.FetchError = FetchError;
     exports2.AbortError = AbortError;
   }
 });
 
-// node_modules/node-domexception/index.js
-var require_node_domexception = __commonJS({
-  "node_modules/node-domexception/index.js"(exports2, module2) {
-    if (!globalThis.DOMException) {
-      try {
-        const { MessageChannel } = require("worker_threads"), port = new MessageChannel().port1, ab = new ArrayBuffer();
-        port.postMessage(ab, [ab, ab]);
-      } catch (err) {
-        err.constructor.name === "DOMException" && (globalThis.DOMException = err.constructor);
-      }
-    }
-    module2.exports = globalThis.DOMException;
-  }
-});
-
-// src/extension.ts
-var extension_exports = {};
-__export(extension_exports, {
-  activate: () => activate,
-  deactivate: () => deactivate
-});
-module.exports = __toCommonJS(extension_exports);
-var vscode = __toESM(require("vscode"));
-
-// node_modules/openai/version.mjs
-var VERSION = "4.0.0";
-
-// node_modules/openai/streaming.mjs
-var Stream = class {
-  constructor(response, controller) {
-    this.response = response;
-    this.controller = controller;
-    this.decoder = new SSEDecoder();
-  }
-  async *iterMessages() {
-    if (!this.response.body) {
-      this.controller.abort();
-      throw new Error(`Attempted to iterate over a response with no body`);
-    }
-    const lineDecoder = new LineDecoder();
-    const iter = readableStreamAsyncIterable(this.response.body);
-    for await (const chunk of iter) {
-      for (const line of lineDecoder.decode(chunk)) {
-        const sse = this.decoder.decode(line);
-        if (sse) yield sse;
-      }
-    }
-    for (const line of lineDecoder.flush()) {
-      const sse = this.decoder.decode(line);
-      if (sse) yield sse;
-    }
-  }
-  async *[Symbol.asyncIterator]() {
-    let done = false;
-    try {
-      for await (const sse of this.iterMessages()) {
-        if (done) continue;
-        if (sse.data.startsWith("[DONE]")) {
-          done = true;
-          continue;
-        }
-        if (sse.event === null) {
-          try {
-            yield JSON.parse(sse.data);
-          } catch (e2) {
-            console.error(`Could not parse message into JSON:`, sse.data);
-            console.error(`From chunk:`, sse.raw);
-            throw e2;
-          }
-        }
-      }
-      done = true;
-    } catch (e2) {
-      if (e2 instanceof Error && e2.name === "AbortError") return;
-      throw e2;
-    } finally {
-      if (!done) this.controller.abort();
-    }
-  }
-};
-var SSEDecoder = class {
-  constructor() {
-    this.event = null;
-    this.data = [];
-    this.chunks = [];
-  }
-  decode(line) {
-    if (line.endsWith("\r")) {
-      line = line.substring(0, line.length - 1);
-    }
-    if (!line) {
-      if (!this.event && !this.data.length) return null;
-      const sse = {
-        event: this.event,
-        data: this.data.join("\n"),
-        raw: this.chunks
-      };
-      this.event = null;
-      this.data = [];
-      this.chunks = [];
-      return sse;
-    }
-    this.chunks.push(line);
-    if (line.startsWith(":")) {
-      return null;
-    }
-    let [fieldname, _2, value] = partition(line, ":");
-    if (value.startsWith(" ")) {
-      value = value.substring(1);
-    }
-    if (fieldname === "event") {
-      this.event = value;
-    } else if (fieldname === "data") {
-      this.data.push(value);
-    }
-    return null;
-  }
-};
-var LineDecoder = class _LineDecoder {
-  constructor() {
-    this.buffer = [];
-    this.trailingCR = false;
-  }
-  decode(chunk) {
-    let text = this.decodeText(chunk);
-    if (this.trailingCR) {
-      text = "\r" + text;
-      this.trailingCR = false;
-    }
-    if (text.endsWith("\r")) {
-      this.trailingCR = true;
-      text = text.slice(0, -1);
-    }
-    if (!text) {
-      return [];
-    }
-    const trailingNewline = _LineDecoder.NEWLINE_CHARS.has(text[text.length - 1] || "");
-    let lines = text.split(_LineDecoder.NEWLINE_REGEXP);
-    if (lines.length === 1 && !trailingNewline) {
-      this.buffer.push(lines[0]);
-      return [];
-    }
-    if (this.buffer.length > 0) {
-      lines = [this.buffer.join("") + lines[0], ...lines.slice(1)];
-      this.buffer = [];
-    }
-    if (!trailingNewline) {
-      this.buffer = [lines.pop() || ""];
-    }
-    return lines;
-  }
-  decodeText(bytes) {
-    var _a2;
-    if (bytes == null) return "";
-    if (typeof bytes === "string") return bytes;
-    if (typeof Buffer !== "undefined") {
-      if (bytes instanceof Buffer) {
-        return bytes.toString();
-      }
-      if (bytes instanceof Uint8Array) {
-        return Buffer.from(bytes).toString();
-      }
-      throw new Error(
-        `Unexpected: received non-Uint8Array (${bytes.constructor.name}) stream chunk in an environment with a global "Buffer" defined, which this library assumes to be Node. Please report this error.`
-      );
-    }
-    if (typeof TextDecoder !== "undefined") {
-      if (bytes instanceof Uint8Array || bytes instanceof ArrayBuffer) {
-        (_a2 = this.textDecoder) !== null && _a2 !== void 0 ? _a2 : this.textDecoder = new TextDecoder("utf8");
-        return this.textDecoder.decode(bytes);
-      }
-      throw new Error(
-        `Unexpected: received non-Uint8Array/ArrayBuffer (${bytes.constructor.name}) in a web platform. Please report this error.`
-      );
-    }
-    throw new Error(
-      `Unexpected: neither Buffer nor TextDecoder are available as globals. Please report this error.`
-    );
-  }
-  flush() {
-    if (!this.buffer.length && !this.trailingCR) {
-      return [];
-    }
-    const lines = [this.buffer.join("")];
-    this.buffer = [];
-    this.trailingCR = false;
-    return lines;
-  }
-};
-LineDecoder.NEWLINE_CHARS = /* @__PURE__ */ new Set(["\n", "\r", "\v", "\f", "", "", "", "\x85", "\u2028", "\u2029"]);
-LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r\x0b\x0c\x1c\x1d\x1e\x85\u2028\u2029]/g;
-function partition(str, delimiter) {
-  const index = str.indexOf(delimiter);
-  if (index !== -1) {
-    return [str.substring(0, index), delimiter, str.substring(index + delimiter.length)];
-  }
-  return [str, "", ""];
-}
-function readableStreamAsyncIterable(stream) {
-  if (stream[Symbol.asyncIterator]) return stream;
-  const reader = stream.getReader();
-  return {
-    async next() {
-      try {
-        const result = await reader.read();
-        if (result === null || result === void 0 ? void 0 : result.done) reader.releaseLock();
-        return result;
-      } catch (e2) {
-        reader.releaseLock();
-        throw e2;
-      }
-    },
-    async return() {
-      const cancelPromise = reader.cancel();
-      reader.releaseLock();
-      await cancelPromise;
-      return { done: true, value: void 0 };
-    },
-    [Symbol.asyncIterator]() {
-      return this;
-    }
-  };
-}
-
-// node_modules/openai/error.mjs
-var error_exports = {};
-__export(error_exports, {
-  APIConnectionError: () => APIConnectionError,
-  APIConnectionTimeoutError: () => APIConnectionTimeoutError,
-  APIError: () => APIError,
-  APIUserAbortError: () => APIUserAbortError,
-  AuthenticationError: () => AuthenticationError,
-  BadRequestError: () => BadRequestError,
-  ConflictError: () => ConflictError,
-  InternalServerError: () => InternalServerError,
-  NotFoundError: () => NotFoundError,
-  PermissionDeniedError: () => PermissionDeniedError,
-  RateLimitError: () => RateLimitError,
-  UnprocessableEntityError: () => UnprocessableEntityError
-});
-var APIError = class _APIError extends Error {
-  constructor(status, error, message, headers) {
-    super(_APIError.makeMessage(error, message));
-    this.status = status;
-    this.headers = headers;
-    const data = error;
-    this.error = data;
-    this.code = data === null || data === void 0 ? void 0 : data["code"];
-    this.param = data === null || data === void 0 ? void 0 : data["param"];
-    this.type = data === null || data === void 0 ? void 0 : data["type"];
-  }
-  static makeMessage(error, message) {
-    return (error === null || error === void 0 ? void 0 : error.message) ? typeof error.message === "string" ? error.message : JSON.stringify(error.message) : error ? JSON.stringify(error) : message || "Unknown error occurred";
-  }
-  static generate(status, errorResponse, message, headers) {
-    if (!status) {
-      return new APIConnectionError({ cause: castToError(errorResponse) });
-    }
-    const error = errorResponse === null || errorResponse === void 0 ? void 0 : errorResponse["error"];
-    if (status === 400) {
-      return new BadRequestError(status, error, message, headers);
-    }
-    if (status === 401) {
-      return new AuthenticationError(status, error, message, headers);
-    }
-    if (status === 403) {
-      return new PermissionDeniedError(status, error, message, headers);
-    }
-    if (status === 404) {
-      return new NotFoundError(status, error, message, headers);
-    }
-    if (status === 409) {
-      return new ConflictError(status, error, message, headers);
-    }
-    if (status === 422) {
-      return new UnprocessableEntityError(status, error, message, headers);
-    }
-    if (status === 429) {
-      return new RateLimitError(status, error, message, headers);
-    }
-    if (status >= 500) {
-      return new InternalServerError(status, error, message, headers);
-    }
-    return new _APIError(status, error, message, headers);
-  }
-};
-var APIUserAbortError = class extends APIError {
-  constructor({ message } = {}) {
-    super(void 0, void 0, message || "Request was aborted.", void 0);
-    this.status = void 0;
-  }
-};
-var APIConnectionError = class extends APIError {
-  constructor({ message, cause }) {
-    super(void 0, void 0, message || "Connection error.", void 0);
-    this.status = void 0;
-    if (cause) this.cause = cause;
-  }
-};
-var APIConnectionTimeoutError = class extends APIConnectionError {
-  constructor() {
-    super({ message: "Request timed out." });
-  }
-};
-var BadRequestError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 400;
-  }
-};
-var AuthenticationError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 401;
-  }
-};
-var PermissionDeniedError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 403;
-  }
-};
-var NotFoundError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 404;
-  }
-};
-var ConflictError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 409;
-  }
-};
-var UnprocessableEntityError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 422;
-  }
-};
-var RateLimitError = class extends APIError {
-  constructor() {
-    super(...arguments);
-    this.status = 429;
-  }
-};
-var InternalServerError = class extends APIError {
-};
-
-// node_modules/openai/_shims/agent.node.mjs
-var import_agentkeepalive = __toESM(require_agentkeepalive(), 1);
-var import_abort_controller = __toESM(require_abort_controller(), 1);
-var defaultHttpAgent = new import_agentkeepalive.default({ keepAlive: true, timeout: 5 * 60 * 1e3 });
-var defaultHttpsAgent = new import_agentkeepalive.default.HttpsAgent({ keepAlive: true, timeout: 5 * 60 * 1e3 });
-if (typeof AbortController === "undefined") {
-  AbortController = import_abort_controller.AbortController;
-}
-var getDefaultAgent = (url) => {
-  if (defaultHttpsAgent && url.startsWith("https")) return defaultHttpsAgent;
-  return defaultHttpAgent;
-};
-
-// node_modules/openai/_shims/fetch.node.mjs
-var nf = __toESM(require_lib2(), 1);
-var _fetch = nf.default;
-var isPolyfilled = true;
-
-// node_modules/formdata-node/lib/esm/FormData.js
-var import_util2 = require("util");
-
 // node_modules/web-streams-polyfill/dist/ponyfill.mjs
-var e = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? Symbol : (e2) => `Symbol(${e2})`;
 function t() {
 }
 function r(e2) {
   return "object" == typeof e2 && null !== e2 || "function" == typeof e2;
 }
-var o = t;
 function n(e2, t2) {
   try {
     Object.defineProperty(e2, "name", { value: t2, configurable: true });
   } catch (e3) {
   }
 }
-var a = Promise;
-var i = Promise.prototype.then;
-var l = Promise.resolve.bind(a);
-var s = Promise.reject.bind(a);
 function u(e2) {
   return new a(e2);
 }
@@ -4657,14 +3080,6 @@ function p(e2, t2, r2) {
 function m(e2) {
   f(e2, void 0, o);
 }
-var y = (e2) => {
-  if ("function" == typeof queueMicrotask) y = queueMicrotask;
-  else {
-    const e3 = c(void 0);
-    y = (t2) => f(e3, t2);
-  }
-  return y(e2);
-};
 function g(e2, t2, r2) {
   if ("function" != typeof e2) throw new TypeError("Argument is not a function");
   return Function.prototype.apply.call(e2, t2, r2);
@@ -4676,40 +3091,6 @@ function w(e2, t2, r2) {
     return d(e3);
   }
 }
-var S = class {
-  constructor() {
-    this._cursor = 0, this._size = 0, this._front = { _elements: [], _next: void 0 }, this._back = this._front, this._cursor = 0, this._size = 0;
-  }
-  get length() {
-    return this._size;
-  }
-  push(e2) {
-    const t2 = this._back;
-    let r2 = t2;
-    16383 === t2._elements.length && (r2 = { _elements: [], _next: void 0 }), t2._elements.push(e2), r2 !== t2 && (this._back = r2, t2._next = r2), ++this._size;
-  }
-  shift() {
-    const e2 = this._front;
-    let t2 = e2;
-    const r2 = this._cursor;
-    let o2 = r2 + 1;
-    const n2 = e2._elements, a2 = n2[r2];
-    return 16384 === o2 && (t2 = e2._next, o2 = 0), --this._size, this._cursor = o2, e2 !== t2 && (this._front = t2), n2[r2] = void 0, a2;
-  }
-  forEach(e2) {
-    let t2 = this._cursor, r2 = this._front, o2 = r2._elements;
-    for (; !(t2 === o2.length && void 0 === r2._next || t2 === o2.length && (r2 = r2._next, o2 = r2._elements, t2 = 0, 0 === o2.length)); ) e2(o2[t2]), ++t2;
-  }
-  peek() {
-    const e2 = this._front, t2 = this._cursor;
-    return e2._elements[t2];
-  }
-};
-var v = e("[[AbortSteps]]");
-var R = e("[[ErrorSteps]]");
-var T = e("[[CancelSteps]]");
-var q = e("[[PullSteps]]");
-var C = e("[[ReleaseSteps]]");
 function E(e2, t2) {
   e2._ownerReadableStream = t2, t2._reader = e2, "readable" === t2._state ? O(e2) : "closed" === t2._state ? function(e3) {
     O(e3), j(e3);
@@ -4741,12 +3122,6 @@ function A(e2, t2) {
 function j(e2) {
   void 0 !== e2._closedPromise_resolve && (e2._closedPromise_resolve(void 0), e2._closedPromise_resolve = void 0, e2._closedPromise_reject = void 0);
 }
-var z = Number.isFinite || function(e2) {
-  return "number" == typeof e2 && isFinite(e2);
-};
-var L = Math.trunc || function(e2) {
-  return e2 < 0 ? Math.ceil(e2) : Math.floor(e2);
-};
 function F(e2, t2) {
   if (void 0 !== e2 && ("object" != typeof (r2 = e2) && "function" != typeof r2)) throw new TypeError(`${t2} is not an object.`);
   var r2;
@@ -4815,38 +3190,6 @@ function J(e2) {
   const t2 = e2._reader;
   return void 0 !== t2 && !!K(t2);
 }
-var ReadableStreamDefaultReader = class {
-  constructor(e2) {
-    if ($(e2, 1, "ReadableStreamDefaultReader"), V(e2, "First parameter"), Ut(e2)) throw new TypeError("This stream has already been locked for exclusive reading by another reader");
-    E(this, e2), this._readRequests = new S();
-  }
-  get closed() {
-    return K(this) ? this._closedPromise : d(ee("closed"));
-  }
-  cancel(e2) {
-    return K(this) ? void 0 === this._ownerReadableStream ? d(k("cancel")) : P(this, e2) : d(ee("cancel"));
-  }
-  read() {
-    if (!K(this)) return d(ee("read"));
-    if (void 0 === this._ownerReadableStream) return d(k("read from"));
-    let e2, t2;
-    const r2 = u((r3, o2) => {
-      e2 = r3, t2 = o2;
-    });
-    return function(e3, t3) {
-      const r3 = e3._ownerReadableStream;
-      r3._disturbed = true, "closed" === r3._state ? t3._closeSteps() : "errored" === r3._state ? t3._errorSteps(r3._storedError) : r3._readableStreamController[q](t3);
-    }(this, { _chunkSteps: (t3) => e2({ value: t3, done: false }), _closeSteps: () => e2({ value: void 0, done: true }), _errorSteps: (e3) => t2(e3) }), r2;
-  }
-  releaseLock() {
-    if (!K(this)) throw ee("releaseLock");
-    void 0 !== this._ownerReadableStream && function(e2) {
-      W(e2);
-      const t2 = new TypeError("Reader was released");
-      Z(e2, t2);
-    }(this);
-  }
-};
 function K(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_readRequests") && e2 instanceof ReadableStreamDefaultReader);
 }
@@ -4859,47 +3202,6 @@ function Z(e2, t2) {
 function ee(e2) {
   return new TypeError(`ReadableStreamDefaultReader.prototype.${e2} can only be used on a ReadableStreamDefaultReader`);
 }
-Object.defineProperties(ReadableStreamDefaultReader.prototype, { cancel: { enumerable: true }, read: { enumerable: true }, releaseLock: { enumerable: true }, closed: { enumerable: true } }), n(ReadableStreamDefaultReader.prototype.cancel, "cancel"), n(ReadableStreamDefaultReader.prototype.read, "read"), n(ReadableStreamDefaultReader.prototype.releaseLock, "releaseLock"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamDefaultReader.prototype, e.toStringTag, { value: "ReadableStreamDefaultReader", configurable: true });
-var te = class {
-  constructor(e2, t2) {
-    this._ongoingPromise = void 0, this._isFinished = false, this._reader = e2, this._preventCancel = t2;
-  }
-  next() {
-    const e2 = () => this._nextSteps();
-    return this._ongoingPromise = this._ongoingPromise ? p(this._ongoingPromise, e2, e2) : e2(), this._ongoingPromise;
-  }
-  return(e2) {
-    const t2 = () => this._returnSteps(e2);
-    return this._ongoingPromise ? p(this._ongoingPromise, t2, t2) : t2();
-  }
-  _nextSteps() {
-    if (this._isFinished) return Promise.resolve({ value: void 0, done: true });
-    const e2 = this._reader;
-    return void 0 === e2 ? d(k("iterate")) : f(e2.read(), (e3) => {
-      var t2;
-      return this._ongoingPromise = void 0, e3.done && (this._isFinished = true, null === (t2 = this._reader) || void 0 === t2 || t2.releaseLock(), this._reader = void 0), e3;
-    }, (e3) => {
-      var t2;
-      throw this._ongoingPromise = void 0, this._isFinished = true, null === (t2 = this._reader) || void 0 === t2 || t2.releaseLock(), this._reader = void 0, e3;
-    });
-  }
-  _returnSteps(e2) {
-    if (this._isFinished) return Promise.resolve({ value: e2, done: true });
-    this._isFinished = true;
-    const t2 = this._reader;
-    if (void 0 === t2) return d(k("finish iterating"));
-    if (this._reader = void 0, !this._preventCancel) {
-      const r2 = t2.cancel(e2);
-      return t2.releaseLock(), p(r2, () => ({ value: e2, done: true }));
-    }
-    return t2.releaseLock(), c({ value: e2, done: true });
-  }
-};
-var re = { next() {
-  return oe(this) ? this._asyncIteratorImpl.next() : d(ne("next"));
-}, return(e2) {
-  return oe(this) ? this._asyncIteratorImpl.return(e2) : d(ne("return"));
-} };
 function oe(e2) {
   if (!r(e2)) return false;
   if (!Object.prototype.hasOwnProperty.call(e2, "_asyncIteratorImpl")) return false;
@@ -4912,12 +3214,6 @@ function oe(e2) {
 function ne(e2) {
   return new TypeError(`ReadableStreamAsyncIterator.${e2} can only be used on a ReadableSteamAsyncIterator`);
 }
-"symbol" == typeof e.asyncIterator && Object.defineProperty(re, e.asyncIterator, { value() {
-  return this;
-}, writable: true, configurable: true });
-var ae = Number.isNaN || function(e2) {
-  return e2 != e2;
-};
 function ie(e2, t2, r2, o2, n2) {
   new Uint8Array(e2).set(new Uint8Array(r2, o2, n2), t2);
 }
@@ -4941,147 +3237,6 @@ function ue(e2, t2, r2) {
 function ce(e2) {
   e2._queue = new S(), e2._queueTotalSize = 0;
 }
-var ReadableStreamBYOBRequest = class {
-  constructor() {
-    throw new TypeError("Illegal constructor");
-  }
-  get view() {
-    if (!fe(this)) throw Be("view");
-    return this._view;
-  }
-  respond(e2) {
-    if (!fe(this)) throw Be("respond");
-    if ($(e2, 1, "respond"), e2 = N(e2, "First parameter"), void 0 === this._associatedReadableByteStreamController) throw new TypeError("This BYOB request has been invalidated");
-    this._view.buffer, function(e3, t2) {
-      const r2 = e3._pendingPullIntos.peek();
-      if ("closed" === e3._controlledReadableByteStream._state) {
-        if (0 !== t2) throw new TypeError("bytesWritten must be 0 when calling respond() on a closed stream");
-      } else {
-        if (0 === t2) throw new TypeError("bytesWritten must be greater than 0 when calling respond() on a readable stream");
-        if (r2.bytesFilled + t2 > r2.byteLength) throw new RangeError("bytesWritten out of range");
-      }
-      r2.buffer = r2.buffer, qe(e3, t2);
-    }(this._associatedReadableByteStreamController, e2);
-  }
-  respondWithNewView(e2) {
-    if (!fe(this)) throw Be("respondWithNewView");
-    if ($(e2, 1, "respondWithNewView"), !ArrayBuffer.isView(e2)) throw new TypeError("You can only respond with array buffer views");
-    if (void 0 === this._associatedReadableByteStreamController) throw new TypeError("This BYOB request has been invalidated");
-    e2.buffer, function(e3, t2) {
-      const r2 = e3._pendingPullIntos.peek();
-      if ("closed" === e3._controlledReadableByteStream._state) {
-        if (0 !== t2.byteLength) throw new TypeError("The view's length must be 0 when calling respondWithNewView() on a closed stream");
-      } else if (0 === t2.byteLength) throw new TypeError("The view's length must be greater than 0 when calling respondWithNewView() on a readable stream");
-      if (r2.byteOffset + r2.bytesFilled !== t2.byteOffset) throw new RangeError("The region specified by view does not match byobRequest");
-      if (r2.bufferByteLength !== t2.buffer.byteLength) throw new RangeError("The buffer of view has different capacity than byobRequest");
-      if (r2.bytesFilled + t2.byteLength > r2.byteLength) throw new RangeError("The region specified by view is larger than byobRequest");
-      const o2 = t2.byteLength;
-      r2.buffer = t2.buffer, qe(e3, o2);
-    }(this._associatedReadableByteStreamController, e2);
-  }
-};
-Object.defineProperties(ReadableStreamBYOBRequest.prototype, { respond: { enumerable: true }, respondWithNewView: { enumerable: true }, view: { enumerable: true } }), n(ReadableStreamBYOBRequest.prototype.respond, "respond"), n(ReadableStreamBYOBRequest.prototype.respondWithNewView, "respondWithNewView"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamBYOBRequest.prototype, e.toStringTag, { value: "ReadableStreamBYOBRequest", configurable: true });
-var ReadableByteStreamController = class {
-  constructor() {
-    throw new TypeError("Illegal constructor");
-  }
-  get byobRequest() {
-    if (!de(this)) throw Ae("byobRequest");
-    return function(e2) {
-      if (null === e2._byobRequest && e2._pendingPullIntos.length > 0) {
-        const t2 = e2._pendingPullIntos.peek(), r2 = new Uint8Array(t2.buffer, t2.byteOffset + t2.bytesFilled, t2.byteLength - t2.bytesFilled), o2 = Object.create(ReadableStreamBYOBRequest.prototype);
-        !function(e3, t3, r3) {
-          e3._associatedReadableByteStreamController = t3, e3._view = r3;
-        }(o2, e2, r2), e2._byobRequest = o2;
-      }
-      return e2._byobRequest;
-    }(this);
-  }
-  get desiredSize() {
-    if (!de(this)) throw Ae("desiredSize");
-    return ke(this);
-  }
-  close() {
-    if (!de(this)) throw Ae("close");
-    if (this._closeRequested) throw new TypeError("The stream has already been closed; do not close it again!");
-    const e2 = this._controlledReadableByteStream._state;
-    if ("readable" !== e2) throw new TypeError(`The stream (in ${e2} state) is not in the readable state and cannot be closed`);
-    !function(e3) {
-      const t2 = e3._controlledReadableByteStream;
-      if (e3._closeRequested || "readable" !== t2._state) return;
-      if (e3._queueTotalSize > 0) return void (e3._closeRequested = true);
-      if (e3._pendingPullIntos.length > 0) {
-        if (e3._pendingPullIntos.peek().bytesFilled > 0) {
-          const t3 = new TypeError("Insufficient bytes to fill elements in the given buffer");
-          throw Pe(e3, t3), t3;
-        }
-      }
-      Ee(e3), Xt(t2);
-    }(this);
-  }
-  enqueue(e2) {
-    if (!de(this)) throw Ae("enqueue");
-    if ($(e2, 1, "enqueue"), !ArrayBuffer.isView(e2)) throw new TypeError("chunk must be an array buffer view");
-    if (0 === e2.byteLength) throw new TypeError("chunk must have non-zero byteLength");
-    if (0 === e2.buffer.byteLength) throw new TypeError("chunk's buffer must have non-zero byteLength");
-    if (this._closeRequested) throw new TypeError("stream is closed or draining");
-    const t2 = this._controlledReadableByteStream._state;
-    if ("readable" !== t2) throw new TypeError(`The stream (in ${t2} state) is not in the readable state and cannot be enqueued to`);
-    !function(e3, t3) {
-      const r2 = e3._controlledReadableByteStream;
-      if (e3._closeRequested || "readable" !== r2._state) return;
-      const o2 = t3.buffer, n2 = t3.byteOffset, a2 = t3.byteLength, i2 = o2;
-      if (e3._pendingPullIntos.length > 0) {
-        const t4 = e3._pendingPullIntos.peek();
-        t4.buffer, 0, Re(e3), t4.buffer = t4.buffer, "none" === t4.readerType && ge(e3, t4);
-      }
-      if (J(r2)) if (function(e4) {
-        const t4 = e4._controlledReadableByteStream._reader;
-        for (; t4._readRequests.length > 0; ) {
-          if (0 === e4._queueTotalSize) return;
-          We(e4, t4._readRequests.shift());
-        }
-      }(e3), 0 === X(r2)) me(e3, i2, n2, a2);
-      else {
-        e3._pendingPullIntos.length > 0 && Ce(e3);
-        G(r2, new Uint8Array(i2, n2, a2), false);
-      }
-      else Le(r2) ? (me(e3, i2, n2, a2), Te(e3)) : me(e3, i2, n2, a2);
-      be(e3);
-    }(this, e2);
-  }
-  error(e2) {
-    if (!de(this)) throw Ae("error");
-    Pe(this, e2);
-  }
-  [T](e2) {
-    he(this), ce(this);
-    const t2 = this._cancelAlgorithm(e2);
-    return Ee(this), t2;
-  }
-  [q](e2) {
-    const t2 = this._controlledReadableByteStream;
-    if (this._queueTotalSize > 0) return void We(this, e2);
-    const r2 = this._autoAllocateChunkSize;
-    if (void 0 !== r2) {
-      let t3;
-      try {
-        t3 = new ArrayBuffer(r2);
-      } catch (t4) {
-        return void e2._errorSteps(t4);
-      }
-      const o2 = { buffer: t3, bufferByteLength: r2, byteOffset: 0, byteLength: r2, bytesFilled: 0, elementSize: 1, viewConstructor: Uint8Array, readerType: "default" };
-      this._pendingPullIntos.push(o2);
-    }
-    U(t2, e2), be(this);
-  }
-  [C]() {
-    if (this._pendingPullIntos.length > 0) {
-      const e2 = this._pendingPullIntos.peek();
-      e2.readerType = "none", this._pendingPullIntos = new S(), this._pendingPullIntos.push(e2);
-    }
-  }
-};
 function de(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_controlledReadableByteStream") && e2 instanceof ReadableByteStreamController);
 }
@@ -5228,65 +3383,6 @@ function Le(e2) {
   const t2 = e2._reader;
   return void 0 !== t2 && !!Fe(t2);
 }
-Object.defineProperties(ReadableByteStreamController.prototype, { close: { enumerable: true }, enqueue: { enumerable: true }, error: { enumerable: true }, byobRequest: { enumerable: true }, desiredSize: { enumerable: true } }), n(ReadableByteStreamController.prototype.close, "close"), n(ReadableByteStreamController.prototype.enqueue, "enqueue"), n(ReadableByteStreamController.prototype.error, "error"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableByteStreamController.prototype, e.toStringTag, { value: "ReadableByteStreamController", configurable: true });
-var ReadableStreamBYOBReader = class {
-  constructor(e2) {
-    if ($(e2, 1, "ReadableStreamBYOBReader"), V(e2, "First parameter"), Ut(e2)) throw new TypeError("This stream has already been locked for exclusive reading by another reader");
-    if (!de(e2._readableStreamController)) throw new TypeError("Cannot construct a ReadableStreamBYOBReader for a stream not constructed with a byte source");
-    E(this, e2), this._readIntoRequests = new S();
-  }
-  get closed() {
-    return Fe(this) ? this._closedPromise : d(De("closed"));
-  }
-  cancel(e2) {
-    return Fe(this) ? void 0 === this._ownerReadableStream ? d(k("cancel")) : P(this, e2) : d(De("cancel"));
-  }
-  read(e2) {
-    if (!Fe(this)) return d(De("read"));
-    if (!ArrayBuffer.isView(e2)) return d(new TypeError("view must be an array buffer view"));
-    if (0 === e2.byteLength) return d(new TypeError("view must have non-zero byteLength"));
-    if (0 === e2.buffer.byteLength) return d(new TypeError("view's buffer must have non-zero byteLength"));
-    if (e2.buffer, void 0 === this._ownerReadableStream) return d(k("read from"));
-    let t2, r2;
-    const o2 = u((e3, o3) => {
-      t2 = e3, r2 = o3;
-    });
-    return function(e3, t3, r3) {
-      const o3 = e3._ownerReadableStream;
-      o3._disturbed = true, "errored" === o3._state ? r3._errorSteps(o3._storedError) : function(e4, t4, r4) {
-        const o4 = e4._controlledReadableByteStream;
-        let n2 = 1;
-        t4.constructor !== DataView && (n2 = t4.constructor.BYTES_PER_ELEMENT);
-        const a2 = t4.constructor, i2 = t4.buffer, l2 = { buffer: i2, bufferByteLength: i2.byteLength, byteOffset: t4.byteOffset, byteLength: t4.byteLength, bytesFilled: 0, elementSize: n2, viewConstructor: a2, readerType: "byob" };
-        if (e4._pendingPullIntos.length > 0) return e4._pendingPullIntos.push(l2), void je(o4, r4);
-        if ("closed" !== o4._state) {
-          if (e4._queueTotalSize > 0) {
-            if (we(e4, l2)) {
-              const t5 = pe(l2);
-              return ve(e4), void r4._chunkSteps(t5);
-            }
-            if (e4._closeRequested) {
-              const t5 = new TypeError("Insufficient bytes to fill elements in the given buffer");
-              return Pe(e4, t5), void r4._errorSteps(t5);
-            }
-          }
-          e4._pendingPullIntos.push(l2), je(o4, r4), be(e4);
-        } else {
-          const e5 = new a2(l2.buffer, l2.byteOffset, 0);
-          r4._closeSteps(e5);
-        }
-      }(o3._readableStreamController, t3, r3);
-    }(this, e2, { _chunkSteps: (e3) => t2({ value: e3, done: false }), _closeSteps: (e3) => t2({ value: e3, done: true }), _errorSteps: (e3) => r2(e3) }), o2;
-  }
-  releaseLock() {
-    if (!Fe(this)) throw De("releaseLock");
-    void 0 !== this._ownerReadableStream && function(e2) {
-      W(e2);
-      const t2 = new TypeError("Reader was released");
-      Ie(e2, t2);
-    }(this);
-  }
-};
 function Fe(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_readIntoRequests") && e2 instanceof ReadableStreamBYOBReader);
 }
@@ -5329,54 +3425,6 @@ function xe(e2, t2, r2) {
 function Ve(e2, t2, r2) {
   return I(e2, r2), (r3, o2) => w(e2, t2, [r3, o2]);
 }
-Object.defineProperties(ReadableStreamBYOBReader.prototype, { cancel: { enumerable: true }, read: { enumerable: true }, releaseLock: { enumerable: true }, closed: { enumerable: true } }), n(ReadableStreamBYOBReader.prototype.cancel, "cancel"), n(ReadableStreamBYOBReader.prototype.read, "read"), n(ReadableStreamBYOBReader.prototype.releaseLock, "releaseLock"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamBYOBReader.prototype, e.toStringTag, { value: "ReadableStreamBYOBReader", configurable: true });
-var Ue = "function" == typeof AbortController;
-var WritableStream = class {
-  constructor(e2 = {}, t2 = {}) {
-    void 0 === e2 ? e2 = null : D(e2, "First parameter");
-    const r2 = Ye(t2, "Second parameter"), o2 = function(e3, t3) {
-      F(e3, t3);
-      const r3 = null == e3 ? void 0 : e3.abort, o3 = null == e3 ? void 0 : e3.close, n3 = null == e3 ? void 0 : e3.start, a3 = null == e3 ? void 0 : e3.type, i2 = null == e3 ? void 0 : e3.write;
-      return { abort: void 0 === r3 ? void 0 : Ne(r3, e3, `${t3} has member 'abort' that`), close: void 0 === o3 ? void 0 : He(o3, e3, `${t3} has member 'close' that`), start: void 0 === n3 ? void 0 : xe(n3, e3, `${t3} has member 'start' that`), write: void 0 === i2 ? void 0 : Ve(i2, e3, `${t3} has member 'write' that`), type: a3 };
-    }(e2, "First parameter");
-    var n2;
-    (n2 = this)._state = "writable", n2._storedError = void 0, n2._writer = void 0, n2._writableStreamController = void 0, n2._writeRequests = new S(), n2._inFlightWriteRequest = void 0, n2._closeRequest = void 0, n2._inFlightCloseRequest = void 0, n2._pendingAbortRequest = void 0, n2._backpressure = false;
-    if (void 0 !== o2.type) throw new RangeError("Invalid type is specified");
-    const a2 = Me(r2);
-    !function(e3, t3, r3, o3) {
-      const n3 = Object.create(WritableStreamDefaultController.prototype);
-      let a3, i2, l2, s2;
-      a3 = void 0 !== t3.start ? () => t3.start(n3) : () => {
-      };
-      i2 = void 0 !== t3.write ? (e4) => t3.write(e4, n3) : () => c(void 0);
-      l2 = void 0 !== t3.close ? () => t3.close() : () => c(void 0);
-      s2 = void 0 !== t3.abort ? (e4) => t3.abort(e4) : () => c(void 0);
-      !function(e4, t4, r4, o4, n4, a4, i3, l3) {
-        t4._controlledWritableStream = e4, e4._writableStreamController = t4, t4._queue = void 0, t4._queueTotalSize = void 0, ce(t4), t4._abortReason = void 0, t4._abortController = function() {
-          if (Ue) return new AbortController();
-        }(), t4._started = false, t4._strategySizeAlgorithm = l3, t4._strategyHWM = i3, t4._writeAlgorithm = o4, t4._closeAlgorithm = n4, t4._abortAlgorithm = a4;
-        const s3 = bt(t4);
-        nt(e4, s3);
-        const u2 = r4();
-        b(c(u2), () => (t4._started = true, dt(t4), null), (r5) => (t4._started = true, Ze(e4, r5), null));
-      }(e3, n3, a3, i2, l2, s2, r3, o3);
-    }(this, o2, $e(r2, 1), a2);
-  }
-  get locked() {
-    if (!Ge(this)) throw _t("locked");
-    return Xe(this);
-  }
-  abort(e2) {
-    return Ge(this) ? Xe(this) ? d(new TypeError("Cannot abort a stream that already has a writer")) : Je(this, e2) : d(_t("abort"));
-  }
-  close() {
-    return Ge(this) ? Xe(this) ? d(new TypeError("Cannot close a stream that already has a writer")) : rt(this) ? d(new TypeError("Cannot close an already-closing stream")) : Ke(this) : d(_t("close"));
-  }
-  getWriter() {
-    if (!Ge(this)) throw _t("getWriter");
-    return new WritableStreamDefaultWriter(this);
-  }
-};
 function Ge(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_writableStreamController") && e2 instanceof WritableStream);
 }
@@ -5443,95 +3491,6 @@ function nt(e2, t2) {
     Rt(e3);
   }(r2) : Et(r2)), e2._backpressure = t2;
 }
-Object.defineProperties(WritableStream.prototype, { abort: { enumerable: true }, close: { enumerable: true }, getWriter: { enumerable: true }, locked: { enumerable: true } }), n(WritableStream.prototype.abort, "abort"), n(WritableStream.prototype.close, "close"), n(WritableStream.prototype.getWriter, "getWriter"), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStream.prototype, e.toStringTag, { value: "WritableStream", configurable: true });
-var WritableStreamDefaultWriter = class {
-  constructor(e2) {
-    if ($(e2, 1, "WritableStreamDefaultWriter"), function(e3, t3) {
-      if (!Ge(e3)) throw new TypeError(`${t3} is not a WritableStream.`);
-    }(e2, "First parameter"), Xe(e2)) throw new TypeError("This stream has already been locked for exclusive writing by another writer");
-    this._ownerWritableStream = e2, e2._writer = this;
-    const t2 = e2._state;
-    if ("writable" === t2) !rt(e2) && e2._backpressure ? Rt(this) : qt(this), gt(this);
-    else if ("erroring" === t2) Tt(this, e2._storedError), gt(this);
-    else if ("closed" === t2) qt(this), gt(r2 = this), vt(r2);
-    else {
-      const t3 = e2._storedError;
-      Tt(this, t3), wt(this, t3);
-    }
-    var r2;
-  }
-  get closed() {
-    return at(this) ? this._closedPromise : d(mt("closed"));
-  }
-  get desiredSize() {
-    if (!at(this)) throw mt("desiredSize");
-    if (void 0 === this._ownerWritableStream) throw yt("desiredSize");
-    return function(e2) {
-      const t2 = e2._ownerWritableStream, r2 = t2._state;
-      if ("errored" === r2 || "erroring" === r2) return null;
-      if ("closed" === r2) return 0;
-      return ct(t2._writableStreamController);
-    }(this);
-  }
-  get ready() {
-    return at(this) ? this._readyPromise : d(mt("ready"));
-  }
-  abort(e2) {
-    return at(this) ? void 0 === this._ownerWritableStream ? d(yt("abort")) : function(e3, t2) {
-      return Je(e3._ownerWritableStream, t2);
-    }(this, e2) : d(mt("abort"));
-  }
-  close() {
-    if (!at(this)) return d(mt("close"));
-    const e2 = this._ownerWritableStream;
-    return void 0 === e2 ? d(yt("close")) : rt(e2) ? d(new TypeError("Cannot close an already-closing stream")) : Ke(this._ownerWritableStream);
-  }
-  releaseLock() {
-    if (!at(this)) throw mt("releaseLock");
-    void 0 !== this._ownerWritableStream && function(e2) {
-      const t2 = e2._ownerWritableStream, r2 = new TypeError("Writer was released and can no longer be used to monitor the stream's closedness");
-      it(e2, r2), function(e3, t3) {
-        "pending" === e3._closedPromiseState ? St(e3, t3) : function(e4, t4) {
-          wt(e4, t4);
-        }(e3, t3);
-      }(e2, r2), t2._writer = void 0, e2._ownerWritableStream = void 0;
-    }(this);
-  }
-  write(e2) {
-    return at(this) ? void 0 === this._ownerWritableStream ? d(yt("write to")) : function(e3, t2) {
-      const r2 = e3._ownerWritableStream, o2 = r2._writableStreamController, n2 = function(e4, t3) {
-        try {
-          return e4._strategySizeAlgorithm(t3);
-        } catch (t4) {
-          return ft(e4, t4), 1;
-        }
-      }(o2, t2);
-      if (r2 !== e3._ownerWritableStream) return d(yt("write to"));
-      const a2 = r2._state;
-      if ("errored" === a2) return d(r2._storedError);
-      if (rt(r2) || "closed" === a2) return d(new TypeError("The stream is closing or closed and cannot be written to"));
-      if ("erroring" === a2) return d(r2._storedError);
-      const i2 = function(e4) {
-        return u((t3, r3) => {
-          const o3 = { _resolve: t3, _reject: r3 };
-          e4._writeRequests.push(o3);
-        });
-      }(r2);
-      return function(e4, t3, r3) {
-        try {
-          ue(e4, t3, r3);
-        } catch (t4) {
-          return void ft(e4, t4);
-        }
-        const o3 = e4._controlledWritableStream;
-        if (!rt(o3) && "writable" === o3._state) {
-          nt(o3, bt(e4));
-        }
-        dt(e4);
-      }(o2, t2, n2), i2;
-    }(this, e2) : d(mt("write"));
-  }
-};
 function at(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_ownerWritableStream") && e2 instanceof WritableStreamDefaultWriter);
 }
@@ -5540,33 +3499,6 @@ function it(e2, t2) {
     Tt(e3, t3);
   }(e2, t2);
 }
-Object.defineProperties(WritableStreamDefaultWriter.prototype, { abort: { enumerable: true }, close: { enumerable: true }, releaseLock: { enumerable: true }, write: { enumerable: true }, closed: { enumerable: true }, desiredSize: { enumerable: true }, ready: { enumerable: true } }), n(WritableStreamDefaultWriter.prototype.abort, "abort"), n(WritableStreamDefaultWriter.prototype.close, "close"), n(WritableStreamDefaultWriter.prototype.releaseLock, "releaseLock"), n(WritableStreamDefaultWriter.prototype.write, "write"), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStreamDefaultWriter.prototype, e.toStringTag, { value: "WritableStreamDefaultWriter", configurable: true });
-var lt = {};
-var WritableStreamDefaultController = class {
-  constructor() {
-    throw new TypeError("Illegal constructor");
-  }
-  get abortReason() {
-    if (!st(this)) throw pt("abortReason");
-    return this._abortReason;
-  }
-  get signal() {
-    if (!st(this)) throw pt("signal");
-    if (void 0 === this._abortController) throw new TypeError("WritableStreamDefaultController.prototype.signal is not supported");
-    return this._abortController.signal;
-  }
-  error(e2) {
-    if (!st(this)) throw pt("error");
-    "writable" === this._controlledWritableStream._state && ht(this, e2);
-  }
-  [v](e2) {
-    const t2 = this._abortAlgorithm(e2);
-    return ut(this), t2;
-  }
-  [R]() {
-    ce(this);
-  }
-};
 function st(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_controlledWritableStream") && e2 instanceof WritableStreamDefaultController);
 }
@@ -5669,21 +3601,6 @@ function Ct(e2, t2) {
 function Et(e2) {
   void 0 !== e2._readyPromise_resolve && (e2._readyPromise_resolve(void 0), e2._readyPromise_resolve = void 0, e2._readyPromise_reject = void 0, e2._readyPromiseState = "fulfilled");
 }
-Object.defineProperties(WritableStreamDefaultController.prototype, { abortReason: { enumerable: true }, signal: { enumerable: true }, error: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStreamDefaultController.prototype, e.toStringTag, { value: "WritableStreamDefaultController", configurable: true });
-var Pt = "undefined" != typeof DOMException ? DOMException : void 0;
-var Wt = function(e2) {
-  if ("function" != typeof e2 && "object" != typeof e2) return false;
-  try {
-    return new e2(), true;
-  } catch (e3) {
-    return false;
-  }
-}(Pt) ? Pt : function() {
-  const e2 = function(e3, t2) {
-    this.message = e3 || "", this.name = t2 || "Error", Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
-  };
-  return e2.prototype = Object.create(Error.prototype), Object.defineProperty(e2.prototype, "constructor", { value: e2, writable: true, configurable: true }), e2;
-}();
 function kt(e2, t2, r2, o2, n2, a2) {
   const i2 = e2.getReader(), l2 = t2.getWriter();
   Vt(e2) && (e2._disturbed = true);
@@ -5833,9 +3750,9 @@ function Ot(e2, t2) {
       }
       return m2;
     }
-    const q2 = new ReadableStream({ type: "bytes", start(e4) {
+    const q2 = new ReadableStream2({ type: "bytes", start(e4) {
       o2 = e4;
-    }, pull: S2, cancel: R2 }), C2 = new ReadableStream({ type: "bytes", start(e4) {
+    }, pull: S2, cancel: R2 }), C2 = new ReadableStream2({ type: "bytes", start(e4) {
       n2 = e4;
     }, pull: v2, cancel: T2 });
     return y2(i2), [q2, C2];
@@ -5866,73 +3783,14 @@ function Ot(e2, t2) {
       }
       return p2;
     }
-    const w2 = new ReadableStream({ start(e4) {
+    const w2 = new ReadableStream2({ start(e4) {
       a2 = e4;
-    }, pull: m2, cancel: y2 }), S2 = new ReadableStream({ start(e4) {
+    }, pull: m2, cancel: y2 }), S2 = new ReadableStream2({ start(e4) {
       i2 = e4;
     }, pull: m2, cancel: g2 });
     return _(r2.closed, (e4) => (a2.error(e4), i2.error(e4), f2 && h2 || l2(void 0), null)), [w2, S2];
   }(e2);
 }
-var ReadableStreamDefaultController = class {
-  constructor() {
-    throw new TypeError("Illegal constructor");
-  }
-  get desiredSize() {
-    if (!Bt(this)) throw Dt("desiredSize");
-    return Lt(this);
-  }
-  close() {
-    if (!Bt(this)) throw Dt("close");
-    if (!Ft(this)) throw new TypeError("The stream is not in a state that permits close");
-    !function(e2) {
-      if (!Ft(e2)) return;
-      const t2 = e2._controlledReadableStream;
-      e2._closeRequested = true, 0 === e2._queue.length && (jt(e2), Xt(t2));
-    }(this);
-  }
-  enqueue(e2) {
-    if (!Bt(this)) throw Dt("enqueue");
-    if (!Ft(this)) throw new TypeError("The stream is not in a state that permits enqueue");
-    return function(e3, t2) {
-      if (!Ft(e3)) return;
-      const r2 = e3._controlledReadableStream;
-      if (Ut(r2) && X(r2) > 0) G(r2, t2, false);
-      else {
-        let r3;
-        try {
-          r3 = e3._strategySizeAlgorithm(t2);
-        } catch (t3) {
-          throw zt(e3, t3), t3;
-        }
-        try {
-          ue(e3, t2, r3);
-        } catch (t3) {
-          throw zt(e3, t3), t3;
-        }
-      }
-      At(e3);
-    }(this, e2);
-  }
-  error(e2) {
-    if (!Bt(this)) throw Dt("error");
-    zt(this, e2);
-  }
-  [T](e2) {
-    ce(this);
-    const t2 = this._cancelAlgorithm(e2);
-    return jt(this), t2;
-  }
-  [q](e2) {
-    const t2 = this._controlledReadableStream;
-    if (this._queue.length > 0) {
-      const r2 = se(this);
-      this._closeRequested && 0 === this._queue.length ? (jt(this), Xt(t2)) : At(this), e2._chunkSteps(r2);
-    } else U(t2, e2), At(this);
-  }
-  [C]() {
-  }
-};
 function Bt(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_controlledReadableStream") && e2 instanceof ReadableStreamDefaultController);
 }
@@ -6017,80 +3875,8 @@ function xt(e2, t2) {
     if (!x(e3)) throw new TypeError(`${t3} is not a WritableStream.`);
   }(o2, `${t2} has member 'writable' that`), { readable: r2, writable: o2 };
 }
-Object.defineProperties(ReadableStreamDefaultController.prototype, { close: { enumerable: true }, enqueue: { enumerable: true }, error: { enumerable: true }, desiredSize: { enumerable: true } }), n(ReadableStreamDefaultController.prototype.close, "close"), n(ReadableStreamDefaultController.prototype.enqueue, "enqueue"), n(ReadableStreamDefaultController.prototype.error, "error"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamDefaultController.prototype, e.toStringTag, { value: "ReadableStreamDefaultController", configurable: true });
-var ReadableStream = class {
-  constructor(e2 = {}, t2 = {}) {
-    void 0 === e2 ? e2 = null : D(e2, "First parameter");
-    const r2 = Ye(t2, "Second parameter"), o2 = function(e3, t3) {
-      F(e3, t3);
-      const r3 = e3, o3 = null == r3 ? void 0 : r3.autoAllocateChunkSize, n3 = null == r3 ? void 0 : r3.cancel, a2 = null == r3 ? void 0 : r3.pull, i2 = null == r3 ? void 0 : r3.start, l2 = null == r3 ? void 0 : r3.type;
-      return { autoAllocateChunkSize: void 0 === o3 ? void 0 : N(o3, `${t3} has member 'autoAllocateChunkSize' that`), cancel: void 0 === n3 ? void 0 : $t(n3, r3, `${t3} has member 'cancel' that`), pull: void 0 === a2 ? void 0 : Mt(a2, r3, `${t3} has member 'pull' that`), start: void 0 === i2 ? void 0 : Yt(i2, r3, `${t3} has member 'start' that`), type: void 0 === l2 ? void 0 : Qt(l2, `${t3} has member 'type' that`) };
-    }(e2, "First parameter");
-    var n2;
-    if ((n2 = this)._state = "readable", n2._reader = void 0, n2._storedError = void 0, n2._disturbed = false, "bytes" === o2.type) {
-      if (void 0 !== r2.size) throw new RangeError("The strategy for a byte stream cannot have a size function");
-      Oe(this, o2, $e(r2, 0));
-    } else {
-      const e3 = Me(r2);
-      It(this, o2, $e(r2, 1), e3);
-    }
-  }
-  get locked() {
-    if (!Vt(this)) throw Kt("locked");
-    return Ut(this);
-  }
-  cancel(e2) {
-    return Vt(this) ? Ut(this) ? d(new TypeError("Cannot cancel a stream that already has a reader")) : Gt(this, e2) : d(Kt("cancel"));
-  }
-  getReader(e2) {
-    if (!Vt(this)) throw Kt("getReader");
-    return void 0 === function(e3, t2) {
-      F(e3, t2);
-      const r2 = null == e3 ? void 0 : e3.mode;
-      return { mode: void 0 === r2 ? void 0 : Nt(r2, `${t2} has member 'mode' that`) };
-    }(e2, "First parameter").mode ? new ReadableStreamDefaultReader(this) : function(e3) {
-      return new ReadableStreamBYOBReader(e3);
-    }(this);
-  }
-  pipeThrough(e2, t2 = {}) {
-    if (!H(this)) throw Kt("pipeThrough");
-    $(e2, 1, "pipeThrough");
-    const r2 = xt(e2, "First parameter"), o2 = Ht(t2, "Second parameter");
-    if (this.locked) throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked ReadableStream");
-    if (r2.writable.locked) throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked WritableStream");
-    return m(kt(this, r2.writable, o2.preventClose, o2.preventAbort, o2.preventCancel, o2.signal)), r2.readable;
-  }
-  pipeTo(e2, t2 = {}) {
-    if (!H(this)) return d(Kt("pipeTo"));
-    if (void 0 === e2) return d("Parameter 1 is required in 'pipeTo'.");
-    if (!x(e2)) return d(new TypeError("ReadableStream.prototype.pipeTo's first argument must be a WritableStream"));
-    let r2;
-    try {
-      r2 = Ht(t2, "Second parameter");
-    } catch (e3) {
-      return d(e3);
-    }
-    return this.locked ? d(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked ReadableStream")) : e2.locked ? d(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked WritableStream")) : kt(this, e2, r2.preventClose, r2.preventAbort, r2.preventCancel, r2.signal);
-  }
-  tee() {
-    if (!H(this)) throw Kt("tee");
-    if (this.locked) throw new TypeError("Cannot tee a stream that already has a reader");
-    return Ot(this);
-  }
-  values(e2) {
-    if (!H(this)) throw Kt("values");
-    return function(e3, t2) {
-      const r2 = e3.getReader(), o2 = new te(r2, t2), n2 = Object.create(re);
-      return n2._asyncIteratorImpl = o2, n2;
-    }(this, function(e3, t2) {
-      F(e3, t2);
-      const r2 = null == e3 ? void 0 : e3.preventCancel;
-      return { preventCancel: Boolean(r2) };
-    }(e2, "First parameter").preventCancel);
-  }
-};
 function Vt(e2) {
-  return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_readableStreamController") && e2 instanceof ReadableStream);
+  return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_readableStreamController") && e2 instanceof ReadableStream2);
 }
 function Ut(e2) {
   return void 0 !== e2._reader;
@@ -6131,44 +3917,12 @@ function Zt(e2, t2) {
   const r2 = null == e2 ? void 0 : e2.highWaterMark;
   return M(r2, "highWaterMark", "QueuingStrategyInit"), { highWaterMark: Y(r2) };
 }
-Object.defineProperties(ReadableStream.prototype, { cancel: { enumerable: true }, getReader: { enumerable: true }, pipeThrough: { enumerable: true }, pipeTo: { enumerable: true }, tee: { enumerable: true }, values: { enumerable: true }, locked: { enumerable: true } }), n(ReadableStream.prototype.cancel, "cancel"), n(ReadableStream.prototype.getReader, "getReader"), n(ReadableStream.prototype.pipeThrough, "pipeThrough"), n(ReadableStream.prototype.pipeTo, "pipeTo"), n(ReadableStream.prototype.tee, "tee"), n(ReadableStream.prototype.values, "values"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStream.prototype, e.toStringTag, { value: "ReadableStream", configurable: true }), "symbol" == typeof e.asyncIterator && Object.defineProperty(ReadableStream.prototype, e.asyncIterator, { value: ReadableStream.prototype.values, writable: true, configurable: true });
-var er = (e2) => e2.byteLength;
-n(er, "size");
-var ByteLengthQueuingStrategy = class {
-  constructor(e2) {
-    $(e2, 1, "ByteLengthQueuingStrategy"), e2 = Zt(e2, "First parameter"), this._byteLengthQueuingStrategyHighWaterMark = e2.highWaterMark;
-  }
-  get highWaterMark() {
-    if (!rr(this)) throw tr("highWaterMark");
-    return this._byteLengthQueuingStrategyHighWaterMark;
-  }
-  get size() {
-    if (!rr(this)) throw tr("size");
-    return er;
-  }
-};
 function tr(e2) {
   return new TypeError(`ByteLengthQueuingStrategy.prototype.${e2} can only be used on a ByteLengthQueuingStrategy`);
 }
 function rr(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_byteLengthQueuingStrategyHighWaterMark") && e2 instanceof ByteLengthQueuingStrategy);
 }
-Object.defineProperties(ByteLengthQueuingStrategy.prototype, { highWaterMark: { enumerable: true }, size: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(ByteLengthQueuingStrategy.prototype, e.toStringTag, { value: "ByteLengthQueuingStrategy", configurable: true });
-var or = () => 1;
-n(or, "size");
-var CountQueuingStrategy = class {
-  constructor(e2) {
-    $(e2, 1, "CountQueuingStrategy"), e2 = Zt(e2, "First parameter"), this._countQueuingStrategyHighWaterMark = e2.highWaterMark;
-  }
-  get highWaterMark() {
-    if (!ar(this)) throw nr("highWaterMark");
-    return this._countQueuingStrategyHighWaterMark;
-  }
-  get size() {
-    if (!ar(this)) throw nr("size");
-    return or;
-  }
-};
 function nr(e2) {
   return new TypeError(`CountQueuingStrategy.prototype.${e2} can only be used on a CountQueuingStrategy`);
 }
@@ -6184,125 +3938,6 @@ function lr(e2, t2, r2) {
 function sr(e2, t2, r2) {
   return I(e2, r2), (r3, o2) => w(e2, t2, [r3, o2]);
 }
-Object.defineProperties(CountQueuingStrategy.prototype, { highWaterMark: { enumerable: true }, size: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(CountQueuingStrategy.prototype, e.toStringTag, { value: "CountQueuingStrategy", configurable: true });
-var TransformStream = class {
-  constructor(e2 = {}, t2 = {}, r2 = {}) {
-    void 0 === e2 && (e2 = null);
-    const o2 = Ye(t2, "Second parameter"), n2 = Ye(r2, "Third parameter"), a2 = function(e3, t3) {
-      F(e3, t3);
-      const r3 = null == e3 ? void 0 : e3.flush, o3 = null == e3 ? void 0 : e3.readableType, n3 = null == e3 ? void 0 : e3.start, a3 = null == e3 ? void 0 : e3.transform, i3 = null == e3 ? void 0 : e3.writableType;
-      return { flush: void 0 === r3 ? void 0 : ir(r3, e3, `${t3} has member 'flush' that`), readableType: o3, start: void 0 === n3 ? void 0 : lr(n3, e3, `${t3} has member 'start' that`), transform: void 0 === a3 ? void 0 : sr(a3, e3, `${t3} has member 'transform' that`), writableType: i3 };
-    }(e2, "First parameter");
-    if (void 0 !== a2.readableType) throw new RangeError("Invalid readableType specified");
-    if (void 0 !== a2.writableType) throw new RangeError("Invalid writableType specified");
-    const i2 = $e(n2, 0), l2 = Me(n2), s2 = $e(o2, 1), f2 = Me(o2);
-    let b2;
-    !function(e3, t3, r3, o3, n3, a3) {
-      function i3() {
-        return t3;
-      }
-      function l3(t4) {
-        return function(e4, t5) {
-          const r4 = e4._transformStreamController;
-          if (e4._backpressure) {
-            return p(e4._backpressureChangePromise, () => {
-              if ("erroring" === (Ge(e4._writable) ? e4._writable._state : e4._writableState)) throw Ge(e4._writable) ? e4._writable._storedError : e4._writableStoredError;
-              return pr(r4, t5);
-            });
-          }
-          return pr(r4, t5);
-        }(e3, t4);
-      }
-      function s3(t4) {
-        return function(e4, t5) {
-          return cr(e4, t5), c(void 0);
-        }(e3, t4);
-      }
-      function u2() {
-        return function(e4) {
-          const t4 = e4._transformStreamController, r4 = t4._flushAlgorithm();
-          return hr(t4), p(r4, () => {
-            if ("errored" === e4._readableState) throw e4._readableStoredError;
-            gr(e4) && wr(e4);
-          }, (t5) => {
-            throw cr(e4, t5), e4._readableStoredError;
-          });
-        }(e3);
-      }
-      function d2() {
-        return function(e4) {
-          return fr(e4, false), e4._backpressureChangePromise;
-        }(e3);
-      }
-      function f3(t4) {
-        return dr(e3, t4), c(void 0);
-      }
-      e3._writableState = "writable", e3._writableStoredError = void 0, e3._writableHasInFlightOperation = false, e3._writableStarted = false, e3._writable = function(e4, t4, r4, o4, n4, a4, i4) {
-        return new WritableStream({ start(r5) {
-          e4._writableController = r5;
-          try {
-            const t5 = r5.signal;
-            void 0 !== t5 && t5.addEventListener("abort", () => {
-              "writable" === e4._writableState && (e4._writableState = "erroring", t5.reason && (e4._writableStoredError = t5.reason));
-            });
-          } catch (e5) {
-          }
-          return p(t4(), () => (e4._writableStarted = true, Cr(e4), null), (t5) => {
-            throw e4._writableStarted = true, Rr(e4, t5), t5;
-          });
-        }, write: (t5) => (function(e5) {
-          e5._writableHasInFlightOperation = true;
-        }(e4), p(r4(t5), () => (function(e5) {
-          e5._writableHasInFlightOperation = false;
-        }(e4), Cr(e4), null), (t6) => {
-          throw function(e5, t7) {
-            e5._writableHasInFlightOperation = false, Rr(e5, t7);
-          }(e4, t6), t6;
-        })), close: () => (function(e5) {
-          e5._writableHasInFlightOperation = true;
-        }(e4), p(o4(), () => (function(e5) {
-          e5._writableHasInFlightOperation = false;
-          "erroring" === e5._writableState && (e5._writableStoredError = void 0);
-          e5._writableState = "closed";
-        }(e4), null), (t5) => {
-          throw function(e5, t6) {
-            e5._writableHasInFlightOperation = false, e5._writableState, Rr(e5, t6);
-          }(e4, t5), t5;
-        })), abort: (t5) => (e4._writableState = "errored", e4._writableStoredError = t5, n4(t5)) }, { highWaterMark: a4, size: i4 });
-      }(e3, i3, l3, u2, s3, r3, o3), e3._readableState = "readable", e3._readableStoredError = void 0, e3._readableCloseRequested = false, e3._readablePulling = false, e3._readable = function(e4, t4, r4, o4, n4, a4) {
-        return new ReadableStream({ start: (r5) => (e4._readableController = r5, t4().catch((t5) => {
-          Sr(e4, t5);
-        })), pull: () => (e4._readablePulling = true, r4().catch((t5) => {
-          Sr(e4, t5);
-        })), cancel: (t5) => (e4._readableState = "closed", o4(t5)) }, { highWaterMark: n4, size: a4 });
-      }(e3, i3, d2, f3, n3, a3), e3._backpressure = void 0, e3._backpressureChangePromise = void 0, e3._backpressureChangePromise_resolve = void 0, fr(e3, true), e3._transformStreamController = void 0;
-    }(this, u((e3) => {
-      b2 = e3;
-    }), s2, f2, i2, l2), function(e3, t3) {
-      const r3 = Object.create(TransformStreamDefaultController.prototype);
-      let o3, n3;
-      o3 = void 0 !== t3.transform ? (e4) => t3.transform(e4, r3) : (e4) => {
-        try {
-          return _r(r3, e4), c(void 0);
-        } catch (e5) {
-          return d(e5);
-        }
-      };
-      n3 = void 0 !== t3.flush ? () => t3.flush(r3) : () => c(void 0);
-      !function(e4, t4, r4, o4) {
-        t4._controlledTransformStream = e4, e4._transformStreamController = t4, t4._transformAlgorithm = r4, t4._flushAlgorithm = o4;
-      }(e3, r3, o3, n3);
-    }(this, a2), void 0 !== a2.start ? b2(a2.start(this._transformStreamController)) : b2(void 0);
-  }
-  get readable() {
-    if (!ur(this)) throw yr("readable");
-    return this._readable;
-  }
-  get writable() {
-    if (!ur(this)) throw yr("writable");
-    return this._writable;
-  }
-};
 function ur(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_transformStreamController") && e2 instanceof TransformStream);
 }
@@ -6320,34 +3955,6 @@ function fr(e2, t2) {
     e2._backpressureChangePromise_resolve = t3;
   }), e2._backpressure = t2;
 }
-Object.defineProperties(TransformStream.prototype, { readable: { enumerable: true }, writable: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(TransformStream.prototype, e.toStringTag, { value: "TransformStream", configurable: true });
-var TransformStreamDefaultController = class {
-  constructor() {
-    throw new TypeError("Illegal constructor");
-  }
-  get desiredSize() {
-    if (!br(this)) throw mr("desiredSize");
-    return vr(this._controlledTransformStream);
-  }
-  enqueue(e2) {
-    if (!br(this)) throw mr("enqueue");
-    _r(this, e2);
-  }
-  error(e2) {
-    if (!br(this)) throw mr("error");
-    var t2;
-    t2 = e2, cr(this._controlledTransformStream, t2);
-  }
-  terminate() {
-    if (!br(this)) throw mr("terminate");
-    !function(e2) {
-      const t2 = e2._controlledTransformStream;
-      gr(t2) && wr(t2);
-      const r2 = new TypeError("TransformStream terminated");
-      dr(t2, r2);
-    }(this);
-  }
-};
 function br(e2) {
   return !!r(e2) && (!!Object.prototype.hasOwnProperty.call(e2, "_controlledTransformStream") && e2 instanceof TransformStreamDefaultController);
 }
@@ -6416,13 +4023,844 @@ function qr(e2) {
 function Cr(e2) {
   "erroring" === e2._writableState && qr(e2);
 }
-Object.defineProperties(TransformStreamDefaultController.prototype, { enqueue: { enumerable: true }, error: { enumerable: true }, terminate: { enumerable: true }, desiredSize: { enumerable: true } }), n(TransformStreamDefaultController.prototype.enqueue, "enqueue"), n(TransformStreamDefaultController.prototype.error, "error"), n(TransformStreamDefaultController.prototype.terminate, "terminate"), "symbol" == typeof e.toStringTag && Object.defineProperty(TransformStreamDefaultController.prototype, e.toStringTag, { value: "TransformStreamDefaultController", configurable: true });
+var e, o, a, i, l, s, y, S, v, R, T, q, C, z, L, ReadableStreamDefaultReader, te, re, ae, ReadableStreamBYOBRequest, ReadableByteStreamController, ReadableStreamBYOBReader, Ue, WritableStream, WritableStreamDefaultWriter, lt, WritableStreamDefaultController, Pt, Wt, ReadableStreamDefaultController, ReadableStream2, er, ByteLengthQueuingStrategy, or, CountQueuingStrategy, TransformStream, TransformStreamDefaultController;
+var init_ponyfill = __esm({
+  "node_modules/web-streams-polyfill/dist/ponyfill.mjs"() {
+    e = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? Symbol : (e2) => `Symbol(${e2})`;
+    o = t;
+    a = Promise;
+    i = Promise.prototype.then;
+    l = Promise.resolve.bind(a);
+    s = Promise.reject.bind(a);
+    y = (e2) => {
+      if ("function" == typeof queueMicrotask) y = queueMicrotask;
+      else {
+        const e3 = c(void 0);
+        y = (t2) => f(e3, t2);
+      }
+      return y(e2);
+    };
+    S = class {
+      constructor() {
+        this._cursor = 0, this._size = 0, this._front = { _elements: [], _next: void 0 }, this._back = this._front, this._cursor = 0, this._size = 0;
+      }
+      get length() {
+        return this._size;
+      }
+      push(e2) {
+        const t2 = this._back;
+        let r2 = t2;
+        16383 === t2._elements.length && (r2 = { _elements: [], _next: void 0 }), t2._elements.push(e2), r2 !== t2 && (this._back = r2, t2._next = r2), ++this._size;
+      }
+      shift() {
+        const e2 = this._front;
+        let t2 = e2;
+        const r2 = this._cursor;
+        let o2 = r2 + 1;
+        const n2 = e2._elements, a2 = n2[r2];
+        return 16384 === o2 && (t2 = e2._next, o2 = 0), --this._size, this._cursor = o2, e2 !== t2 && (this._front = t2), n2[r2] = void 0, a2;
+      }
+      forEach(e2) {
+        let t2 = this._cursor, r2 = this._front, o2 = r2._elements;
+        for (; !(t2 === o2.length && void 0 === r2._next || t2 === o2.length && (r2 = r2._next, o2 = r2._elements, t2 = 0, 0 === o2.length)); ) e2(o2[t2]), ++t2;
+      }
+      peek() {
+        const e2 = this._front, t2 = this._cursor;
+        return e2._elements[t2];
+      }
+    };
+    v = e("[[AbortSteps]]");
+    R = e("[[ErrorSteps]]");
+    T = e("[[CancelSteps]]");
+    q = e("[[PullSteps]]");
+    C = e("[[ReleaseSteps]]");
+    z = Number.isFinite || function(e2) {
+      return "number" == typeof e2 && isFinite(e2);
+    };
+    L = Math.trunc || function(e2) {
+      return e2 < 0 ? Math.ceil(e2) : Math.floor(e2);
+    };
+    ReadableStreamDefaultReader = class {
+      constructor(e2) {
+        if ($(e2, 1, "ReadableStreamDefaultReader"), V(e2, "First parameter"), Ut(e2)) throw new TypeError("This stream has already been locked for exclusive reading by another reader");
+        E(this, e2), this._readRequests = new S();
+      }
+      get closed() {
+        return K(this) ? this._closedPromise : d(ee("closed"));
+      }
+      cancel(e2) {
+        return K(this) ? void 0 === this._ownerReadableStream ? d(k("cancel")) : P(this, e2) : d(ee("cancel"));
+      }
+      read() {
+        if (!K(this)) return d(ee("read"));
+        if (void 0 === this._ownerReadableStream) return d(k("read from"));
+        let e2, t2;
+        const r2 = u((r3, o2) => {
+          e2 = r3, t2 = o2;
+        });
+        return function(e3, t3) {
+          const r3 = e3._ownerReadableStream;
+          r3._disturbed = true, "closed" === r3._state ? t3._closeSteps() : "errored" === r3._state ? t3._errorSteps(r3._storedError) : r3._readableStreamController[q](t3);
+        }(this, { _chunkSteps: (t3) => e2({ value: t3, done: false }), _closeSteps: () => e2({ value: void 0, done: true }), _errorSteps: (e3) => t2(e3) }), r2;
+      }
+      releaseLock() {
+        if (!K(this)) throw ee("releaseLock");
+        void 0 !== this._ownerReadableStream && function(e2) {
+          W(e2);
+          const t2 = new TypeError("Reader was released");
+          Z(e2, t2);
+        }(this);
+      }
+    };
+    Object.defineProperties(ReadableStreamDefaultReader.prototype, { cancel: { enumerable: true }, read: { enumerable: true }, releaseLock: { enumerable: true }, closed: { enumerable: true } }), n(ReadableStreamDefaultReader.prototype.cancel, "cancel"), n(ReadableStreamDefaultReader.prototype.read, "read"), n(ReadableStreamDefaultReader.prototype.releaseLock, "releaseLock"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamDefaultReader.prototype, e.toStringTag, { value: "ReadableStreamDefaultReader", configurable: true });
+    te = class {
+      constructor(e2, t2) {
+        this._ongoingPromise = void 0, this._isFinished = false, this._reader = e2, this._preventCancel = t2;
+      }
+      next() {
+        const e2 = () => this._nextSteps();
+        return this._ongoingPromise = this._ongoingPromise ? p(this._ongoingPromise, e2, e2) : e2(), this._ongoingPromise;
+      }
+      return(e2) {
+        const t2 = () => this._returnSteps(e2);
+        return this._ongoingPromise ? p(this._ongoingPromise, t2, t2) : t2();
+      }
+      _nextSteps() {
+        if (this._isFinished) return Promise.resolve({ value: void 0, done: true });
+        const e2 = this._reader;
+        return void 0 === e2 ? d(k("iterate")) : f(e2.read(), (e3) => {
+          var t2;
+          return this._ongoingPromise = void 0, e3.done && (this._isFinished = true, null === (t2 = this._reader) || void 0 === t2 || t2.releaseLock(), this._reader = void 0), e3;
+        }, (e3) => {
+          var t2;
+          throw this._ongoingPromise = void 0, this._isFinished = true, null === (t2 = this._reader) || void 0 === t2 || t2.releaseLock(), this._reader = void 0, e3;
+        });
+      }
+      _returnSteps(e2) {
+        if (this._isFinished) return Promise.resolve({ value: e2, done: true });
+        this._isFinished = true;
+        const t2 = this._reader;
+        if (void 0 === t2) return d(k("finish iterating"));
+        if (this._reader = void 0, !this._preventCancel) {
+          const r2 = t2.cancel(e2);
+          return t2.releaseLock(), p(r2, () => ({ value: e2, done: true }));
+        }
+        return t2.releaseLock(), c({ value: e2, done: true });
+      }
+    };
+    re = { next() {
+      return oe(this) ? this._asyncIteratorImpl.next() : d(ne("next"));
+    }, return(e2) {
+      return oe(this) ? this._asyncIteratorImpl.return(e2) : d(ne("return"));
+    } };
+    "symbol" == typeof e.asyncIterator && Object.defineProperty(re, e.asyncIterator, { value() {
+      return this;
+    }, writable: true, configurable: true });
+    ae = Number.isNaN || function(e2) {
+      return e2 != e2;
+    };
+    ReadableStreamBYOBRequest = class {
+      constructor() {
+        throw new TypeError("Illegal constructor");
+      }
+      get view() {
+        if (!fe(this)) throw Be("view");
+        return this._view;
+      }
+      respond(e2) {
+        if (!fe(this)) throw Be("respond");
+        if ($(e2, 1, "respond"), e2 = N(e2, "First parameter"), void 0 === this._associatedReadableByteStreamController) throw new TypeError("This BYOB request has been invalidated");
+        this._view.buffer, function(e3, t2) {
+          const r2 = e3._pendingPullIntos.peek();
+          if ("closed" === e3._controlledReadableByteStream._state) {
+            if (0 !== t2) throw new TypeError("bytesWritten must be 0 when calling respond() on a closed stream");
+          } else {
+            if (0 === t2) throw new TypeError("bytesWritten must be greater than 0 when calling respond() on a readable stream");
+            if (r2.bytesFilled + t2 > r2.byteLength) throw new RangeError("bytesWritten out of range");
+          }
+          r2.buffer = r2.buffer, qe(e3, t2);
+        }(this._associatedReadableByteStreamController, e2);
+      }
+      respondWithNewView(e2) {
+        if (!fe(this)) throw Be("respondWithNewView");
+        if ($(e2, 1, "respondWithNewView"), !ArrayBuffer.isView(e2)) throw new TypeError("You can only respond with array buffer views");
+        if (void 0 === this._associatedReadableByteStreamController) throw new TypeError("This BYOB request has been invalidated");
+        e2.buffer, function(e3, t2) {
+          const r2 = e3._pendingPullIntos.peek();
+          if ("closed" === e3._controlledReadableByteStream._state) {
+            if (0 !== t2.byteLength) throw new TypeError("The view's length must be 0 when calling respondWithNewView() on a closed stream");
+          } else if (0 === t2.byteLength) throw new TypeError("The view's length must be greater than 0 when calling respondWithNewView() on a readable stream");
+          if (r2.byteOffset + r2.bytesFilled !== t2.byteOffset) throw new RangeError("The region specified by view does not match byobRequest");
+          if (r2.bufferByteLength !== t2.buffer.byteLength) throw new RangeError("The buffer of view has different capacity than byobRequest");
+          if (r2.bytesFilled + t2.byteLength > r2.byteLength) throw new RangeError("The region specified by view is larger than byobRequest");
+          const o2 = t2.byteLength;
+          r2.buffer = t2.buffer, qe(e3, o2);
+        }(this._associatedReadableByteStreamController, e2);
+      }
+    };
+    Object.defineProperties(ReadableStreamBYOBRequest.prototype, { respond: { enumerable: true }, respondWithNewView: { enumerable: true }, view: { enumerable: true } }), n(ReadableStreamBYOBRequest.prototype.respond, "respond"), n(ReadableStreamBYOBRequest.prototype.respondWithNewView, "respondWithNewView"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamBYOBRequest.prototype, e.toStringTag, { value: "ReadableStreamBYOBRequest", configurable: true });
+    ReadableByteStreamController = class {
+      constructor() {
+        throw new TypeError("Illegal constructor");
+      }
+      get byobRequest() {
+        if (!de(this)) throw Ae("byobRequest");
+        return function(e2) {
+          if (null === e2._byobRequest && e2._pendingPullIntos.length > 0) {
+            const t2 = e2._pendingPullIntos.peek(), r2 = new Uint8Array(t2.buffer, t2.byteOffset + t2.bytesFilled, t2.byteLength - t2.bytesFilled), o2 = Object.create(ReadableStreamBYOBRequest.prototype);
+            !function(e3, t3, r3) {
+              e3._associatedReadableByteStreamController = t3, e3._view = r3;
+            }(o2, e2, r2), e2._byobRequest = o2;
+          }
+          return e2._byobRequest;
+        }(this);
+      }
+      get desiredSize() {
+        if (!de(this)) throw Ae("desiredSize");
+        return ke(this);
+      }
+      close() {
+        if (!de(this)) throw Ae("close");
+        if (this._closeRequested) throw new TypeError("The stream has already been closed; do not close it again!");
+        const e2 = this._controlledReadableByteStream._state;
+        if ("readable" !== e2) throw new TypeError(`The stream (in ${e2} state) is not in the readable state and cannot be closed`);
+        !function(e3) {
+          const t2 = e3._controlledReadableByteStream;
+          if (e3._closeRequested || "readable" !== t2._state) return;
+          if (e3._queueTotalSize > 0) return void (e3._closeRequested = true);
+          if (e3._pendingPullIntos.length > 0) {
+            if (e3._pendingPullIntos.peek().bytesFilled > 0) {
+              const t3 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+              throw Pe(e3, t3), t3;
+            }
+          }
+          Ee(e3), Xt(t2);
+        }(this);
+      }
+      enqueue(e2) {
+        if (!de(this)) throw Ae("enqueue");
+        if ($(e2, 1, "enqueue"), !ArrayBuffer.isView(e2)) throw new TypeError("chunk must be an array buffer view");
+        if (0 === e2.byteLength) throw new TypeError("chunk must have non-zero byteLength");
+        if (0 === e2.buffer.byteLength) throw new TypeError("chunk's buffer must have non-zero byteLength");
+        if (this._closeRequested) throw new TypeError("stream is closed or draining");
+        const t2 = this._controlledReadableByteStream._state;
+        if ("readable" !== t2) throw new TypeError(`The stream (in ${t2} state) is not in the readable state and cannot be enqueued to`);
+        !function(e3, t3) {
+          const r2 = e3._controlledReadableByteStream;
+          if (e3._closeRequested || "readable" !== r2._state) return;
+          const o2 = t3.buffer, n2 = t3.byteOffset, a2 = t3.byteLength, i2 = o2;
+          if (e3._pendingPullIntos.length > 0) {
+            const t4 = e3._pendingPullIntos.peek();
+            t4.buffer, 0, Re(e3), t4.buffer = t4.buffer, "none" === t4.readerType && ge(e3, t4);
+          }
+          if (J(r2)) if (function(e4) {
+            const t4 = e4._controlledReadableByteStream._reader;
+            for (; t4._readRequests.length > 0; ) {
+              if (0 === e4._queueTotalSize) return;
+              We(e4, t4._readRequests.shift());
+            }
+          }(e3), 0 === X(r2)) me(e3, i2, n2, a2);
+          else {
+            e3._pendingPullIntos.length > 0 && Ce(e3);
+            G(r2, new Uint8Array(i2, n2, a2), false);
+          }
+          else Le(r2) ? (me(e3, i2, n2, a2), Te(e3)) : me(e3, i2, n2, a2);
+          be(e3);
+        }(this, e2);
+      }
+      error(e2) {
+        if (!de(this)) throw Ae("error");
+        Pe(this, e2);
+      }
+      [T](e2) {
+        he(this), ce(this);
+        const t2 = this._cancelAlgorithm(e2);
+        return Ee(this), t2;
+      }
+      [q](e2) {
+        const t2 = this._controlledReadableByteStream;
+        if (this._queueTotalSize > 0) return void We(this, e2);
+        const r2 = this._autoAllocateChunkSize;
+        if (void 0 !== r2) {
+          let t3;
+          try {
+            t3 = new ArrayBuffer(r2);
+          } catch (t4) {
+            return void e2._errorSteps(t4);
+          }
+          const o2 = { buffer: t3, bufferByteLength: r2, byteOffset: 0, byteLength: r2, bytesFilled: 0, elementSize: 1, viewConstructor: Uint8Array, readerType: "default" };
+          this._pendingPullIntos.push(o2);
+        }
+        U(t2, e2), be(this);
+      }
+      [C]() {
+        if (this._pendingPullIntos.length > 0) {
+          const e2 = this._pendingPullIntos.peek();
+          e2.readerType = "none", this._pendingPullIntos = new S(), this._pendingPullIntos.push(e2);
+        }
+      }
+    };
+    Object.defineProperties(ReadableByteStreamController.prototype, { close: { enumerable: true }, enqueue: { enumerable: true }, error: { enumerable: true }, byobRequest: { enumerable: true }, desiredSize: { enumerable: true } }), n(ReadableByteStreamController.prototype.close, "close"), n(ReadableByteStreamController.prototype.enqueue, "enqueue"), n(ReadableByteStreamController.prototype.error, "error"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableByteStreamController.prototype, e.toStringTag, { value: "ReadableByteStreamController", configurable: true });
+    ReadableStreamBYOBReader = class {
+      constructor(e2) {
+        if ($(e2, 1, "ReadableStreamBYOBReader"), V(e2, "First parameter"), Ut(e2)) throw new TypeError("This stream has already been locked for exclusive reading by another reader");
+        if (!de(e2._readableStreamController)) throw new TypeError("Cannot construct a ReadableStreamBYOBReader for a stream not constructed with a byte source");
+        E(this, e2), this._readIntoRequests = new S();
+      }
+      get closed() {
+        return Fe(this) ? this._closedPromise : d(De("closed"));
+      }
+      cancel(e2) {
+        return Fe(this) ? void 0 === this._ownerReadableStream ? d(k("cancel")) : P(this, e2) : d(De("cancel"));
+      }
+      read(e2) {
+        if (!Fe(this)) return d(De("read"));
+        if (!ArrayBuffer.isView(e2)) return d(new TypeError("view must be an array buffer view"));
+        if (0 === e2.byteLength) return d(new TypeError("view must have non-zero byteLength"));
+        if (0 === e2.buffer.byteLength) return d(new TypeError("view's buffer must have non-zero byteLength"));
+        if (e2.buffer, void 0 === this._ownerReadableStream) return d(k("read from"));
+        let t2, r2;
+        const o2 = u((e3, o3) => {
+          t2 = e3, r2 = o3;
+        });
+        return function(e3, t3, r3) {
+          const o3 = e3._ownerReadableStream;
+          o3._disturbed = true, "errored" === o3._state ? r3._errorSteps(o3._storedError) : function(e4, t4, r4) {
+            const o4 = e4._controlledReadableByteStream;
+            let n2 = 1;
+            t4.constructor !== DataView && (n2 = t4.constructor.BYTES_PER_ELEMENT);
+            const a2 = t4.constructor, i2 = t4.buffer, l2 = { buffer: i2, bufferByteLength: i2.byteLength, byteOffset: t4.byteOffset, byteLength: t4.byteLength, bytesFilled: 0, elementSize: n2, viewConstructor: a2, readerType: "byob" };
+            if (e4._pendingPullIntos.length > 0) return e4._pendingPullIntos.push(l2), void je(o4, r4);
+            if ("closed" !== o4._state) {
+              if (e4._queueTotalSize > 0) {
+                if (we(e4, l2)) {
+                  const t5 = pe(l2);
+                  return ve(e4), void r4._chunkSteps(t5);
+                }
+                if (e4._closeRequested) {
+                  const t5 = new TypeError("Insufficient bytes to fill elements in the given buffer");
+                  return Pe(e4, t5), void r4._errorSteps(t5);
+                }
+              }
+              e4._pendingPullIntos.push(l2), je(o4, r4), be(e4);
+            } else {
+              const e5 = new a2(l2.buffer, l2.byteOffset, 0);
+              r4._closeSteps(e5);
+            }
+          }(o3._readableStreamController, t3, r3);
+        }(this, e2, { _chunkSteps: (e3) => t2({ value: e3, done: false }), _closeSteps: (e3) => t2({ value: e3, done: true }), _errorSteps: (e3) => r2(e3) }), o2;
+      }
+      releaseLock() {
+        if (!Fe(this)) throw De("releaseLock");
+        void 0 !== this._ownerReadableStream && function(e2) {
+          W(e2);
+          const t2 = new TypeError("Reader was released");
+          Ie(e2, t2);
+        }(this);
+      }
+    };
+    Object.defineProperties(ReadableStreamBYOBReader.prototype, { cancel: { enumerable: true }, read: { enumerable: true }, releaseLock: { enumerable: true }, closed: { enumerable: true } }), n(ReadableStreamBYOBReader.prototype.cancel, "cancel"), n(ReadableStreamBYOBReader.prototype.read, "read"), n(ReadableStreamBYOBReader.prototype.releaseLock, "releaseLock"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamBYOBReader.prototype, e.toStringTag, { value: "ReadableStreamBYOBReader", configurable: true });
+    Ue = "function" == typeof AbortController;
+    WritableStream = class {
+      constructor(e2 = {}, t2 = {}) {
+        void 0 === e2 ? e2 = null : D(e2, "First parameter");
+        const r2 = Ye(t2, "Second parameter"), o2 = function(e3, t3) {
+          F(e3, t3);
+          const r3 = null == e3 ? void 0 : e3.abort, o3 = null == e3 ? void 0 : e3.close, n3 = null == e3 ? void 0 : e3.start, a3 = null == e3 ? void 0 : e3.type, i2 = null == e3 ? void 0 : e3.write;
+          return { abort: void 0 === r3 ? void 0 : Ne(r3, e3, `${t3} has member 'abort' that`), close: void 0 === o3 ? void 0 : He(o3, e3, `${t3} has member 'close' that`), start: void 0 === n3 ? void 0 : xe(n3, e3, `${t3} has member 'start' that`), write: void 0 === i2 ? void 0 : Ve(i2, e3, `${t3} has member 'write' that`), type: a3 };
+        }(e2, "First parameter");
+        var n2;
+        (n2 = this)._state = "writable", n2._storedError = void 0, n2._writer = void 0, n2._writableStreamController = void 0, n2._writeRequests = new S(), n2._inFlightWriteRequest = void 0, n2._closeRequest = void 0, n2._inFlightCloseRequest = void 0, n2._pendingAbortRequest = void 0, n2._backpressure = false;
+        if (void 0 !== o2.type) throw new RangeError("Invalid type is specified");
+        const a2 = Me(r2);
+        !function(e3, t3, r3, o3) {
+          const n3 = Object.create(WritableStreamDefaultController.prototype);
+          let a3, i2, l2, s2;
+          a3 = void 0 !== t3.start ? () => t3.start(n3) : () => {
+          };
+          i2 = void 0 !== t3.write ? (e4) => t3.write(e4, n3) : () => c(void 0);
+          l2 = void 0 !== t3.close ? () => t3.close() : () => c(void 0);
+          s2 = void 0 !== t3.abort ? (e4) => t3.abort(e4) : () => c(void 0);
+          !function(e4, t4, r4, o4, n4, a4, i3, l3) {
+            t4._controlledWritableStream = e4, e4._writableStreamController = t4, t4._queue = void 0, t4._queueTotalSize = void 0, ce(t4), t4._abortReason = void 0, t4._abortController = function() {
+              if (Ue) return new AbortController();
+            }(), t4._started = false, t4._strategySizeAlgorithm = l3, t4._strategyHWM = i3, t4._writeAlgorithm = o4, t4._closeAlgorithm = n4, t4._abortAlgorithm = a4;
+            const s3 = bt(t4);
+            nt(e4, s3);
+            const u2 = r4();
+            b(c(u2), () => (t4._started = true, dt(t4), null), (r5) => (t4._started = true, Ze(e4, r5), null));
+          }(e3, n3, a3, i2, l2, s2, r3, o3);
+        }(this, o2, $e(r2, 1), a2);
+      }
+      get locked() {
+        if (!Ge(this)) throw _t("locked");
+        return Xe(this);
+      }
+      abort(e2) {
+        return Ge(this) ? Xe(this) ? d(new TypeError("Cannot abort a stream that already has a writer")) : Je(this, e2) : d(_t("abort"));
+      }
+      close() {
+        return Ge(this) ? Xe(this) ? d(new TypeError("Cannot close a stream that already has a writer")) : rt(this) ? d(new TypeError("Cannot close an already-closing stream")) : Ke(this) : d(_t("close"));
+      }
+      getWriter() {
+        if (!Ge(this)) throw _t("getWriter");
+        return new WritableStreamDefaultWriter(this);
+      }
+    };
+    Object.defineProperties(WritableStream.prototype, { abort: { enumerable: true }, close: { enumerable: true }, getWriter: { enumerable: true }, locked: { enumerable: true } }), n(WritableStream.prototype.abort, "abort"), n(WritableStream.prototype.close, "close"), n(WritableStream.prototype.getWriter, "getWriter"), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStream.prototype, e.toStringTag, { value: "WritableStream", configurable: true });
+    WritableStreamDefaultWriter = class {
+      constructor(e2) {
+        if ($(e2, 1, "WritableStreamDefaultWriter"), function(e3, t3) {
+          if (!Ge(e3)) throw new TypeError(`${t3} is not a WritableStream.`);
+        }(e2, "First parameter"), Xe(e2)) throw new TypeError("This stream has already been locked for exclusive writing by another writer");
+        this._ownerWritableStream = e2, e2._writer = this;
+        const t2 = e2._state;
+        if ("writable" === t2) !rt(e2) && e2._backpressure ? Rt(this) : qt(this), gt(this);
+        else if ("erroring" === t2) Tt(this, e2._storedError), gt(this);
+        else if ("closed" === t2) qt(this), gt(r2 = this), vt(r2);
+        else {
+          const t3 = e2._storedError;
+          Tt(this, t3), wt(this, t3);
+        }
+        var r2;
+      }
+      get closed() {
+        return at(this) ? this._closedPromise : d(mt("closed"));
+      }
+      get desiredSize() {
+        if (!at(this)) throw mt("desiredSize");
+        if (void 0 === this._ownerWritableStream) throw yt("desiredSize");
+        return function(e2) {
+          const t2 = e2._ownerWritableStream, r2 = t2._state;
+          if ("errored" === r2 || "erroring" === r2) return null;
+          if ("closed" === r2) return 0;
+          return ct(t2._writableStreamController);
+        }(this);
+      }
+      get ready() {
+        return at(this) ? this._readyPromise : d(mt("ready"));
+      }
+      abort(e2) {
+        return at(this) ? void 0 === this._ownerWritableStream ? d(yt("abort")) : function(e3, t2) {
+          return Je(e3._ownerWritableStream, t2);
+        }(this, e2) : d(mt("abort"));
+      }
+      close() {
+        if (!at(this)) return d(mt("close"));
+        const e2 = this._ownerWritableStream;
+        return void 0 === e2 ? d(yt("close")) : rt(e2) ? d(new TypeError("Cannot close an already-closing stream")) : Ke(this._ownerWritableStream);
+      }
+      releaseLock() {
+        if (!at(this)) throw mt("releaseLock");
+        void 0 !== this._ownerWritableStream && function(e2) {
+          const t2 = e2._ownerWritableStream, r2 = new TypeError("Writer was released and can no longer be used to monitor the stream's closedness");
+          it(e2, r2), function(e3, t3) {
+            "pending" === e3._closedPromiseState ? St(e3, t3) : function(e4, t4) {
+              wt(e4, t4);
+            }(e3, t3);
+          }(e2, r2), t2._writer = void 0, e2._ownerWritableStream = void 0;
+        }(this);
+      }
+      write(e2) {
+        return at(this) ? void 0 === this._ownerWritableStream ? d(yt("write to")) : function(e3, t2) {
+          const r2 = e3._ownerWritableStream, o2 = r2._writableStreamController, n2 = function(e4, t3) {
+            try {
+              return e4._strategySizeAlgorithm(t3);
+            } catch (t4) {
+              return ft(e4, t4), 1;
+            }
+          }(o2, t2);
+          if (r2 !== e3._ownerWritableStream) return d(yt("write to"));
+          const a2 = r2._state;
+          if ("errored" === a2) return d(r2._storedError);
+          if (rt(r2) || "closed" === a2) return d(new TypeError("The stream is closing or closed and cannot be written to"));
+          if ("erroring" === a2) return d(r2._storedError);
+          const i2 = function(e4) {
+            return u((t3, r3) => {
+              const o3 = { _resolve: t3, _reject: r3 };
+              e4._writeRequests.push(o3);
+            });
+          }(r2);
+          return function(e4, t3, r3) {
+            try {
+              ue(e4, t3, r3);
+            } catch (t4) {
+              return void ft(e4, t4);
+            }
+            const o3 = e4._controlledWritableStream;
+            if (!rt(o3) && "writable" === o3._state) {
+              nt(o3, bt(e4));
+            }
+            dt(e4);
+          }(o2, t2, n2), i2;
+        }(this, e2) : d(mt("write"));
+      }
+    };
+    Object.defineProperties(WritableStreamDefaultWriter.prototype, { abort: { enumerable: true }, close: { enumerable: true }, releaseLock: { enumerable: true }, write: { enumerable: true }, closed: { enumerable: true }, desiredSize: { enumerable: true }, ready: { enumerable: true } }), n(WritableStreamDefaultWriter.prototype.abort, "abort"), n(WritableStreamDefaultWriter.prototype.close, "close"), n(WritableStreamDefaultWriter.prototype.releaseLock, "releaseLock"), n(WritableStreamDefaultWriter.prototype.write, "write"), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStreamDefaultWriter.prototype, e.toStringTag, { value: "WritableStreamDefaultWriter", configurable: true });
+    lt = {};
+    WritableStreamDefaultController = class {
+      constructor() {
+        throw new TypeError("Illegal constructor");
+      }
+      get abortReason() {
+        if (!st(this)) throw pt("abortReason");
+        return this._abortReason;
+      }
+      get signal() {
+        if (!st(this)) throw pt("signal");
+        if (void 0 === this._abortController) throw new TypeError("WritableStreamDefaultController.prototype.signal is not supported");
+        return this._abortController.signal;
+      }
+      error(e2) {
+        if (!st(this)) throw pt("error");
+        "writable" === this._controlledWritableStream._state && ht(this, e2);
+      }
+      [v](e2) {
+        const t2 = this._abortAlgorithm(e2);
+        return ut(this), t2;
+      }
+      [R]() {
+        ce(this);
+      }
+    };
+    Object.defineProperties(WritableStreamDefaultController.prototype, { abortReason: { enumerable: true }, signal: { enumerable: true }, error: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(WritableStreamDefaultController.prototype, e.toStringTag, { value: "WritableStreamDefaultController", configurable: true });
+    Pt = "undefined" != typeof DOMException ? DOMException : void 0;
+    Wt = function(e2) {
+      if ("function" != typeof e2 && "object" != typeof e2) return false;
+      try {
+        return new e2(), true;
+      } catch (e3) {
+        return false;
+      }
+    }(Pt) ? Pt : function() {
+      const e2 = function(e3, t2) {
+        this.message = e3 || "", this.name = t2 || "Error", Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
+      };
+      return e2.prototype = Object.create(Error.prototype), Object.defineProperty(e2.prototype, "constructor", { value: e2, writable: true, configurable: true }), e2;
+    }();
+    ReadableStreamDefaultController = class {
+      constructor() {
+        throw new TypeError("Illegal constructor");
+      }
+      get desiredSize() {
+        if (!Bt(this)) throw Dt("desiredSize");
+        return Lt(this);
+      }
+      close() {
+        if (!Bt(this)) throw Dt("close");
+        if (!Ft(this)) throw new TypeError("The stream is not in a state that permits close");
+        !function(e2) {
+          if (!Ft(e2)) return;
+          const t2 = e2._controlledReadableStream;
+          e2._closeRequested = true, 0 === e2._queue.length && (jt(e2), Xt(t2));
+        }(this);
+      }
+      enqueue(e2) {
+        if (!Bt(this)) throw Dt("enqueue");
+        if (!Ft(this)) throw new TypeError("The stream is not in a state that permits enqueue");
+        return function(e3, t2) {
+          if (!Ft(e3)) return;
+          const r2 = e3._controlledReadableStream;
+          if (Ut(r2) && X(r2) > 0) G(r2, t2, false);
+          else {
+            let r3;
+            try {
+              r3 = e3._strategySizeAlgorithm(t2);
+            } catch (t3) {
+              throw zt(e3, t3), t3;
+            }
+            try {
+              ue(e3, t2, r3);
+            } catch (t3) {
+              throw zt(e3, t3), t3;
+            }
+          }
+          At(e3);
+        }(this, e2);
+      }
+      error(e2) {
+        if (!Bt(this)) throw Dt("error");
+        zt(this, e2);
+      }
+      [T](e2) {
+        ce(this);
+        const t2 = this._cancelAlgorithm(e2);
+        return jt(this), t2;
+      }
+      [q](e2) {
+        const t2 = this._controlledReadableStream;
+        if (this._queue.length > 0) {
+          const r2 = se(this);
+          this._closeRequested && 0 === this._queue.length ? (jt(this), Xt(t2)) : At(this), e2._chunkSteps(r2);
+        } else U(t2, e2), At(this);
+      }
+      [C]() {
+      }
+    };
+    Object.defineProperties(ReadableStreamDefaultController.prototype, { close: { enumerable: true }, enqueue: { enumerable: true }, error: { enumerable: true }, desiredSize: { enumerable: true } }), n(ReadableStreamDefaultController.prototype.close, "close"), n(ReadableStreamDefaultController.prototype.enqueue, "enqueue"), n(ReadableStreamDefaultController.prototype.error, "error"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStreamDefaultController.prototype, e.toStringTag, { value: "ReadableStreamDefaultController", configurable: true });
+    ReadableStream2 = class {
+      constructor(e2 = {}, t2 = {}) {
+        void 0 === e2 ? e2 = null : D(e2, "First parameter");
+        const r2 = Ye(t2, "Second parameter"), o2 = function(e3, t3) {
+          F(e3, t3);
+          const r3 = e3, o3 = null == r3 ? void 0 : r3.autoAllocateChunkSize, n3 = null == r3 ? void 0 : r3.cancel, a2 = null == r3 ? void 0 : r3.pull, i2 = null == r3 ? void 0 : r3.start, l2 = null == r3 ? void 0 : r3.type;
+          return { autoAllocateChunkSize: void 0 === o3 ? void 0 : N(o3, `${t3} has member 'autoAllocateChunkSize' that`), cancel: void 0 === n3 ? void 0 : $t(n3, r3, `${t3} has member 'cancel' that`), pull: void 0 === a2 ? void 0 : Mt(a2, r3, `${t3} has member 'pull' that`), start: void 0 === i2 ? void 0 : Yt(i2, r3, `${t3} has member 'start' that`), type: void 0 === l2 ? void 0 : Qt(l2, `${t3} has member 'type' that`) };
+        }(e2, "First parameter");
+        var n2;
+        if ((n2 = this)._state = "readable", n2._reader = void 0, n2._storedError = void 0, n2._disturbed = false, "bytes" === o2.type) {
+          if (void 0 !== r2.size) throw new RangeError("The strategy for a byte stream cannot have a size function");
+          Oe(this, o2, $e(r2, 0));
+        } else {
+          const e3 = Me(r2);
+          It(this, o2, $e(r2, 1), e3);
+        }
+      }
+      get locked() {
+        if (!Vt(this)) throw Kt("locked");
+        return Ut(this);
+      }
+      cancel(e2) {
+        return Vt(this) ? Ut(this) ? d(new TypeError("Cannot cancel a stream that already has a reader")) : Gt(this, e2) : d(Kt("cancel"));
+      }
+      getReader(e2) {
+        if (!Vt(this)) throw Kt("getReader");
+        return void 0 === function(e3, t2) {
+          F(e3, t2);
+          const r2 = null == e3 ? void 0 : e3.mode;
+          return { mode: void 0 === r2 ? void 0 : Nt(r2, `${t2} has member 'mode' that`) };
+        }(e2, "First parameter").mode ? new ReadableStreamDefaultReader(this) : function(e3) {
+          return new ReadableStreamBYOBReader(e3);
+        }(this);
+      }
+      pipeThrough(e2, t2 = {}) {
+        if (!H(this)) throw Kt("pipeThrough");
+        $(e2, 1, "pipeThrough");
+        const r2 = xt(e2, "First parameter"), o2 = Ht(t2, "Second parameter");
+        if (this.locked) throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked ReadableStream");
+        if (r2.writable.locked) throw new TypeError("ReadableStream.prototype.pipeThrough cannot be used on a locked WritableStream");
+        return m(kt(this, r2.writable, o2.preventClose, o2.preventAbort, o2.preventCancel, o2.signal)), r2.readable;
+      }
+      pipeTo(e2, t2 = {}) {
+        if (!H(this)) return d(Kt("pipeTo"));
+        if (void 0 === e2) return d("Parameter 1 is required in 'pipeTo'.");
+        if (!x(e2)) return d(new TypeError("ReadableStream.prototype.pipeTo's first argument must be a WritableStream"));
+        let r2;
+        try {
+          r2 = Ht(t2, "Second parameter");
+        } catch (e3) {
+          return d(e3);
+        }
+        return this.locked ? d(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked ReadableStream")) : e2.locked ? d(new TypeError("ReadableStream.prototype.pipeTo cannot be used on a locked WritableStream")) : kt(this, e2, r2.preventClose, r2.preventAbort, r2.preventCancel, r2.signal);
+      }
+      tee() {
+        if (!H(this)) throw Kt("tee");
+        if (this.locked) throw new TypeError("Cannot tee a stream that already has a reader");
+        return Ot(this);
+      }
+      values(e2) {
+        if (!H(this)) throw Kt("values");
+        return function(e3, t2) {
+          const r2 = e3.getReader(), o2 = new te(r2, t2), n2 = Object.create(re);
+          return n2._asyncIteratorImpl = o2, n2;
+        }(this, function(e3, t2) {
+          F(e3, t2);
+          const r2 = null == e3 ? void 0 : e3.preventCancel;
+          return { preventCancel: Boolean(r2) };
+        }(e2, "First parameter").preventCancel);
+      }
+    };
+    Object.defineProperties(ReadableStream2.prototype, { cancel: { enumerable: true }, getReader: { enumerable: true }, pipeThrough: { enumerable: true }, pipeTo: { enumerable: true }, tee: { enumerable: true }, values: { enumerable: true }, locked: { enumerable: true } }), n(ReadableStream2.prototype.cancel, "cancel"), n(ReadableStream2.prototype.getReader, "getReader"), n(ReadableStream2.prototype.pipeThrough, "pipeThrough"), n(ReadableStream2.prototype.pipeTo, "pipeTo"), n(ReadableStream2.prototype.tee, "tee"), n(ReadableStream2.prototype.values, "values"), "symbol" == typeof e.toStringTag && Object.defineProperty(ReadableStream2.prototype, e.toStringTag, { value: "ReadableStream", configurable: true }), "symbol" == typeof e.asyncIterator && Object.defineProperty(ReadableStream2.prototype, e.asyncIterator, { value: ReadableStream2.prototype.values, writable: true, configurable: true });
+    er = (e2) => e2.byteLength;
+    n(er, "size");
+    ByteLengthQueuingStrategy = class {
+      constructor(e2) {
+        $(e2, 1, "ByteLengthQueuingStrategy"), e2 = Zt(e2, "First parameter"), this._byteLengthQueuingStrategyHighWaterMark = e2.highWaterMark;
+      }
+      get highWaterMark() {
+        if (!rr(this)) throw tr("highWaterMark");
+        return this._byteLengthQueuingStrategyHighWaterMark;
+      }
+      get size() {
+        if (!rr(this)) throw tr("size");
+        return er;
+      }
+    };
+    Object.defineProperties(ByteLengthQueuingStrategy.prototype, { highWaterMark: { enumerable: true }, size: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(ByteLengthQueuingStrategy.prototype, e.toStringTag, { value: "ByteLengthQueuingStrategy", configurable: true });
+    or = () => 1;
+    n(or, "size");
+    CountQueuingStrategy = class {
+      constructor(e2) {
+        $(e2, 1, "CountQueuingStrategy"), e2 = Zt(e2, "First parameter"), this._countQueuingStrategyHighWaterMark = e2.highWaterMark;
+      }
+      get highWaterMark() {
+        if (!ar(this)) throw nr("highWaterMark");
+        return this._countQueuingStrategyHighWaterMark;
+      }
+      get size() {
+        if (!ar(this)) throw nr("size");
+        return or;
+      }
+    };
+    Object.defineProperties(CountQueuingStrategy.prototype, { highWaterMark: { enumerable: true }, size: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(CountQueuingStrategy.prototype, e.toStringTag, { value: "CountQueuingStrategy", configurable: true });
+    TransformStream = class {
+      constructor(e2 = {}, t2 = {}, r2 = {}) {
+        void 0 === e2 && (e2 = null);
+        const o2 = Ye(t2, "Second parameter"), n2 = Ye(r2, "Third parameter"), a2 = function(e3, t3) {
+          F(e3, t3);
+          const r3 = null == e3 ? void 0 : e3.flush, o3 = null == e3 ? void 0 : e3.readableType, n3 = null == e3 ? void 0 : e3.start, a3 = null == e3 ? void 0 : e3.transform, i3 = null == e3 ? void 0 : e3.writableType;
+          return { flush: void 0 === r3 ? void 0 : ir(r3, e3, `${t3} has member 'flush' that`), readableType: o3, start: void 0 === n3 ? void 0 : lr(n3, e3, `${t3} has member 'start' that`), transform: void 0 === a3 ? void 0 : sr(a3, e3, `${t3} has member 'transform' that`), writableType: i3 };
+        }(e2, "First parameter");
+        if (void 0 !== a2.readableType) throw new RangeError("Invalid readableType specified");
+        if (void 0 !== a2.writableType) throw new RangeError("Invalid writableType specified");
+        const i2 = $e(n2, 0), l2 = Me(n2), s2 = $e(o2, 1), f2 = Me(o2);
+        let b2;
+        !function(e3, t3, r3, o3, n3, a3) {
+          function i3() {
+            return t3;
+          }
+          function l3(t4) {
+            return function(e4, t5) {
+              const r4 = e4._transformStreamController;
+              if (e4._backpressure) {
+                return p(e4._backpressureChangePromise, () => {
+                  if ("erroring" === (Ge(e4._writable) ? e4._writable._state : e4._writableState)) throw Ge(e4._writable) ? e4._writable._storedError : e4._writableStoredError;
+                  return pr(r4, t5);
+                });
+              }
+              return pr(r4, t5);
+            }(e3, t4);
+          }
+          function s3(t4) {
+            return function(e4, t5) {
+              return cr(e4, t5), c(void 0);
+            }(e3, t4);
+          }
+          function u2() {
+            return function(e4) {
+              const t4 = e4._transformStreamController, r4 = t4._flushAlgorithm();
+              return hr(t4), p(r4, () => {
+                if ("errored" === e4._readableState) throw e4._readableStoredError;
+                gr(e4) && wr(e4);
+              }, (t5) => {
+                throw cr(e4, t5), e4._readableStoredError;
+              });
+            }(e3);
+          }
+          function d2() {
+            return function(e4) {
+              return fr(e4, false), e4._backpressureChangePromise;
+            }(e3);
+          }
+          function f3(t4) {
+            return dr(e3, t4), c(void 0);
+          }
+          e3._writableState = "writable", e3._writableStoredError = void 0, e3._writableHasInFlightOperation = false, e3._writableStarted = false, e3._writable = function(e4, t4, r4, o4, n4, a4, i4) {
+            return new WritableStream({ start(r5) {
+              e4._writableController = r5;
+              try {
+                const t5 = r5.signal;
+                void 0 !== t5 && t5.addEventListener("abort", () => {
+                  "writable" === e4._writableState && (e4._writableState = "erroring", t5.reason && (e4._writableStoredError = t5.reason));
+                });
+              } catch (e5) {
+              }
+              return p(t4(), () => (e4._writableStarted = true, Cr(e4), null), (t5) => {
+                throw e4._writableStarted = true, Rr(e4, t5), t5;
+              });
+            }, write: (t5) => (function(e5) {
+              e5._writableHasInFlightOperation = true;
+            }(e4), p(r4(t5), () => (function(e5) {
+              e5._writableHasInFlightOperation = false;
+            }(e4), Cr(e4), null), (t6) => {
+              throw function(e5, t7) {
+                e5._writableHasInFlightOperation = false, Rr(e5, t7);
+              }(e4, t6), t6;
+            })), close: () => (function(e5) {
+              e5._writableHasInFlightOperation = true;
+            }(e4), p(o4(), () => (function(e5) {
+              e5._writableHasInFlightOperation = false;
+              "erroring" === e5._writableState && (e5._writableStoredError = void 0);
+              e5._writableState = "closed";
+            }(e4), null), (t5) => {
+              throw function(e5, t6) {
+                e5._writableHasInFlightOperation = false, e5._writableState, Rr(e5, t6);
+              }(e4, t5), t5;
+            })), abort: (t5) => (e4._writableState = "errored", e4._writableStoredError = t5, n4(t5)) }, { highWaterMark: a4, size: i4 });
+          }(e3, i3, l3, u2, s3, r3, o3), e3._readableState = "readable", e3._readableStoredError = void 0, e3._readableCloseRequested = false, e3._readablePulling = false, e3._readable = function(e4, t4, r4, o4, n4, a4) {
+            return new ReadableStream2({ start: (r5) => (e4._readableController = r5, t4().catch((t5) => {
+              Sr(e4, t5);
+            })), pull: () => (e4._readablePulling = true, r4().catch((t5) => {
+              Sr(e4, t5);
+            })), cancel: (t5) => (e4._readableState = "closed", o4(t5)) }, { highWaterMark: n4, size: a4 });
+          }(e3, i3, d2, f3, n3, a3), e3._backpressure = void 0, e3._backpressureChangePromise = void 0, e3._backpressureChangePromise_resolve = void 0, fr(e3, true), e3._transformStreamController = void 0;
+        }(this, u((e3) => {
+          b2 = e3;
+        }), s2, f2, i2, l2), function(e3, t3) {
+          const r3 = Object.create(TransformStreamDefaultController.prototype);
+          let o3, n3;
+          o3 = void 0 !== t3.transform ? (e4) => t3.transform(e4, r3) : (e4) => {
+            try {
+              return _r(r3, e4), c(void 0);
+            } catch (e5) {
+              return d(e5);
+            }
+          };
+          n3 = void 0 !== t3.flush ? () => t3.flush(r3) : () => c(void 0);
+          !function(e4, t4, r4, o4) {
+            t4._controlledTransformStream = e4, e4._transformStreamController = t4, t4._transformAlgorithm = r4, t4._flushAlgorithm = o4;
+          }(e3, r3, o3, n3);
+        }(this, a2), void 0 !== a2.start ? b2(a2.start(this._transformStreamController)) : b2(void 0);
+      }
+      get readable() {
+        if (!ur(this)) throw yr("readable");
+        return this._readable;
+      }
+      get writable() {
+        if (!ur(this)) throw yr("writable");
+        return this._writable;
+      }
+    };
+    Object.defineProperties(TransformStream.prototype, { readable: { enumerable: true }, writable: { enumerable: true } }), "symbol" == typeof e.toStringTag && Object.defineProperty(TransformStream.prototype, e.toStringTag, { value: "TransformStream", configurable: true });
+    TransformStreamDefaultController = class {
+      constructor() {
+        throw new TypeError("Illegal constructor");
+      }
+      get desiredSize() {
+        if (!br(this)) throw mr("desiredSize");
+        return vr(this._controlledTransformStream);
+      }
+      enqueue(e2) {
+        if (!br(this)) throw mr("enqueue");
+        _r(this, e2);
+      }
+      error(e2) {
+        if (!br(this)) throw mr("error");
+        var t2;
+        t2 = e2, cr(this._controlledTransformStream, t2);
+      }
+      terminate() {
+        if (!br(this)) throw mr("terminate");
+        !function(e2) {
+          const t2 = e2._controlledTransformStream;
+          gr(t2) && wr(t2);
+          const r2 = new TypeError("TransformStream terminated");
+          dr(t2, r2);
+        }(this);
+      }
+    };
+    Object.defineProperties(TransformStreamDefaultController.prototype, { enqueue: { enumerable: true }, error: { enumerable: true }, terminate: { enumerable: true }, desiredSize: { enumerable: true } }), n(TransformStreamDefaultController.prototype.enqueue, "enqueue"), n(TransformStreamDefaultController.prototype.error, "error"), n(TransformStreamDefaultController.prototype.terminate, "terminate"), "symbol" == typeof e.toStringTag && Object.defineProperty(TransformStreamDefaultController.prototype, e.toStringTag, { value: "TransformStreamDefaultController", configurable: true });
+  }
+});
 
 // node_modules/formdata-node/lib/esm/isFunction.js
-var isFunction = (value) => typeof value === "function";
+var isFunction;
+var init_isFunction = __esm({
+  "node_modules/formdata-node/lib/esm/isFunction.js"() {
+    isFunction = (value) => typeof value === "function";
+  }
+});
 
 // node_modules/formdata-node/lib/esm/blobHelpers.js
-var CHUNK_SIZE = 65536;
 async function* clonePart(part) {
   const end = part.byteOffset + part.byteLength;
   let position = part.byteOffset;
@@ -6486,165 +4924,3753 @@ function* sliceBlob(blobParts, blobSize, start = 0, end) {
     }
   }
 }
+var CHUNK_SIZE;
+var init_blobHelpers = __esm({
+  "node_modules/formdata-node/lib/esm/blobHelpers.js"() {
+    init_isFunction();
+    CHUNK_SIZE = 65536;
+  }
+});
 
 // node_modules/formdata-node/lib/esm/Blob.js
-var __classPrivateFieldGet = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
-};
-var __classPrivateFieldSet = function(receiver, state, value, kind, f2) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
-};
-var _Blob_parts;
-var _Blob_type;
-var _Blob_size;
-var Blob = class _Blob {
-  constructor(blobParts = [], options = {}) {
-    _Blob_parts.set(this, []);
-    _Blob_type.set(this, "");
-    _Blob_size.set(this, 0);
-    options !== null && options !== void 0 ? options : options = {};
-    if (typeof blobParts !== "object" || blobParts === null) {
-      throw new TypeError("Failed to construct 'Blob': The provided value cannot be converted to a sequence.");
-    }
-    if (!isFunction(blobParts[Symbol.iterator])) {
-      throw new TypeError("Failed to construct 'Blob': The object must have a callable @@iterator property.");
-    }
-    if (typeof options !== "object" && !isFunction(options)) {
-      throw new TypeError("Failed to construct 'Blob': parameter 2 cannot convert to dictionary.");
-    }
-    const encoder = new TextEncoder();
-    for (const raw of blobParts) {
-      let part;
-      if (ArrayBuffer.isView(raw)) {
-        part = new Uint8Array(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
-      } else if (raw instanceof ArrayBuffer) {
-        part = new Uint8Array(raw.slice(0));
-      } else if (raw instanceof _Blob) {
-        part = raw;
-      } else {
-        part = encoder.encode(String(raw));
-      }
-      __classPrivateFieldSet(this, _Blob_size, __classPrivateFieldGet(this, _Blob_size, "f") + (ArrayBuffer.isView(part) ? part.byteLength : part.size), "f");
-      __classPrivateFieldGet(this, _Blob_parts, "f").push(part);
-    }
-    const type = options.type === void 0 ? "" : String(options.type);
-    __classPrivateFieldSet(this, _Blob_type, /^[\x20-\x7E]*$/.test(type) ? type : "", "f");
-  }
-  static [(_Blob_parts = /* @__PURE__ */ new WeakMap(), _Blob_type = /* @__PURE__ */ new WeakMap(), _Blob_size = /* @__PURE__ */ new WeakMap(), Symbol.hasInstance)](value) {
-    return Boolean(value && typeof value === "object" && isFunction(value.constructor) && (isFunction(value.stream) || isFunction(value.arrayBuffer)) && /^(Blob|File)$/.test(value[Symbol.toStringTag]));
-  }
-  get type() {
-    return __classPrivateFieldGet(this, _Blob_type, "f");
-  }
-  get size() {
-    return __classPrivateFieldGet(this, _Blob_size, "f");
-  }
-  slice(start, end, contentType) {
-    return new _Blob(sliceBlob(__classPrivateFieldGet(this, _Blob_parts, "f"), this.size, start, end), {
-      type: contentType
-    });
-  }
-  async text() {
-    const decoder = new TextDecoder();
-    let result = "";
-    for await (const chunk of consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"))) {
-      result += decoder.decode(chunk, { stream: true });
-    }
-    result += decoder.decode();
-    return result;
-  }
-  async arrayBuffer() {
-    const view = new Uint8Array(this.size);
-    let offset = 0;
-    for await (const chunk of consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"))) {
-      view.set(chunk, offset);
-      offset += chunk.length;
-    }
-    return view.buffer;
-  }
-  stream() {
-    const iterator = consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"), true);
-    return new ReadableStream({
-      async pull(controller) {
-        const { value, done } = await iterator.next();
-        if (done) {
-          return queueMicrotask(() => controller.close());
+var __classPrivateFieldGet, __classPrivateFieldSet, _Blob_parts, _Blob_type, _Blob_size, Blob2;
+var init_Blob = __esm({
+  "node_modules/formdata-node/lib/esm/Blob.js"() {
+    init_ponyfill();
+    init_isFunction();
+    init_blobHelpers();
+    __classPrivateFieldGet = function(receiver, state, kind2, f2) {
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+      return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+    };
+    __classPrivateFieldSet = function(receiver, state, value, kind2, f2) {
+      if (kind2 === "m") throw new TypeError("Private method is not writable");
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+      return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+    };
+    Blob2 = class _Blob {
+      constructor(blobParts = [], options = {}) {
+        _Blob_parts.set(this, []);
+        _Blob_type.set(this, "");
+        _Blob_size.set(this, 0);
+        options !== null && options !== void 0 ? options : options = {};
+        if (typeof blobParts !== "object" || blobParts === null) {
+          throw new TypeError("Failed to construct 'Blob': The provided value cannot be converted to a sequence.");
         }
-        controller.enqueue(value);
-      },
-      async cancel() {
-        await iterator.return();
+        if (!isFunction(blobParts[Symbol.iterator])) {
+          throw new TypeError("Failed to construct 'Blob': The object must have a callable @@iterator property.");
+        }
+        if (typeof options !== "object" && !isFunction(options)) {
+          throw new TypeError("Failed to construct 'Blob': parameter 2 cannot convert to dictionary.");
+        }
+        const encoder = new TextEncoder();
+        for (const raw of blobParts) {
+          let part;
+          if (ArrayBuffer.isView(raw)) {
+            part = new Uint8Array(raw.buffer.slice(raw.byteOffset, raw.byteOffset + raw.byteLength));
+          } else if (raw instanceof ArrayBuffer) {
+            part = new Uint8Array(raw.slice(0));
+          } else if (raw instanceof _Blob) {
+            part = raw;
+          } else {
+            part = encoder.encode(String(raw));
+          }
+          __classPrivateFieldSet(this, _Blob_size, __classPrivateFieldGet(this, _Blob_size, "f") + (ArrayBuffer.isView(part) ? part.byteLength : part.size), "f");
+          __classPrivateFieldGet(this, _Blob_parts, "f").push(part);
+        }
+        const type = options.type === void 0 ? "" : String(options.type);
+        __classPrivateFieldSet(this, _Blob_type, /^[\x20-\x7E]*$/.test(type) ? type : "", "f");
       }
+      static [(_Blob_parts = /* @__PURE__ */ new WeakMap(), _Blob_type = /* @__PURE__ */ new WeakMap(), _Blob_size = /* @__PURE__ */ new WeakMap(), Symbol.hasInstance)](value) {
+        return Boolean(value && typeof value === "object" && isFunction(value.constructor) && (isFunction(value.stream) || isFunction(value.arrayBuffer)) && /^(Blob|File)$/.test(value[Symbol.toStringTag]));
+      }
+      get type() {
+        return __classPrivateFieldGet(this, _Blob_type, "f");
+      }
+      get size() {
+        return __classPrivateFieldGet(this, _Blob_size, "f");
+      }
+      slice(start, end, contentType) {
+        return new _Blob(sliceBlob(__classPrivateFieldGet(this, _Blob_parts, "f"), this.size, start, end), {
+          type: contentType
+        });
+      }
+      async text() {
+        const decoder = new TextDecoder();
+        let result = "";
+        for await (const chunk of consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"))) {
+          result += decoder.decode(chunk, { stream: true });
+        }
+        result += decoder.decode();
+        return result;
+      }
+      async arrayBuffer() {
+        const view = new Uint8Array(this.size);
+        let offset = 0;
+        for await (const chunk of consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"))) {
+          view.set(chunk, offset);
+          offset += chunk.length;
+        }
+        return view.buffer;
+      }
+      stream() {
+        const iterator = consumeBlobParts(__classPrivateFieldGet(this, _Blob_parts, "f"), true);
+        return new ReadableStream2({
+          async pull(controller) {
+            const { value, done } = await iterator.next();
+            if (done) {
+              return queueMicrotask(() => controller.close());
+            }
+            controller.enqueue(value);
+          },
+          async cancel() {
+            await iterator.return();
+          }
+        });
+      }
+      get [Symbol.toStringTag]() {
+        return "Blob";
+      }
+    };
+    Object.defineProperties(Blob2.prototype, {
+      type: { enumerable: true },
+      size: { enumerable: true },
+      slice: { enumerable: true },
+      stream: { enumerable: true },
+      text: { enumerable: true },
+      arrayBuffer: { enumerable: true }
     });
   }
-  get [Symbol.toStringTag]() {
-    return "Blob";
-  }
-};
-Object.defineProperties(Blob.prototype, {
-  type: { enumerable: true },
-  size: { enumerable: true },
-  slice: { enumerable: true },
-  stream: { enumerable: true },
-  text: { enumerable: true },
-  arrayBuffer: { enumerable: true }
 });
 
 // node_modules/formdata-node/lib/esm/File.js
-var __classPrivateFieldSet2 = function(receiver, state, value, kind, f2) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
-};
-var __classPrivateFieldGet2 = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
-};
-var _File_name;
-var _File_lastModified;
-var File = class extends Blob {
-  constructor(fileBits, name, options = {}) {
-    super(fileBits, options);
-    _File_name.set(this, void 0);
-    _File_lastModified.set(this, 0);
-    if (arguments.length < 2) {
-      throw new TypeError(`Failed to construct 'File': 2 arguments required, but only ${arguments.length} present.`);
-    }
-    __classPrivateFieldSet2(this, _File_name, String(name), "f");
-    const lastModified = options.lastModified === void 0 ? Date.now() : Number(options.lastModified);
-    if (!Number.isNaN(lastModified)) {
-      __classPrivateFieldSet2(this, _File_lastModified, lastModified, "f");
-    }
+var __classPrivateFieldSet2, __classPrivateFieldGet2, _File_name, _File_lastModified, File2;
+var init_File = __esm({
+  "node_modules/formdata-node/lib/esm/File.js"() {
+    init_Blob();
+    __classPrivateFieldSet2 = function(receiver, state, value, kind2, f2) {
+      if (kind2 === "m") throw new TypeError("Private method is not writable");
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+      return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+    };
+    __classPrivateFieldGet2 = function(receiver, state, kind2, f2) {
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+      return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+    };
+    File2 = class extends Blob2 {
+      constructor(fileBits, name, options = {}) {
+        super(fileBits, options);
+        _File_name.set(this, void 0);
+        _File_lastModified.set(this, 0);
+        if (arguments.length < 2) {
+          throw new TypeError(`Failed to construct 'File': 2 arguments required, but only ${arguments.length} present.`);
+        }
+        __classPrivateFieldSet2(this, _File_name, String(name), "f");
+        const lastModified = options.lastModified === void 0 ? Date.now() : Number(options.lastModified);
+        if (!Number.isNaN(lastModified)) {
+          __classPrivateFieldSet2(this, _File_lastModified, lastModified, "f");
+        }
+      }
+      static [(_File_name = /* @__PURE__ */ new WeakMap(), _File_lastModified = /* @__PURE__ */ new WeakMap(), Symbol.hasInstance)](value) {
+        return value instanceof Blob2 && value[Symbol.toStringTag] === "File" && typeof value.name === "string";
+      }
+      get name() {
+        return __classPrivateFieldGet2(this, _File_name, "f");
+      }
+      get lastModified() {
+        return __classPrivateFieldGet2(this, _File_lastModified, "f");
+      }
+      get webkitRelativePath() {
+        return "";
+      }
+      get [Symbol.toStringTag]() {
+        return "File";
+      }
+    };
   }
-  static [(_File_name = /* @__PURE__ */ new WeakMap(), _File_lastModified = /* @__PURE__ */ new WeakMap(), Symbol.hasInstance)](value) {
-    return value instanceof Blob && value[Symbol.toStringTag] === "File" && typeof value.name === "string";
-  }
-  get name() {
-    return __classPrivateFieldGet2(this, _File_name, "f");
-  }
-  get lastModified() {
-    return __classPrivateFieldGet2(this, _File_lastModified, "f");
-  }
-  get webkitRelativePath() {
-    return "";
-  }
-  get [Symbol.toStringTag]() {
-    return "File";
-  }
-};
+});
 
 // node_modules/formdata-node/lib/esm/isFile.js
-var isFile = (value) => value instanceof File;
+var isFile;
+var init_isFile = __esm({
+  "node_modules/formdata-node/lib/esm/isFile.js"() {
+    init_File();
+    isFile = (value) => value instanceof File2;
+  }
+});
+
+// node_modules/ms/index.js
+var require_ms = __commonJS({
+  "node_modules/ms/index.js"(exports2, module2) {
+    var s2 = 1e3;
+    var m2 = s2 * 60;
+    var h2 = m2 * 60;
+    var d2 = h2 * 24;
+    var w2 = d2 * 7;
+    var y2 = d2 * 365.25;
+    module2.exports = function(val, options) {
+      options = options || {};
+      var type = typeof val;
+      if (type === "string" && val.length > 0) {
+        return parse(val);
+      } else if (type === "number" && isFinite(val)) {
+        return options.long ? fmtLong(val) : fmtShort(val);
+      }
+      throw new Error(
+        "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
+      );
+    };
+    function parse(str2) {
+      str2 = String(str2);
+      if (str2.length > 100) {
+        return;
+      }
+      var match = /^(-?(?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
+        str2
+      );
+      if (!match) {
+        return;
+      }
+      var n2 = parseFloat(match[1]);
+      var type = (match[2] || "ms").toLowerCase();
+      switch (type) {
+        case "years":
+        case "year":
+        case "yrs":
+        case "yr":
+        case "y":
+          return n2 * y2;
+        case "weeks":
+        case "week":
+        case "w":
+          return n2 * w2;
+        case "days":
+        case "day":
+        case "d":
+          return n2 * d2;
+        case "hours":
+        case "hour":
+        case "hrs":
+        case "hr":
+        case "h":
+          return n2 * h2;
+        case "minutes":
+        case "minute":
+        case "mins":
+        case "min":
+        case "m":
+          return n2 * m2;
+        case "seconds":
+        case "second":
+        case "secs":
+        case "sec":
+        case "s":
+          return n2 * s2;
+        case "milliseconds":
+        case "millisecond":
+        case "msecs":
+        case "msec":
+        case "ms":
+          return n2;
+        default:
+          return void 0;
+      }
+    }
+    function fmtShort(ms) {
+      var msAbs = Math.abs(ms);
+      if (msAbs >= d2) {
+        return Math.round(ms / d2) + "d";
+      }
+      if (msAbs >= h2) {
+        return Math.round(ms / h2) + "h";
+      }
+      if (msAbs >= m2) {
+        return Math.round(ms / m2) + "m";
+      }
+      if (msAbs >= s2) {
+        return Math.round(ms / s2) + "s";
+      }
+      return ms + "ms";
+    }
+    function fmtLong(ms) {
+      var msAbs = Math.abs(ms);
+      if (msAbs >= d2) {
+        return plural(ms, msAbs, d2, "day");
+      }
+      if (msAbs >= h2) {
+        return plural(ms, msAbs, h2, "hour");
+      }
+      if (msAbs >= m2) {
+        return plural(ms, msAbs, m2, "minute");
+      }
+      if (msAbs >= s2) {
+        return plural(ms, msAbs, s2, "second");
+      }
+      return ms + " ms";
+    }
+    function plural(ms, msAbs, n2, name) {
+      var isPlural = msAbs >= n2 * 1.5;
+      return Math.round(ms / n2) + " " + name + (isPlural ? "s" : "");
+    }
+  }
+});
+
+// node_modules/humanize-ms/index.js
+var require_humanize_ms = __commonJS({
+  "node_modules/humanize-ms/index.js"(exports2, module2) {
+    "use strict";
+    var util = require("util");
+    var ms = require_ms();
+    module2.exports = function(t2) {
+      if (typeof t2 === "number") return t2;
+      var r2 = ms(t2);
+      if (r2 === void 0) {
+        var err = new Error(util.format("humanize-ms(%j) result undefined", t2));
+        console.warn(err.stack);
+      }
+      return r2;
+    };
+  }
+});
+
+// node_modules/agentkeepalive/lib/constants.js
+var require_constants = __commonJS({
+  "node_modules/agentkeepalive/lib/constants.js"(exports2, module2) {
+    "use strict";
+    module2.exports = {
+      // agent
+      CURRENT_ID: Symbol("agentkeepalive#currentId"),
+      CREATE_ID: Symbol("agentkeepalive#createId"),
+      INIT_SOCKET: Symbol("agentkeepalive#initSocket"),
+      CREATE_HTTPS_CONNECTION: Symbol("agentkeepalive#createHttpsConnection"),
+      // socket
+      SOCKET_CREATED_TIME: Symbol("agentkeepalive#socketCreatedTime"),
+      SOCKET_NAME: Symbol("agentkeepalive#socketName"),
+      SOCKET_REQUEST_COUNT: Symbol("agentkeepalive#socketRequestCount"),
+      SOCKET_REQUEST_FINISHED_COUNT: Symbol("agentkeepalive#socketRequestFinishedCount")
+    };
+  }
+});
+
+// node_modules/agentkeepalive/lib/agent.js
+var require_agent = __commonJS({
+  "node_modules/agentkeepalive/lib/agent.js"(exports2, module2) {
+    "use strict";
+    var OriginalAgent = require("http").Agent;
+    var ms = require_humanize_ms();
+    var debug2 = require("util").debuglog("agentkeepalive");
+    var {
+      INIT_SOCKET,
+      CURRENT_ID,
+      CREATE_ID,
+      SOCKET_CREATED_TIME,
+      SOCKET_NAME,
+      SOCKET_REQUEST_COUNT,
+      SOCKET_REQUEST_FINISHED_COUNT
+    } = require_constants();
+    var defaultTimeoutListenerCount = 1;
+    var majorVersion = parseInt(process.version.split(".", 1)[0].substring(1));
+    if (majorVersion >= 11 && majorVersion <= 12) {
+      defaultTimeoutListenerCount = 2;
+    } else if (majorVersion >= 13) {
+      defaultTimeoutListenerCount = 3;
+    }
+    function deprecate2(message) {
+      console.log("[agentkeepalive:deprecated] %s", message);
+    }
+    var Agent = class extends OriginalAgent {
+      constructor(options) {
+        options = options || {};
+        options.keepAlive = options.keepAlive !== false;
+        if (options.freeSocketTimeout === void 0) {
+          options.freeSocketTimeout = 4e3;
+        }
+        if (options.keepAliveTimeout) {
+          deprecate2("options.keepAliveTimeout is deprecated, please use options.freeSocketTimeout instead");
+          options.freeSocketTimeout = options.keepAliveTimeout;
+          delete options.keepAliveTimeout;
+        }
+        if (options.freeSocketKeepAliveTimeout) {
+          deprecate2("options.freeSocketKeepAliveTimeout is deprecated, please use options.freeSocketTimeout instead");
+          options.freeSocketTimeout = options.freeSocketKeepAliveTimeout;
+          delete options.freeSocketKeepAliveTimeout;
+        }
+        if (options.timeout === void 0) {
+          options.timeout = Math.max(options.freeSocketTimeout * 2, 8e3);
+        }
+        options.timeout = ms(options.timeout);
+        options.freeSocketTimeout = ms(options.freeSocketTimeout);
+        options.socketActiveTTL = options.socketActiveTTL ? ms(options.socketActiveTTL) : 0;
+        super(options);
+        this[CURRENT_ID] = 0;
+        this.createSocketCount = 0;
+        this.createSocketCountLastCheck = 0;
+        this.createSocketErrorCount = 0;
+        this.createSocketErrorCountLastCheck = 0;
+        this.closeSocketCount = 0;
+        this.closeSocketCountLastCheck = 0;
+        this.errorSocketCount = 0;
+        this.errorSocketCountLastCheck = 0;
+        this.requestCount = 0;
+        this.requestCountLastCheck = 0;
+        this.timeoutSocketCount = 0;
+        this.timeoutSocketCountLastCheck = 0;
+        this.on("free", (socket) => {
+          const timeout = this.calcSocketTimeout(socket);
+          if (timeout > 0 && socket.timeout !== timeout) {
+            socket.setTimeout(timeout);
+          }
+        });
+      }
+      get freeSocketKeepAliveTimeout() {
+        deprecate2("agent.freeSocketKeepAliveTimeout is deprecated, please use agent.options.freeSocketTimeout instead");
+        return this.options.freeSocketTimeout;
+      }
+      get timeout() {
+        deprecate2("agent.timeout is deprecated, please use agent.options.timeout instead");
+        return this.options.timeout;
+      }
+      get socketActiveTTL() {
+        deprecate2("agent.socketActiveTTL is deprecated, please use agent.options.socketActiveTTL instead");
+        return this.options.socketActiveTTL;
+      }
+      calcSocketTimeout(socket) {
+        let freeSocketTimeout = this.options.freeSocketTimeout;
+        const socketActiveTTL = this.options.socketActiveTTL;
+        if (socketActiveTTL) {
+          const aliveTime = Date.now() - socket[SOCKET_CREATED_TIME];
+          const diff = socketActiveTTL - aliveTime;
+          if (diff <= 0) {
+            return diff;
+          }
+          if (freeSocketTimeout && diff < freeSocketTimeout) {
+            freeSocketTimeout = diff;
+          }
+        }
+        if (freeSocketTimeout) {
+          const customFreeSocketTimeout = socket.freeSocketTimeout || socket.freeSocketKeepAliveTimeout;
+          return customFreeSocketTimeout || freeSocketTimeout;
+        }
+      }
+      keepSocketAlive(socket) {
+        const result = super.keepSocketAlive(socket);
+        if (!result) return result;
+        const customTimeout = this.calcSocketTimeout(socket);
+        if (typeof customTimeout === "undefined") {
+          return true;
+        }
+        if (customTimeout <= 0) {
+          debug2(
+            "%s(requests: %s, finished: %s) free but need to destroy by TTL, request count %s, diff is %s",
+            socket[SOCKET_NAME],
+            socket[SOCKET_REQUEST_COUNT],
+            socket[SOCKET_REQUEST_FINISHED_COUNT],
+            customTimeout
+          );
+          return false;
+        }
+        if (socket.timeout !== customTimeout) {
+          socket.setTimeout(customTimeout);
+        }
+        return true;
+      }
+      // only call on addRequest
+      reuseSocket(...args) {
+        super.reuseSocket(...args);
+        const socket = args[0];
+        const req = args[1];
+        req.reusedSocket = true;
+        const agentTimeout = this.options.timeout;
+        if (getSocketTimeout(socket) !== agentTimeout) {
+          socket.setTimeout(agentTimeout);
+          debug2("%s reset timeout to %sms", socket[SOCKET_NAME], agentTimeout);
+        }
+        socket[SOCKET_REQUEST_COUNT]++;
+        debug2(
+          "%s(requests: %s, finished: %s) reuse on addRequest, timeout %sms",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT],
+          getSocketTimeout(socket)
+        );
+      }
+      [CREATE_ID]() {
+        const id = this[CURRENT_ID]++;
+        if (this[CURRENT_ID] === Number.MAX_SAFE_INTEGER) this[CURRENT_ID] = 0;
+        return id;
+      }
+      [INIT_SOCKET](socket, options) {
+        if (options.timeout) {
+          const timeout = getSocketTimeout(socket);
+          if (!timeout) {
+            socket.setTimeout(options.timeout);
+          }
+        }
+        if (this.options.keepAlive) {
+          socket.setNoDelay(true);
+        }
+        this.createSocketCount++;
+        if (this.options.socketActiveTTL) {
+          socket[SOCKET_CREATED_TIME] = Date.now();
+        }
+        socket[SOCKET_NAME] = `sock[${this[CREATE_ID]()}#${options._agentKey}]`.split("-----BEGIN", 1)[0];
+        socket[SOCKET_REQUEST_COUNT] = 1;
+        socket[SOCKET_REQUEST_FINISHED_COUNT] = 0;
+        installListeners(this, socket, options);
+      }
+      createConnection(options, oncreate) {
+        let called = false;
+        const onNewCreate = (err, socket) => {
+          if (called) return;
+          called = true;
+          if (err) {
+            this.createSocketErrorCount++;
+            return oncreate(err);
+          }
+          this[INIT_SOCKET](socket, options);
+          oncreate(err, socket);
+        };
+        const newSocket = super.createConnection(options, onNewCreate);
+        if (newSocket) onNewCreate(null, newSocket);
+        return newSocket;
+      }
+      get statusChanged() {
+        const changed = this.createSocketCount !== this.createSocketCountLastCheck || this.createSocketErrorCount !== this.createSocketErrorCountLastCheck || this.closeSocketCount !== this.closeSocketCountLastCheck || this.errorSocketCount !== this.errorSocketCountLastCheck || this.timeoutSocketCount !== this.timeoutSocketCountLastCheck || this.requestCount !== this.requestCountLastCheck;
+        if (changed) {
+          this.createSocketCountLastCheck = this.createSocketCount;
+          this.createSocketErrorCountLastCheck = this.createSocketErrorCount;
+          this.closeSocketCountLastCheck = this.closeSocketCount;
+          this.errorSocketCountLastCheck = this.errorSocketCount;
+          this.timeoutSocketCountLastCheck = this.timeoutSocketCount;
+          this.requestCountLastCheck = this.requestCount;
+        }
+        return changed;
+      }
+      getCurrentStatus() {
+        return {
+          createSocketCount: this.createSocketCount,
+          createSocketErrorCount: this.createSocketErrorCount,
+          closeSocketCount: this.closeSocketCount,
+          errorSocketCount: this.errorSocketCount,
+          timeoutSocketCount: this.timeoutSocketCount,
+          requestCount: this.requestCount,
+          freeSockets: inspect2(this.freeSockets),
+          sockets: inspect2(this.sockets),
+          requests: inspect2(this.requests)
+        };
+      }
+    };
+    function getSocketTimeout(socket) {
+      return socket.timeout || socket._idleTimeout;
+    }
+    function installListeners(agent, socket, options) {
+      debug2("%s create, timeout %sms", socket[SOCKET_NAME], getSocketTimeout(socket));
+      function onFree() {
+        if (!socket._httpMessage && socket[SOCKET_REQUEST_COUNT] === 1) return;
+        socket[SOCKET_REQUEST_FINISHED_COUNT]++;
+        agent.requestCount++;
+        debug2(
+          "%s(requests: %s, finished: %s) free",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT]
+        );
+        const name = agent.getName(options);
+        if (socket.writable && agent.requests[name] && agent.requests[name].length) {
+          socket[SOCKET_REQUEST_COUNT]++;
+          debug2(
+            "%s(requests: %s, finished: %s) will be reuse on agent free event",
+            socket[SOCKET_NAME],
+            socket[SOCKET_REQUEST_COUNT],
+            socket[SOCKET_REQUEST_FINISHED_COUNT]
+          );
+        }
+      }
+      socket.on("free", onFree);
+      function onClose(isError) {
+        debug2(
+          "%s(requests: %s, finished: %s) close, isError: %s",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT],
+          isError
+        );
+        agent.closeSocketCount++;
+      }
+      socket.on("close", onClose);
+      function onTimeout() {
+        const listenerCount = socket.listeners("timeout").length;
+        const timeout = getSocketTimeout(socket);
+        const req = socket._httpMessage;
+        const reqTimeoutListenerCount = req && req.listeners("timeout").length || 0;
+        debug2(
+          "%s(requests: %s, finished: %s) timeout after %sms, listeners %s, defaultTimeoutListenerCount %s, hasHttpRequest %s, HttpRequest timeoutListenerCount %s",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT],
+          timeout,
+          listenerCount,
+          defaultTimeoutListenerCount,
+          !!req,
+          reqTimeoutListenerCount
+        );
+        if (debug2.enabled) {
+          debug2("timeout listeners: %s", socket.listeners("timeout").map((f2) => f2.name).join(", "));
+        }
+        agent.timeoutSocketCount++;
+        const name = agent.getName(options);
+        if (agent.freeSockets[name] && agent.freeSockets[name].indexOf(socket) !== -1) {
+          socket.destroy();
+          agent.removeSocket(socket, options);
+          debug2("%s is free, destroy quietly", socket[SOCKET_NAME]);
+        } else {
+          if (reqTimeoutListenerCount === 0) {
+            const error = new Error("Socket timeout");
+            error.code = "ERR_SOCKET_TIMEOUT";
+            error.timeout = timeout;
+            socket.destroy(error);
+            agent.removeSocket(socket, options);
+            debug2("%s destroy with timeout error", socket[SOCKET_NAME]);
+          }
+        }
+      }
+      socket.on("timeout", onTimeout);
+      function onError(err) {
+        const listenerCount = socket.listeners("error").length;
+        debug2(
+          "%s(requests: %s, finished: %s) error: %s, listenerCount: %s",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT],
+          err,
+          listenerCount
+        );
+        agent.errorSocketCount++;
+        if (listenerCount === 1) {
+          debug2("%s emit uncaught error event", socket[SOCKET_NAME]);
+          socket.removeListener("error", onError);
+          socket.emit("error", err);
+        }
+      }
+      socket.on("error", onError);
+      function onRemove() {
+        debug2(
+          "%s(requests: %s, finished: %s) agentRemove",
+          socket[SOCKET_NAME],
+          socket[SOCKET_REQUEST_COUNT],
+          socket[SOCKET_REQUEST_FINISHED_COUNT]
+        );
+        socket.removeListener("close", onClose);
+        socket.removeListener("error", onError);
+        socket.removeListener("free", onFree);
+        socket.removeListener("timeout", onTimeout);
+        socket.removeListener("agentRemove", onRemove);
+      }
+      socket.on("agentRemove", onRemove);
+    }
+    module2.exports = Agent;
+    function inspect2(obj) {
+      const res = {};
+      for (const key in obj) {
+        res[key] = obj[key].length;
+      }
+      return res;
+    }
+  }
+});
+
+// node_modules/agentkeepalive/lib/https_agent.js
+var require_https_agent = __commonJS({
+  "node_modules/agentkeepalive/lib/https_agent.js"(exports2, module2) {
+    "use strict";
+    var OriginalHttpsAgent = require("https").Agent;
+    var HttpAgent = require_agent();
+    var {
+      INIT_SOCKET,
+      CREATE_HTTPS_CONNECTION
+    } = require_constants();
+    var HttpsAgent = class extends HttpAgent {
+      constructor(options) {
+        super(options);
+        this.defaultPort = 443;
+        this.protocol = "https:";
+        this.maxCachedSessions = this.options.maxCachedSessions;
+        if (this.maxCachedSessions === void 0) {
+          this.maxCachedSessions = 100;
+        }
+        this._sessionCache = {
+          map: {},
+          list: []
+        };
+      }
+      createConnection(options, oncreate) {
+        const socket = this[CREATE_HTTPS_CONNECTION](options, oncreate);
+        this[INIT_SOCKET](socket, options);
+        return socket;
+      }
+    };
+    HttpsAgent.prototype[CREATE_HTTPS_CONNECTION] = OriginalHttpsAgent.prototype.createConnection;
+    [
+      "getName",
+      "_getSession",
+      "_cacheSession",
+      // https://github.com/nodejs/node/pull/4982
+      "_evictSession"
+    ].forEach(function(method) {
+      if (typeof OriginalHttpsAgent.prototype[method] === "function") {
+        HttpsAgent.prototype[method] = OriginalHttpsAgent.prototype[method];
+      }
+    });
+    module2.exports = HttpsAgent;
+  }
+});
+
+// node_modules/agentkeepalive/index.js
+var require_agentkeepalive = __commonJS({
+  "node_modules/agentkeepalive/index.js"(exports2, module2) {
+    "use strict";
+    module2.exports = require_agent();
+    module2.exports.HttpsAgent = require_https_agent();
+    module2.exports.constants = require_constants();
+  }
+});
+
+// node_modules/event-target-shim/dist/event-target-shim.js
+var require_event_target_shim = __commonJS({
+  "node_modules/event-target-shim/dist/event-target-shim.js"(exports2, module2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    var privateData = /* @__PURE__ */ new WeakMap();
+    var wrappers = /* @__PURE__ */ new WeakMap();
+    function pd(event) {
+      const retv = privateData.get(event);
+      console.assert(
+        retv != null,
+        "'this' is expected an Event object, but got",
+        event
+      );
+      return retv;
+    }
+    function setCancelFlag(data) {
+      if (data.passiveListener != null) {
+        if (typeof console !== "undefined" && typeof console.error === "function") {
+          console.error(
+            "Unable to preventDefault inside passive event listener invocation.",
+            data.passiveListener
+          );
+        }
+        return;
+      }
+      if (!data.event.cancelable) {
+        return;
+      }
+      data.canceled = true;
+      if (typeof data.event.preventDefault === "function") {
+        data.event.preventDefault();
+      }
+    }
+    function Event(eventTarget, event) {
+      privateData.set(this, {
+        eventTarget,
+        event,
+        eventPhase: 2,
+        currentTarget: eventTarget,
+        canceled: false,
+        stopped: false,
+        immediateStopped: false,
+        passiveListener: null,
+        timeStamp: event.timeStamp || Date.now()
+      });
+      Object.defineProperty(this, "isTrusted", { value: false, enumerable: true });
+      const keys = Object.keys(event);
+      for (let i2 = 0; i2 < keys.length; ++i2) {
+        const key = keys[i2];
+        if (!(key in this)) {
+          Object.defineProperty(this, key, defineRedirectDescriptor(key));
+        }
+      }
+    }
+    Event.prototype = {
+      /**
+       * The type of this event.
+       * @type {string}
+       */
+      get type() {
+        return pd(this).event.type;
+      },
+      /**
+       * The target of this event.
+       * @type {EventTarget}
+       */
+      get target() {
+        return pd(this).eventTarget;
+      },
+      /**
+       * The target of this event.
+       * @type {EventTarget}
+       */
+      get currentTarget() {
+        return pd(this).currentTarget;
+      },
+      /**
+       * @returns {EventTarget[]} The composed path of this event.
+       */
+      composedPath() {
+        const currentTarget = pd(this).currentTarget;
+        if (currentTarget == null) {
+          return [];
+        }
+        return [currentTarget];
+      },
+      /**
+       * Constant of NONE.
+       * @type {number}
+       */
+      get NONE() {
+        return 0;
+      },
+      /**
+       * Constant of CAPTURING_PHASE.
+       * @type {number}
+       */
+      get CAPTURING_PHASE() {
+        return 1;
+      },
+      /**
+       * Constant of AT_TARGET.
+       * @type {number}
+       */
+      get AT_TARGET() {
+        return 2;
+      },
+      /**
+       * Constant of BUBBLING_PHASE.
+       * @type {number}
+       */
+      get BUBBLING_PHASE() {
+        return 3;
+      },
+      /**
+       * The target of this event.
+       * @type {number}
+       */
+      get eventPhase() {
+        return pd(this).eventPhase;
+      },
+      /**
+       * Stop event bubbling.
+       * @returns {void}
+       */
+      stopPropagation() {
+        const data = pd(this);
+        data.stopped = true;
+        if (typeof data.event.stopPropagation === "function") {
+          data.event.stopPropagation();
+        }
+      },
+      /**
+       * Stop event bubbling.
+       * @returns {void}
+       */
+      stopImmediatePropagation() {
+        const data = pd(this);
+        data.stopped = true;
+        data.immediateStopped = true;
+        if (typeof data.event.stopImmediatePropagation === "function") {
+          data.event.stopImmediatePropagation();
+        }
+      },
+      /**
+       * The flag to be bubbling.
+       * @type {boolean}
+       */
+      get bubbles() {
+        return Boolean(pd(this).event.bubbles);
+      },
+      /**
+       * The flag to be cancelable.
+       * @type {boolean}
+       */
+      get cancelable() {
+        return Boolean(pd(this).event.cancelable);
+      },
+      /**
+       * Cancel this event.
+       * @returns {void}
+       */
+      preventDefault() {
+        setCancelFlag(pd(this));
+      },
+      /**
+       * The flag to indicate cancellation state.
+       * @type {boolean}
+       */
+      get defaultPrevented() {
+        return pd(this).canceled;
+      },
+      /**
+       * The flag to be composed.
+       * @type {boolean}
+       */
+      get composed() {
+        return Boolean(pd(this).event.composed);
+      },
+      /**
+       * The unix time of this event.
+       * @type {number}
+       */
+      get timeStamp() {
+        return pd(this).timeStamp;
+      },
+      /**
+       * The target of this event.
+       * @type {EventTarget}
+       * @deprecated
+       */
+      get srcElement() {
+        return pd(this).eventTarget;
+      },
+      /**
+       * The flag to stop event bubbling.
+       * @type {boolean}
+       * @deprecated
+       */
+      get cancelBubble() {
+        return pd(this).stopped;
+      },
+      set cancelBubble(value) {
+        if (!value) {
+          return;
+        }
+        const data = pd(this);
+        data.stopped = true;
+        if (typeof data.event.cancelBubble === "boolean") {
+          data.event.cancelBubble = true;
+        }
+      },
+      /**
+       * The flag to indicate cancellation state.
+       * @type {boolean}
+       * @deprecated
+       */
+      get returnValue() {
+        return !pd(this).canceled;
+      },
+      set returnValue(value) {
+        if (!value) {
+          setCancelFlag(pd(this));
+        }
+      },
+      /**
+       * Initialize this event object. But do nothing under event dispatching.
+       * @param {string} type The event type.
+       * @param {boolean} [bubbles=false] The flag to be possible to bubble up.
+       * @param {boolean} [cancelable=false] The flag to be possible to cancel.
+       * @deprecated
+       */
+      initEvent() {
+      }
+    };
+    Object.defineProperty(Event.prototype, "constructor", {
+      value: Event,
+      configurable: true,
+      writable: true
+    });
+    if (typeof window !== "undefined" && typeof window.Event !== "undefined") {
+      Object.setPrototypeOf(Event.prototype, window.Event.prototype);
+      wrappers.set(window.Event.prototype, Event);
+    }
+    function defineRedirectDescriptor(key) {
+      return {
+        get() {
+          return pd(this).event[key];
+        },
+        set(value) {
+          pd(this).event[key] = value;
+        },
+        configurable: true,
+        enumerable: true
+      };
+    }
+    function defineCallDescriptor(key) {
+      return {
+        value() {
+          const event = pd(this).event;
+          return event[key].apply(event, arguments);
+        },
+        configurable: true,
+        enumerable: true
+      };
+    }
+    function defineWrapper(BaseEvent, proto) {
+      const keys = Object.keys(proto);
+      if (keys.length === 0) {
+        return BaseEvent;
+      }
+      function CustomEvent(eventTarget, event) {
+        BaseEvent.call(this, eventTarget, event);
+      }
+      CustomEvent.prototype = Object.create(BaseEvent.prototype, {
+        constructor: { value: CustomEvent, configurable: true, writable: true }
+      });
+      for (let i2 = 0; i2 < keys.length; ++i2) {
+        const key = keys[i2];
+        if (!(key in BaseEvent.prototype)) {
+          const descriptor = Object.getOwnPropertyDescriptor(proto, key);
+          const isFunc = typeof descriptor.value === "function";
+          Object.defineProperty(
+            CustomEvent.prototype,
+            key,
+            isFunc ? defineCallDescriptor(key) : defineRedirectDescriptor(key)
+          );
+        }
+      }
+      return CustomEvent;
+    }
+    function getWrapper(proto) {
+      if (proto == null || proto === Object.prototype) {
+        return Event;
+      }
+      let wrapper = wrappers.get(proto);
+      if (wrapper == null) {
+        wrapper = defineWrapper(getWrapper(Object.getPrototypeOf(proto)), proto);
+        wrappers.set(proto, wrapper);
+      }
+      return wrapper;
+    }
+    function wrapEvent(eventTarget, event) {
+      const Wrapper = getWrapper(Object.getPrototypeOf(event));
+      return new Wrapper(eventTarget, event);
+    }
+    function isStopped(event) {
+      return pd(event).immediateStopped;
+    }
+    function setEventPhase(event, eventPhase) {
+      pd(event).eventPhase = eventPhase;
+    }
+    function setCurrentTarget(event, currentTarget) {
+      pd(event).currentTarget = currentTarget;
+    }
+    function setPassiveListener(event, passiveListener) {
+      pd(event).passiveListener = passiveListener;
+    }
+    var listenersMap = /* @__PURE__ */ new WeakMap();
+    var CAPTURE = 1;
+    var BUBBLE = 2;
+    var ATTRIBUTE = 3;
+    function isObject(x2) {
+      return x2 !== null && typeof x2 === "object";
+    }
+    function getListeners(eventTarget) {
+      const listeners = listenersMap.get(eventTarget);
+      if (listeners == null) {
+        throw new TypeError(
+          "'this' is expected an EventTarget object, but got another value."
+        );
+      }
+      return listeners;
+    }
+    function defineEventAttributeDescriptor(eventName) {
+      return {
+        get() {
+          const listeners = getListeners(this);
+          let node = listeners.get(eventName);
+          while (node != null) {
+            if (node.listenerType === ATTRIBUTE) {
+              return node.listener;
+            }
+            node = node.next;
+          }
+          return null;
+        },
+        set(listener) {
+          if (typeof listener !== "function" && !isObject(listener)) {
+            listener = null;
+          }
+          const listeners = getListeners(this);
+          let prev = null;
+          let node = listeners.get(eventName);
+          while (node != null) {
+            if (node.listenerType === ATTRIBUTE) {
+              if (prev !== null) {
+                prev.next = node.next;
+              } else if (node.next !== null) {
+                listeners.set(eventName, node.next);
+              } else {
+                listeners.delete(eventName);
+              }
+            } else {
+              prev = node;
+            }
+            node = node.next;
+          }
+          if (listener !== null) {
+            const newNode = {
+              listener,
+              listenerType: ATTRIBUTE,
+              passive: false,
+              once: false,
+              next: null
+            };
+            if (prev === null) {
+              listeners.set(eventName, newNode);
+            } else {
+              prev.next = newNode;
+            }
+          }
+        },
+        configurable: true,
+        enumerable: true
+      };
+    }
+    function defineEventAttribute(eventTargetPrototype, eventName) {
+      Object.defineProperty(
+        eventTargetPrototype,
+        `on${eventName}`,
+        defineEventAttributeDescriptor(eventName)
+      );
+    }
+    function defineCustomEventTarget(eventNames) {
+      function CustomEventTarget() {
+        EventTarget.call(this);
+      }
+      CustomEventTarget.prototype = Object.create(EventTarget.prototype, {
+        constructor: {
+          value: CustomEventTarget,
+          configurable: true,
+          writable: true
+        }
+      });
+      for (let i2 = 0; i2 < eventNames.length; ++i2) {
+        defineEventAttribute(CustomEventTarget.prototype, eventNames[i2]);
+      }
+      return CustomEventTarget;
+    }
+    function EventTarget() {
+      if (this instanceof EventTarget) {
+        listenersMap.set(this, /* @__PURE__ */ new Map());
+        return;
+      }
+      if (arguments.length === 1 && Array.isArray(arguments[0])) {
+        return defineCustomEventTarget(arguments[0]);
+      }
+      if (arguments.length > 0) {
+        const types = new Array(arguments.length);
+        for (let i2 = 0; i2 < arguments.length; ++i2) {
+          types[i2] = arguments[i2];
+        }
+        return defineCustomEventTarget(types);
+      }
+      throw new TypeError("Cannot call a class as a function");
+    }
+    EventTarget.prototype = {
+      /**
+       * Add a given listener to this event target.
+       * @param {string} eventName The event name to add.
+       * @param {Function} listener The listener to add.
+       * @param {boolean|{capture?:boolean,passive?:boolean,once?:boolean}} [options] The options for this listener.
+       * @returns {void}
+       */
+      addEventListener(eventName, listener, options) {
+        if (listener == null) {
+          return;
+        }
+        if (typeof listener !== "function" && !isObject(listener)) {
+          throw new TypeError("'listener' should be a function or an object.");
+        }
+        const listeners = getListeners(this);
+        const optionsIsObj = isObject(options);
+        const capture = optionsIsObj ? Boolean(options.capture) : Boolean(options);
+        const listenerType = capture ? CAPTURE : BUBBLE;
+        const newNode = {
+          listener,
+          listenerType,
+          passive: optionsIsObj && Boolean(options.passive),
+          once: optionsIsObj && Boolean(options.once),
+          next: null
+        };
+        let node = listeners.get(eventName);
+        if (node === void 0) {
+          listeners.set(eventName, newNode);
+          return;
+        }
+        let prev = null;
+        while (node != null) {
+          if (node.listener === listener && node.listenerType === listenerType) {
+            return;
+          }
+          prev = node;
+          node = node.next;
+        }
+        prev.next = newNode;
+      },
+      /**
+       * Remove a given listener from this event target.
+       * @param {string} eventName The event name to remove.
+       * @param {Function} listener The listener to remove.
+       * @param {boolean|{capture?:boolean,passive?:boolean,once?:boolean}} [options] The options for this listener.
+       * @returns {void}
+       */
+      removeEventListener(eventName, listener, options) {
+        if (listener == null) {
+          return;
+        }
+        const listeners = getListeners(this);
+        const capture = isObject(options) ? Boolean(options.capture) : Boolean(options);
+        const listenerType = capture ? CAPTURE : BUBBLE;
+        let prev = null;
+        let node = listeners.get(eventName);
+        while (node != null) {
+          if (node.listener === listener && node.listenerType === listenerType) {
+            if (prev !== null) {
+              prev.next = node.next;
+            } else if (node.next !== null) {
+              listeners.set(eventName, node.next);
+            } else {
+              listeners.delete(eventName);
+            }
+            return;
+          }
+          prev = node;
+          node = node.next;
+        }
+      },
+      /**
+       * Dispatch a given event.
+       * @param {Event|{type:string}} event The event to dispatch.
+       * @returns {boolean} `false` if canceled.
+       */
+      dispatchEvent(event) {
+        if (event == null || typeof event.type !== "string") {
+          throw new TypeError('"event.type" should be a string.');
+        }
+        const listeners = getListeners(this);
+        const eventName = event.type;
+        let node = listeners.get(eventName);
+        if (node == null) {
+          return true;
+        }
+        const wrappedEvent = wrapEvent(this, event);
+        let prev = null;
+        while (node != null) {
+          if (node.once) {
+            if (prev !== null) {
+              prev.next = node.next;
+            } else if (node.next !== null) {
+              listeners.set(eventName, node.next);
+            } else {
+              listeners.delete(eventName);
+            }
+          } else {
+            prev = node;
+          }
+          setPassiveListener(
+            wrappedEvent,
+            node.passive ? node.listener : null
+          );
+          if (typeof node.listener === "function") {
+            try {
+              node.listener.call(this, wrappedEvent);
+            } catch (err) {
+              if (typeof console !== "undefined" && typeof console.error === "function") {
+                console.error(err);
+              }
+            }
+          } else if (node.listenerType !== ATTRIBUTE && typeof node.listener.handleEvent === "function") {
+            node.listener.handleEvent(wrappedEvent);
+          }
+          if (isStopped(wrappedEvent)) {
+            break;
+          }
+          node = node.next;
+        }
+        setPassiveListener(wrappedEvent, null);
+        setEventPhase(wrappedEvent, 0);
+        setCurrentTarget(wrappedEvent, null);
+        return !wrappedEvent.defaultPrevented;
+      }
+    };
+    Object.defineProperty(EventTarget.prototype, "constructor", {
+      value: EventTarget,
+      configurable: true,
+      writable: true
+    });
+    if (typeof window !== "undefined" && typeof window.EventTarget !== "undefined") {
+      Object.setPrototypeOf(EventTarget.prototype, window.EventTarget.prototype);
+    }
+    exports2.defineEventAttribute = defineEventAttribute;
+    exports2.EventTarget = EventTarget;
+    exports2.default = EventTarget;
+    module2.exports = EventTarget;
+    module2.exports.EventTarget = module2.exports["default"] = EventTarget;
+    module2.exports.defineEventAttribute = defineEventAttribute;
+  }
+});
+
+// node_modules/abort-controller/dist/abort-controller.js
+var require_abort_controller = __commonJS({
+  "node_modules/abort-controller/dist/abort-controller.js"(exports2, module2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    var eventTargetShim = require_event_target_shim();
+    var AbortSignal = class extends eventTargetShim.EventTarget {
+      /**
+       * AbortSignal cannot be constructed directly.
+       */
+      constructor() {
+        super();
+        throw new TypeError("AbortSignal cannot be constructed directly");
+      }
+      /**
+       * Returns `true` if this `AbortSignal`'s `AbortController` has signaled to abort, and `false` otherwise.
+       */
+      get aborted() {
+        const aborted = abortedFlags.get(this);
+        if (typeof aborted !== "boolean") {
+          throw new TypeError(`Expected 'this' to be an 'AbortSignal' object, but got ${this === null ? "null" : typeof this}`);
+        }
+        return aborted;
+      }
+    };
+    eventTargetShim.defineEventAttribute(AbortSignal.prototype, "abort");
+    function createAbortSignal() {
+      const signal = Object.create(AbortSignal.prototype);
+      eventTargetShim.EventTarget.call(signal);
+      abortedFlags.set(signal, false);
+      return signal;
+    }
+    function abortSignal(signal) {
+      if (abortedFlags.get(signal) !== false) {
+        return;
+      }
+      abortedFlags.set(signal, true);
+      signal.dispatchEvent({ type: "abort" });
+    }
+    var abortedFlags = /* @__PURE__ */ new WeakMap();
+    Object.defineProperties(AbortSignal.prototype, {
+      aborted: { enumerable: true }
+    });
+    if (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") {
+      Object.defineProperty(AbortSignal.prototype, Symbol.toStringTag, {
+        configurable: true,
+        value: "AbortSignal"
+      });
+    }
+    var AbortController2 = class {
+      /**
+       * Initialize this controller.
+       */
+      constructor() {
+        signals.set(this, createAbortSignal());
+      }
+      /**
+       * Returns the `AbortSignal` object associated with this object.
+       */
+      get signal() {
+        return getSignal(this);
+      }
+      /**
+       * Abort and signal to any observers that the associated activity is to be aborted.
+       */
+      abort() {
+        abortSignal(getSignal(this));
+      }
+    };
+    var signals = /* @__PURE__ */ new WeakMap();
+    function getSignal(controller) {
+      const signal = signals.get(controller);
+      if (signal == null) {
+        throw new TypeError(`Expected 'this' to be an 'AbortController' object, but got ${controller === null ? "null" : typeof controller}`);
+      }
+      return signal;
+    }
+    Object.defineProperties(AbortController2.prototype, {
+      signal: { enumerable: true },
+      abort: { enumerable: true }
+    });
+    if (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") {
+      Object.defineProperty(AbortController2.prototype, Symbol.toStringTag, {
+        configurable: true,
+        value: "AbortController"
+      });
+    }
+    exports2.AbortController = AbortController2;
+    exports2.AbortSignal = AbortSignal;
+    exports2.default = AbortController2;
+    module2.exports = AbortController2;
+    module2.exports.AbortController = module2.exports["default"] = AbortController2;
+    module2.exports.AbortSignal = AbortSignal;
+  }
+});
+
+// node_modules/node-domexception/index.js
+var require_node_domexception = __commonJS({
+  "node_modules/node-domexception/index.js"(exports2, module2) {
+    if (!globalThis.DOMException) {
+      try {
+        const { MessageChannel } = require("worker_threads"), port = new MessageChannel().port1, ab = new ArrayBuffer();
+        port.postMessage(ab, [ab, ab]);
+      } catch (err) {
+        err.constructor.name === "DOMException" && (globalThis.DOMException = err.constructor);
+      }
+    }
+    module2.exports = globalThis.DOMException;
+  }
+});
+
+// node_modules/formdata-node/lib/esm/isPlainObject.js
+function isPlainObject2(value) {
+  if (getType2(value) !== "object") {
+    return false;
+  }
+  const pp = Object.getPrototypeOf(value);
+  if (pp === null || pp === void 0) {
+    return true;
+  }
+  const Ctor = pp.constructor && pp.constructor.toString();
+  return Ctor === Object.toString();
+}
+var getType2, isPlainObject_default2;
+var init_isPlainObject = __esm({
+  "node_modules/formdata-node/lib/esm/isPlainObject.js"() {
+    getType2 = (value) => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
+    isPlainObject_default2 = isPlainObject2;
+  }
+});
+
+// node_modules/formdata-node/lib/esm/fileFromPath.js
+var fileFromPath_exports = {};
+__export(fileFromPath_exports, {
+  fileFromPath: () => fileFromPath2,
+  fileFromPathSync: () => fileFromPathSync,
+  isFile: () => isFile
+});
+function createFileFromPath(path, { mtimeMs, size }, filenameOrOptions, options = {}) {
+  let filename;
+  if (isPlainObject_default2(filenameOrOptions)) {
+    [options, filename] = [filenameOrOptions, void 0];
+  } else {
+    filename = filenameOrOptions;
+  }
+  const file = new FileFromPath({ path, size, lastModified: mtimeMs });
+  if (!filename) {
+    filename = file.name;
+  }
+  return new File2([file], filename, {
+    ...options,
+    lastModified: file.lastModified
+  });
+}
+function fileFromPathSync(path, filenameOrOptions, options = {}) {
+  const stats = (0, import_fs.statSync)(path);
+  return createFileFromPath(path, stats, filenameOrOptions, options);
+}
+async function fileFromPath2(path, filenameOrOptions, options) {
+  const stats = await import_fs.promises.stat(path);
+  return createFileFromPath(path, stats, filenameOrOptions, options);
+}
+var import_fs, import_path, import_node_domexception, __classPrivateFieldSet4, __classPrivateFieldGet5, _FileFromPath_path, _FileFromPath_start, MESSAGE, FileFromPath;
+var init_fileFromPath = __esm({
+  "node_modules/formdata-node/lib/esm/fileFromPath.js"() {
+    import_fs = require("fs");
+    import_path = require("path");
+    import_node_domexception = __toESM(require_node_domexception(), 1);
+    init_File();
+    init_isPlainObject();
+    init_isFile();
+    __classPrivateFieldSet4 = function(receiver, state, value, kind2, f2) {
+      if (kind2 === "m") throw new TypeError("Private method is not writable");
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+      return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+    };
+    __classPrivateFieldGet5 = function(receiver, state, kind2, f2) {
+      if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+      if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+      return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+    };
+    MESSAGE = "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.";
+    FileFromPath = class _FileFromPath {
+      constructor(input) {
+        _FileFromPath_path.set(this, void 0);
+        _FileFromPath_start.set(this, void 0);
+        __classPrivateFieldSet4(this, _FileFromPath_path, input.path, "f");
+        __classPrivateFieldSet4(this, _FileFromPath_start, input.start || 0, "f");
+        this.name = (0, import_path.basename)(__classPrivateFieldGet5(this, _FileFromPath_path, "f"));
+        this.size = input.size;
+        this.lastModified = input.lastModified;
+      }
+      slice(start, end) {
+        return new _FileFromPath({
+          path: __classPrivateFieldGet5(this, _FileFromPath_path, "f"),
+          lastModified: this.lastModified,
+          size: end - start,
+          start
+        });
+      }
+      async *stream() {
+        const { mtimeMs } = await import_fs.promises.stat(__classPrivateFieldGet5(this, _FileFromPath_path, "f"));
+        if (mtimeMs > this.lastModified) {
+          throw new import_node_domexception.default(MESSAGE, "NotReadableError");
+        }
+        if (this.size) {
+          yield* (0, import_fs.createReadStream)(__classPrivateFieldGet5(this, _FileFromPath_path, "f"), {
+            start: __classPrivateFieldGet5(this, _FileFromPath_start, "f"),
+            end: __classPrivateFieldGet5(this, _FileFromPath_start, "f") + this.size - 1
+          });
+        }
+      }
+      get [(_FileFromPath_path = /* @__PURE__ */ new WeakMap(), _FileFromPath_start = /* @__PURE__ */ new WeakMap(), Symbol.toStringTag)]() {
+        return "File";
+      }
+    };
+  }
+});
+
+// node_modules/es-errors/index.js
+var require_es_errors = __commonJS({
+  "node_modules/es-errors/index.js"(exports2, module2) {
+    "use strict";
+    module2.exports = Error;
+  }
+});
+
+// node_modules/es-errors/eval.js
+var require_eval = __commonJS({
+  "node_modules/es-errors/eval.js"(exports2, module2) {
+    "use strict";
+    module2.exports = EvalError;
+  }
+});
+
+// node_modules/es-errors/range.js
+var require_range = __commonJS({
+  "node_modules/es-errors/range.js"(exports2, module2) {
+    "use strict";
+    module2.exports = RangeError;
+  }
+});
+
+// node_modules/es-errors/ref.js
+var require_ref = __commonJS({
+  "node_modules/es-errors/ref.js"(exports2, module2) {
+    "use strict";
+    module2.exports = ReferenceError;
+  }
+});
+
+// node_modules/es-errors/syntax.js
+var require_syntax = __commonJS({
+  "node_modules/es-errors/syntax.js"(exports2, module2) {
+    "use strict";
+    module2.exports = SyntaxError;
+  }
+});
+
+// node_modules/es-errors/type.js
+var require_type = __commonJS({
+  "node_modules/es-errors/type.js"(exports2, module2) {
+    "use strict";
+    module2.exports = TypeError;
+  }
+});
+
+// node_modules/es-errors/uri.js
+var require_uri = __commonJS({
+  "node_modules/es-errors/uri.js"(exports2, module2) {
+    "use strict";
+    module2.exports = URIError;
+  }
+});
+
+// node_modules/has-symbols/shams.js
+var require_shams = __commonJS({
+  "node_modules/has-symbols/shams.js"(exports2, module2) {
+    "use strict";
+    module2.exports = function hasSymbols() {
+      if (typeof Symbol !== "function" || typeof Object.getOwnPropertySymbols !== "function") {
+        return false;
+      }
+      if (typeof Symbol.iterator === "symbol") {
+        return true;
+      }
+      var obj = {};
+      var sym = Symbol("test");
+      var symObj = Object(sym);
+      if (typeof sym === "string") {
+        return false;
+      }
+      if (Object.prototype.toString.call(sym) !== "[object Symbol]") {
+        return false;
+      }
+      if (Object.prototype.toString.call(symObj) !== "[object Symbol]") {
+        return false;
+      }
+      var symVal = 42;
+      obj[sym] = symVal;
+      for (sym in obj) {
+        return false;
+      }
+      if (typeof Object.keys === "function" && Object.keys(obj).length !== 0) {
+        return false;
+      }
+      if (typeof Object.getOwnPropertyNames === "function" && Object.getOwnPropertyNames(obj).length !== 0) {
+        return false;
+      }
+      var syms = Object.getOwnPropertySymbols(obj);
+      if (syms.length !== 1 || syms[0] !== sym) {
+        return false;
+      }
+      if (!Object.prototype.propertyIsEnumerable.call(obj, sym)) {
+        return false;
+      }
+      if (typeof Object.getOwnPropertyDescriptor === "function") {
+        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
+        if (descriptor.value !== symVal || descriptor.enumerable !== true) {
+          return false;
+        }
+      }
+      return true;
+    };
+  }
+});
+
+// node_modules/has-symbols/index.js
+var require_has_symbols = __commonJS({
+  "node_modules/has-symbols/index.js"(exports2, module2) {
+    "use strict";
+    var origSymbol = typeof Symbol !== "undefined" && Symbol;
+    var hasSymbolSham = require_shams();
+    module2.exports = function hasNativeSymbols() {
+      if (typeof origSymbol !== "function") {
+        return false;
+      }
+      if (typeof Symbol !== "function") {
+        return false;
+      }
+      if (typeof origSymbol("foo") !== "symbol") {
+        return false;
+      }
+      if (typeof Symbol("bar") !== "symbol") {
+        return false;
+      }
+      return hasSymbolSham();
+    };
+  }
+});
+
+// node_modules/has-proto/index.js
+var require_has_proto = __commonJS({
+  "node_modules/has-proto/index.js"(exports2, module2) {
+    "use strict";
+    var test = {
+      __proto__: null,
+      foo: {}
+    };
+    var $Object = Object;
+    module2.exports = function hasProto() {
+      return { __proto__: test }.foo === test.foo && !(test instanceof $Object);
+    };
+  }
+});
+
+// node_modules/function-bind/implementation.js
+var require_implementation = __commonJS({
+  "node_modules/function-bind/implementation.js"(exports2, module2) {
+    "use strict";
+    var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
+    var toStr = Object.prototype.toString;
+    var max = Math.max;
+    var funcType = "[object Function]";
+    var concatty = function concatty2(a2, b2) {
+      var arr = [];
+      for (var i2 = 0; i2 < a2.length; i2 += 1) {
+        arr[i2] = a2[i2];
+      }
+      for (var j2 = 0; j2 < b2.length; j2 += 1) {
+        arr[j2 + a2.length] = b2[j2];
+      }
+      return arr;
+    };
+    var slicy = function slicy2(arrLike, offset) {
+      var arr = [];
+      for (var i2 = offset || 0, j2 = 0; i2 < arrLike.length; i2 += 1, j2 += 1) {
+        arr[j2] = arrLike[i2];
+      }
+      return arr;
+    };
+    var joiny = function(arr, joiner) {
+      var str2 = "";
+      for (var i2 = 0; i2 < arr.length; i2 += 1) {
+        str2 += arr[i2];
+        if (i2 + 1 < arr.length) {
+          str2 += joiner;
+        }
+      }
+      return str2;
+    };
+    module2.exports = function bind(that) {
+      var target = this;
+      if (typeof target !== "function" || toStr.apply(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+      }
+      var args = slicy(arguments, 1);
+      var bound;
+      var binder = function() {
+        if (this instanceof bound) {
+          var result = target.apply(
+            this,
+            concatty(args, arguments)
+          );
+          if (Object(result) === result) {
+            return result;
+          }
+          return this;
+        }
+        return target.apply(
+          that,
+          concatty(args, arguments)
+        );
+      };
+      var boundLength = max(0, target.length - args.length);
+      var boundArgs = [];
+      for (var i2 = 0; i2 < boundLength; i2++) {
+        boundArgs[i2] = "$" + i2;
+      }
+      bound = Function("binder", "return function (" + joiny(boundArgs, ",") + "){ return binder.apply(this,arguments); }")(binder);
+      if (target.prototype) {
+        var Empty = function Empty2() {
+        };
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+      }
+      return bound;
+    };
+  }
+});
+
+// node_modules/function-bind/index.js
+var require_function_bind = __commonJS({
+  "node_modules/function-bind/index.js"(exports2, module2) {
+    "use strict";
+    var implementation = require_implementation();
+    module2.exports = Function.prototype.bind || implementation;
+  }
+});
+
+// node_modules/hasown/index.js
+var require_hasown = __commonJS({
+  "node_modules/hasown/index.js"(exports2, module2) {
+    "use strict";
+    var call = Function.prototype.call;
+    var $hasOwn = Object.prototype.hasOwnProperty;
+    var bind = require_function_bind();
+    module2.exports = bind.call(call, $hasOwn);
+  }
+});
+
+// node_modules/get-intrinsic/index.js
+var require_get_intrinsic = __commonJS({
+  "node_modules/get-intrinsic/index.js"(exports2, module2) {
+    "use strict";
+    var undefined2;
+    var $Error = require_es_errors();
+    var $EvalError = require_eval();
+    var $RangeError = require_range();
+    var $ReferenceError = require_ref();
+    var $SyntaxError = require_syntax();
+    var $TypeError = require_type();
+    var $URIError = require_uri();
+    var $Function = Function;
+    var getEvalledConstructor = function(expressionSyntax) {
+      try {
+        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
+      } catch (e2) {
+      }
+    };
+    var $gOPD = Object.getOwnPropertyDescriptor;
+    if ($gOPD) {
+      try {
+        $gOPD({}, "");
+      } catch (e2) {
+        $gOPD = null;
+      }
+    }
+    var throwTypeError = function() {
+      throw new $TypeError();
+    };
+    var ThrowTypeError = $gOPD ? function() {
+      try {
+        arguments.callee;
+        return throwTypeError;
+      } catch (calleeThrows) {
+        try {
+          return $gOPD(arguments, "callee").get;
+        } catch (gOPDthrows) {
+          return throwTypeError;
+        }
+      }
+    }() : throwTypeError;
+    var hasSymbols = require_has_symbols()();
+    var hasProto = require_has_proto()();
+    var getProto = Object.getPrototypeOf || (hasProto ? function(x2) {
+      return x2.__proto__;
+    } : null);
+    var needsEval = {};
+    var TypedArray = typeof Uint8Array === "undefined" || !getProto ? undefined2 : getProto(Uint8Array);
+    var INTRINSICS = {
+      __proto__: null,
+      "%AggregateError%": typeof AggregateError === "undefined" ? undefined2 : AggregateError,
+      "%Array%": Array,
+      "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined2 : ArrayBuffer,
+      "%ArrayIteratorPrototype%": hasSymbols && getProto ? getProto([][Symbol.iterator]()) : undefined2,
+      "%AsyncFromSyncIteratorPrototype%": undefined2,
+      "%AsyncFunction%": needsEval,
+      "%AsyncGenerator%": needsEval,
+      "%AsyncGeneratorFunction%": needsEval,
+      "%AsyncIteratorPrototype%": needsEval,
+      "%Atomics%": typeof Atomics === "undefined" ? undefined2 : Atomics,
+      "%BigInt%": typeof BigInt === "undefined" ? undefined2 : BigInt,
+      "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined2 : BigInt64Array,
+      "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined2 : BigUint64Array,
+      "%Boolean%": Boolean,
+      "%DataView%": typeof DataView === "undefined" ? undefined2 : DataView,
+      "%Date%": Date,
+      "%decodeURI%": decodeURI,
+      "%decodeURIComponent%": decodeURIComponent,
+      "%encodeURI%": encodeURI,
+      "%encodeURIComponent%": encodeURIComponent,
+      "%Error%": $Error,
+      "%eval%": eval,
+      // eslint-disable-line no-eval
+      "%EvalError%": $EvalError,
+      "%Float32Array%": typeof Float32Array === "undefined" ? undefined2 : Float32Array,
+      "%Float64Array%": typeof Float64Array === "undefined" ? undefined2 : Float64Array,
+      "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined2 : FinalizationRegistry,
+      "%Function%": $Function,
+      "%GeneratorFunction%": needsEval,
+      "%Int8Array%": typeof Int8Array === "undefined" ? undefined2 : Int8Array,
+      "%Int16Array%": typeof Int16Array === "undefined" ? undefined2 : Int16Array,
+      "%Int32Array%": typeof Int32Array === "undefined" ? undefined2 : Int32Array,
+      "%isFinite%": isFinite,
+      "%isNaN%": isNaN,
+      "%IteratorPrototype%": hasSymbols && getProto ? getProto(getProto([][Symbol.iterator]())) : undefined2,
+      "%JSON%": typeof JSON === "object" ? JSON : undefined2,
+      "%Map%": typeof Map === "undefined" ? undefined2 : Map,
+      "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols || !getProto ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+      "%Math%": Math,
+      "%Number%": Number,
+      "%Object%": Object,
+      "%parseFloat%": parseFloat,
+      "%parseInt%": parseInt,
+      "%Promise%": typeof Promise === "undefined" ? undefined2 : Promise,
+      "%Proxy%": typeof Proxy === "undefined" ? undefined2 : Proxy,
+      "%RangeError%": $RangeError,
+      "%ReferenceError%": $ReferenceError,
+      "%Reflect%": typeof Reflect === "undefined" ? undefined2 : Reflect,
+      "%RegExp%": RegExp,
+      "%Set%": typeof Set === "undefined" ? undefined2 : Set,
+      "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols || !getProto ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+      "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined2 : SharedArrayBuffer,
+      "%String%": String,
+      "%StringIteratorPrototype%": hasSymbols && getProto ? getProto(""[Symbol.iterator]()) : undefined2,
+      "%Symbol%": hasSymbols ? Symbol : undefined2,
+      "%SyntaxError%": $SyntaxError,
+      "%ThrowTypeError%": ThrowTypeError,
+      "%TypedArray%": TypedArray,
+      "%TypeError%": $TypeError,
+      "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined2 : Uint8Array,
+      "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined2 : Uint8ClampedArray,
+      "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined2 : Uint16Array,
+      "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined2 : Uint32Array,
+      "%URIError%": $URIError,
+      "%WeakMap%": typeof WeakMap === "undefined" ? undefined2 : WeakMap,
+      "%WeakRef%": typeof WeakRef === "undefined" ? undefined2 : WeakRef,
+      "%WeakSet%": typeof WeakSet === "undefined" ? undefined2 : WeakSet
+    };
+    if (getProto) {
+      try {
+        null.error;
+      } catch (e2) {
+        errorProto = getProto(getProto(e2));
+        INTRINSICS["%Error.prototype%"] = errorProto;
+      }
+    }
+    var errorProto;
+    var doEval = function doEval2(name) {
+      var value;
+      if (name === "%AsyncFunction%") {
+        value = getEvalledConstructor("async function () {}");
+      } else if (name === "%GeneratorFunction%") {
+        value = getEvalledConstructor("function* () {}");
+      } else if (name === "%AsyncGeneratorFunction%") {
+        value = getEvalledConstructor("async function* () {}");
+      } else if (name === "%AsyncGenerator%") {
+        var fn = doEval2("%AsyncGeneratorFunction%");
+        if (fn) {
+          value = fn.prototype;
+        }
+      } else if (name === "%AsyncIteratorPrototype%") {
+        var gen = doEval2("%AsyncGenerator%");
+        if (gen && getProto) {
+          value = getProto(gen.prototype);
+        }
+      }
+      INTRINSICS[name] = value;
+      return value;
+    };
+    var LEGACY_ALIASES = {
+      __proto__: null,
+      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
+      "%ArrayPrototype%": ["Array", "prototype"],
+      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
+      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
+      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
+      "%ArrayProto_values%": ["Array", "prototype", "values"],
+      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
+      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
+      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
+      "%BooleanPrototype%": ["Boolean", "prototype"],
+      "%DataViewPrototype%": ["DataView", "prototype"],
+      "%DatePrototype%": ["Date", "prototype"],
+      "%ErrorPrototype%": ["Error", "prototype"],
+      "%EvalErrorPrototype%": ["EvalError", "prototype"],
+      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
+      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
+      "%FunctionPrototype%": ["Function", "prototype"],
+      "%Generator%": ["GeneratorFunction", "prototype"],
+      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
+      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
+      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
+      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
+      "%JSONParse%": ["JSON", "parse"],
+      "%JSONStringify%": ["JSON", "stringify"],
+      "%MapPrototype%": ["Map", "prototype"],
+      "%NumberPrototype%": ["Number", "prototype"],
+      "%ObjectPrototype%": ["Object", "prototype"],
+      "%ObjProto_toString%": ["Object", "prototype", "toString"],
+      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
+      "%PromisePrototype%": ["Promise", "prototype"],
+      "%PromiseProto_then%": ["Promise", "prototype", "then"],
+      "%Promise_all%": ["Promise", "all"],
+      "%Promise_reject%": ["Promise", "reject"],
+      "%Promise_resolve%": ["Promise", "resolve"],
+      "%RangeErrorPrototype%": ["RangeError", "prototype"],
+      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
+      "%RegExpPrototype%": ["RegExp", "prototype"],
+      "%SetPrototype%": ["Set", "prototype"],
+      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
+      "%StringPrototype%": ["String", "prototype"],
+      "%SymbolPrototype%": ["Symbol", "prototype"],
+      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
+      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
+      "%TypeErrorPrototype%": ["TypeError", "prototype"],
+      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
+      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
+      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
+      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
+      "%URIErrorPrototype%": ["URIError", "prototype"],
+      "%WeakMapPrototype%": ["WeakMap", "prototype"],
+      "%WeakSetPrototype%": ["WeakSet", "prototype"]
+    };
+    var bind = require_function_bind();
+    var hasOwn2 = require_hasown();
+    var $concat = bind.call(Function.call, Array.prototype.concat);
+    var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+    var $replace = bind.call(Function.call, String.prototype.replace);
+    var $strSlice = bind.call(Function.call, String.prototype.slice);
+    var $exec = bind.call(Function.call, RegExp.prototype.exec);
+    var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+    var reEscapeChar = /\\(\\)?/g;
+    var stringToPath = function stringToPath2(string) {
+      var first = $strSlice(string, 0, 1);
+      var last = $strSlice(string, -1);
+      if (first === "%" && last !== "%") {
+        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
+      } else if (last === "%" && first !== "%") {
+        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+      }
+      var result = [];
+      $replace(string, rePropName, function(match, number, quote, subString) {
+        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
+      });
+      return result;
+    };
+    var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
+      var intrinsicName = name;
+      var alias;
+      if (hasOwn2(LEGACY_ALIASES, intrinsicName)) {
+        alias = LEGACY_ALIASES[intrinsicName];
+        intrinsicName = "%" + alias[0] + "%";
+      }
+      if (hasOwn2(INTRINSICS, intrinsicName)) {
+        var value = INTRINSICS[intrinsicName];
+        if (value === needsEval) {
+          value = doEval(intrinsicName);
+        }
+        if (typeof value === "undefined" && !allowMissing) {
+          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
+        }
+        return {
+          alias,
+          name: intrinsicName,
+          value
+        };
+      }
+      throw new $SyntaxError("intrinsic " + name + " does not exist!");
+    };
+    module2.exports = function GetIntrinsic(name, allowMissing) {
+      if (typeof name !== "string" || name.length === 0) {
+        throw new $TypeError("intrinsic name must be a non-empty string");
+      }
+      if (arguments.length > 1 && typeof allowMissing !== "boolean") {
+        throw new $TypeError('"allowMissing" argument must be a boolean');
+      }
+      if ($exec(/^%?[^%]*%?$/, name) === null) {
+        throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+      }
+      var parts = stringToPath(name);
+      var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
+      var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
+      var intrinsicRealName = intrinsic.name;
+      var value = intrinsic.value;
+      var skipFurtherCaching = false;
+      var alias = intrinsic.alias;
+      if (alias) {
+        intrinsicBaseName = alias[0];
+        $spliceApply(parts, $concat([0, 1], alias));
+      }
+      for (var i2 = 1, isOwn = true; i2 < parts.length; i2 += 1) {
+        var part = parts[i2];
+        var first = $strSlice(part, 0, 1);
+        var last = $strSlice(part, -1);
+        if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+          throw new $SyntaxError("property names with quotes must have matching quotes");
+        }
+        if (part === "constructor" || !isOwn) {
+          skipFurtherCaching = true;
+        }
+        intrinsicBaseName += "." + part;
+        intrinsicRealName = "%" + intrinsicBaseName + "%";
+        if (hasOwn2(INTRINSICS, intrinsicRealName)) {
+          value = INTRINSICS[intrinsicRealName];
+        } else if (value != null) {
+          if (!(part in value)) {
+            if (!allowMissing) {
+              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
+            }
+            return void 0;
+          }
+          if ($gOPD && i2 + 1 >= parts.length) {
+            var desc = $gOPD(value, part);
+            isOwn = !!desc;
+            if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
+              value = desc.get;
+            } else {
+              value = value[part];
+            }
+          } else {
+            isOwn = hasOwn2(value, part);
+            value = value[part];
+          }
+          if (isOwn && !skipFurtherCaching) {
+            INTRINSICS[intrinsicRealName] = value;
+          }
+        }
+      }
+      return value;
+    };
+  }
+});
+
+// node_modules/es-define-property/index.js
+var require_es_define_property = __commonJS({
+  "node_modules/es-define-property/index.js"(exports2, module2) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var $defineProperty = GetIntrinsic("%Object.defineProperty%", true) || false;
+    if ($defineProperty) {
+      try {
+        $defineProperty({}, "a", { value: 1 });
+      } catch (e2) {
+        $defineProperty = false;
+      }
+    }
+    module2.exports = $defineProperty;
+  }
+});
+
+// node_modules/gopd/index.js
+var require_gopd = __commonJS({
+  "node_modules/gopd/index.js"(exports2, module2) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
+    if ($gOPD) {
+      try {
+        $gOPD([], "length");
+      } catch (e2) {
+        $gOPD = null;
+      }
+    }
+    module2.exports = $gOPD;
+  }
+});
+
+// node_modules/define-data-property/index.js
+var require_define_data_property = __commonJS({
+  "node_modules/define-data-property/index.js"(exports2, module2) {
+    "use strict";
+    var $defineProperty = require_es_define_property();
+    var $SyntaxError = require_syntax();
+    var $TypeError = require_type();
+    var gopd = require_gopd();
+    module2.exports = function defineDataProperty(obj, property, value) {
+      if (!obj || typeof obj !== "object" && typeof obj !== "function") {
+        throw new $TypeError("`obj` must be an object or a function`");
+      }
+      if (typeof property !== "string" && typeof property !== "symbol") {
+        throw new $TypeError("`property` must be a string or a symbol`");
+      }
+      if (arguments.length > 3 && typeof arguments[3] !== "boolean" && arguments[3] !== null) {
+        throw new $TypeError("`nonEnumerable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 4 && typeof arguments[4] !== "boolean" && arguments[4] !== null) {
+        throw new $TypeError("`nonWritable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 5 && typeof arguments[5] !== "boolean" && arguments[5] !== null) {
+        throw new $TypeError("`nonConfigurable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 6 && typeof arguments[6] !== "boolean") {
+        throw new $TypeError("`loose`, if provided, must be a boolean");
+      }
+      var nonEnumerable = arguments.length > 3 ? arguments[3] : null;
+      var nonWritable = arguments.length > 4 ? arguments[4] : null;
+      var nonConfigurable = arguments.length > 5 ? arguments[5] : null;
+      var loose = arguments.length > 6 ? arguments[6] : false;
+      var desc = !!gopd && gopd(obj, property);
+      if ($defineProperty) {
+        $defineProperty(obj, property, {
+          configurable: nonConfigurable === null && desc ? desc.configurable : !nonConfigurable,
+          enumerable: nonEnumerable === null && desc ? desc.enumerable : !nonEnumerable,
+          value,
+          writable: nonWritable === null && desc ? desc.writable : !nonWritable
+        });
+      } else if (loose || !nonEnumerable && !nonWritable && !nonConfigurable) {
+        obj[property] = value;
+      } else {
+        throw new $SyntaxError("This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.");
+      }
+    };
+  }
+});
+
+// node_modules/has-property-descriptors/index.js
+var require_has_property_descriptors = __commonJS({
+  "node_modules/has-property-descriptors/index.js"(exports2, module2) {
+    "use strict";
+    var $defineProperty = require_es_define_property();
+    var hasPropertyDescriptors = function hasPropertyDescriptors2() {
+      return !!$defineProperty;
+    };
+    hasPropertyDescriptors.hasArrayLengthDefineBug = function hasArrayLengthDefineBug() {
+      if (!$defineProperty) {
+        return null;
+      }
+      try {
+        return $defineProperty([], "length", { value: 1 }).length !== 1;
+      } catch (e2) {
+        return true;
+      }
+    };
+    module2.exports = hasPropertyDescriptors;
+  }
+});
+
+// node_modules/set-function-length/index.js
+var require_set_function_length = __commonJS({
+  "node_modules/set-function-length/index.js"(exports2, module2) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var define = require_define_data_property();
+    var hasDescriptors = require_has_property_descriptors()();
+    var gOPD = require_gopd();
+    var $TypeError = require_type();
+    var $floor = GetIntrinsic("%Math.floor%");
+    module2.exports = function setFunctionLength(fn, length) {
+      if (typeof fn !== "function") {
+        throw new $TypeError("`fn` is not a function");
+      }
+      if (typeof length !== "number" || length < 0 || length > 4294967295 || $floor(length) !== length) {
+        throw new $TypeError("`length` must be a positive 32-bit integer");
+      }
+      var loose = arguments.length > 2 && !!arguments[2];
+      var functionLengthIsConfigurable = true;
+      var functionLengthIsWritable = true;
+      if ("length" in fn && gOPD) {
+        var desc = gOPD(fn, "length");
+        if (desc && !desc.configurable) {
+          functionLengthIsConfigurable = false;
+        }
+        if (desc && !desc.writable) {
+          functionLengthIsWritable = false;
+        }
+      }
+      if (functionLengthIsConfigurable || functionLengthIsWritable || !loose) {
+        if (hasDescriptors) {
+          define(
+            /** @type {Parameters<define>[0]} */
+            fn,
+            "length",
+            length,
+            true,
+            true
+          );
+        } else {
+          define(
+            /** @type {Parameters<define>[0]} */
+            fn,
+            "length",
+            length
+          );
+        }
+      }
+      return fn;
+    };
+  }
+});
+
+// node_modules/call-bind/index.js
+var require_call_bind = __commonJS({
+  "node_modules/call-bind/index.js"(exports2, module2) {
+    "use strict";
+    var bind = require_function_bind();
+    var GetIntrinsic = require_get_intrinsic();
+    var setFunctionLength = require_set_function_length();
+    var $TypeError = require_type();
+    var $apply = GetIntrinsic("%Function.prototype.apply%");
+    var $call = GetIntrinsic("%Function.prototype.call%");
+    var $reflectApply = GetIntrinsic("%Reflect.apply%", true) || bind.call($call, $apply);
+    var $defineProperty = require_es_define_property();
+    var $max = GetIntrinsic("%Math.max%");
+    module2.exports = function callBind(originalFunction) {
+      if (typeof originalFunction !== "function") {
+        throw new $TypeError("a function is required");
+      }
+      var func = $reflectApply(bind, $call, arguments);
+      return setFunctionLength(
+        func,
+        1 + $max(0, originalFunction.length - (arguments.length - 1)),
+        true
+      );
+    };
+    var applyBind = function applyBind2() {
+      return $reflectApply(bind, $apply, arguments);
+    };
+    if ($defineProperty) {
+      $defineProperty(module2.exports, "apply", { value: applyBind });
+    } else {
+      module2.exports.apply = applyBind;
+    }
+  }
+});
+
+// node_modules/call-bind/callBound.js
+var require_callBound = __commonJS({
+  "node_modules/call-bind/callBound.js"(exports2, module2) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var callBind = require_call_bind();
+    var $indexOf = callBind(GetIntrinsic("String.prototype.indexOf"));
+    module2.exports = function callBoundIntrinsic(name, allowMissing) {
+      var intrinsic = GetIntrinsic(name, !!allowMissing);
+      if (typeof intrinsic === "function" && $indexOf(name, ".prototype.") > -1) {
+        return callBind(intrinsic);
+      }
+      return intrinsic;
+    };
+  }
+});
+
+// node_modules/object-inspect/util.inspect.js
+var require_util_inspect = __commonJS({
+  "node_modules/object-inspect/util.inspect.js"(exports2, module2) {
+    module2.exports = require("util").inspect;
+  }
+});
+
+// node_modules/object-inspect/index.js
+var require_object_inspect = __commonJS({
+  "node_modules/object-inspect/index.js"(exports2, module2) {
+    var hasMap = typeof Map === "function" && Map.prototype;
+    var mapSizeDescriptor = Object.getOwnPropertyDescriptor && hasMap ? Object.getOwnPropertyDescriptor(Map.prototype, "size") : null;
+    var mapSize = hasMap && mapSizeDescriptor && typeof mapSizeDescriptor.get === "function" ? mapSizeDescriptor.get : null;
+    var mapForEach = hasMap && Map.prototype.forEach;
+    var hasSet = typeof Set === "function" && Set.prototype;
+    var setSizeDescriptor = Object.getOwnPropertyDescriptor && hasSet ? Object.getOwnPropertyDescriptor(Set.prototype, "size") : null;
+    var setSize = hasSet && setSizeDescriptor && typeof setSizeDescriptor.get === "function" ? setSizeDescriptor.get : null;
+    var setForEach = hasSet && Set.prototype.forEach;
+    var hasWeakMap = typeof WeakMap === "function" && WeakMap.prototype;
+    var weakMapHas = hasWeakMap ? WeakMap.prototype.has : null;
+    var hasWeakSet = typeof WeakSet === "function" && WeakSet.prototype;
+    var weakSetHas = hasWeakSet ? WeakSet.prototype.has : null;
+    var hasWeakRef = typeof WeakRef === "function" && WeakRef.prototype;
+    var weakRefDeref = hasWeakRef ? WeakRef.prototype.deref : null;
+    var booleanValueOf = Boolean.prototype.valueOf;
+    var objectToString = Object.prototype.toString;
+    var functionToString = Function.prototype.toString;
+    var $match = String.prototype.match;
+    var $slice = String.prototype.slice;
+    var $replace = String.prototype.replace;
+    var $toUpperCase = String.prototype.toUpperCase;
+    var $toLowerCase = String.prototype.toLowerCase;
+    var $test = RegExp.prototype.test;
+    var $concat = Array.prototype.concat;
+    var $join = Array.prototype.join;
+    var $arrSlice = Array.prototype.slice;
+    var $floor = Math.floor;
+    var bigIntValueOf = typeof BigInt === "function" ? BigInt.prototype.valueOf : null;
+    var gOPS = Object.getOwnPropertySymbols;
+    var symToString = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? Symbol.prototype.toString : null;
+    var hasShammedSymbols = typeof Symbol === "function" && typeof Symbol.iterator === "object";
+    var toStringTag = typeof Symbol === "function" && Symbol.toStringTag && (typeof Symbol.toStringTag === hasShammedSymbols ? "object" : "symbol") ? Symbol.toStringTag : null;
+    var isEnumerable = Object.prototype.propertyIsEnumerable;
+    var gPO = (typeof Reflect === "function" ? Reflect.getPrototypeOf : Object.getPrototypeOf) || ([].__proto__ === Array.prototype ? function(O2) {
+      return O2.__proto__;
+    } : null);
+    function addNumericSeparator(num, str2) {
+      if (num === Infinity || num === -Infinity || num !== num || num && num > -1e3 && num < 1e3 || $test.call(/e/, str2)) {
+        return str2;
+      }
+      var sepRegex = /[0-9](?=(?:[0-9]{3})+(?![0-9]))/g;
+      if (typeof num === "number") {
+        var int = num < 0 ? -$floor(-num) : $floor(num);
+        if (int !== num) {
+          var intStr = String(int);
+          var dec = $slice.call(str2, intStr.length + 1);
+          return $replace.call(intStr, sepRegex, "$&_") + "." + $replace.call($replace.call(dec, /([0-9]{3})/g, "$&_"), /_$/, "");
+        }
+      }
+      return $replace.call(str2, sepRegex, "$&_");
+    }
+    var utilInspect = require_util_inspect();
+    var inspectCustom = utilInspect.custom;
+    var inspectSymbol = isSymbol(inspectCustom) ? inspectCustom : null;
+    module2.exports = function inspect_(obj, options, depth, seen) {
+      var opts = options || {};
+      if (has(opts, "quoteStyle") && (opts.quoteStyle !== "single" && opts.quoteStyle !== "double")) {
+        throw new TypeError('option "quoteStyle" must be "single" or "double"');
+      }
+      if (has(opts, "maxStringLength") && (typeof opts.maxStringLength === "number" ? opts.maxStringLength < 0 && opts.maxStringLength !== Infinity : opts.maxStringLength !== null)) {
+        throw new TypeError('option "maxStringLength", if provided, must be a positive integer, Infinity, or `null`');
+      }
+      var customInspect = has(opts, "customInspect") ? opts.customInspect : true;
+      if (typeof customInspect !== "boolean" && customInspect !== "symbol") {
+        throw new TypeError("option \"customInspect\", if provided, must be `true`, `false`, or `'symbol'`");
+      }
+      if (has(opts, "indent") && opts.indent !== null && opts.indent !== "	" && !(parseInt(opts.indent, 10) === opts.indent && opts.indent > 0)) {
+        throw new TypeError('option "indent" must be "\\t", an integer > 0, or `null`');
+      }
+      if (has(opts, "numericSeparator") && typeof opts.numericSeparator !== "boolean") {
+        throw new TypeError('option "numericSeparator", if provided, must be `true` or `false`');
+      }
+      var numericSeparator = opts.numericSeparator;
+      if (typeof obj === "undefined") {
+        return "undefined";
+      }
+      if (obj === null) {
+        return "null";
+      }
+      if (typeof obj === "boolean") {
+        return obj ? "true" : "false";
+      }
+      if (typeof obj === "string") {
+        return inspectString(obj, opts);
+      }
+      if (typeof obj === "number") {
+        if (obj === 0) {
+          return Infinity / obj > 0 ? "0" : "-0";
+        }
+        var str2 = String(obj);
+        return numericSeparator ? addNumericSeparator(obj, str2) : str2;
+      }
+      if (typeof obj === "bigint") {
+        var bigIntStr = String(obj) + "n";
+        return numericSeparator ? addNumericSeparator(obj, bigIntStr) : bigIntStr;
+      }
+      var maxDepth = typeof opts.depth === "undefined" ? 5 : opts.depth;
+      if (typeof depth === "undefined") {
+        depth = 0;
+      }
+      if (depth >= maxDepth && maxDepth > 0 && typeof obj === "object") {
+        return isArray(obj) ? "[Array]" : "[Object]";
+      }
+      var indent = getIndent(opts, depth);
+      if (typeof seen === "undefined") {
+        seen = [];
+      } else if (indexOf(seen, obj) >= 0) {
+        return "[Circular]";
+      }
+      function inspect2(value, from, noIndent) {
+        if (from) {
+          seen = $arrSlice.call(seen);
+          seen.push(from);
+        }
+        if (noIndent) {
+          var newOpts = {
+            depth: opts.depth
+          };
+          if (has(opts, "quoteStyle")) {
+            newOpts.quoteStyle = opts.quoteStyle;
+          }
+          return inspect_(value, newOpts, depth + 1, seen);
+        }
+        return inspect_(value, opts, depth + 1, seen);
+      }
+      if (typeof obj === "function" && !isRegExp(obj)) {
+        var name = nameOf(obj);
+        var keys = arrObjKeys(obj, inspect2);
+        return "[Function" + (name ? ": " + name : " (anonymous)") + "]" + (keys.length > 0 ? " { " + $join.call(keys, ", ") + " }" : "");
+      }
+      if (isSymbol(obj)) {
+        var symString = hasShammedSymbols ? $replace.call(String(obj), /^(Symbol\(.*\))_[^)]*$/, "$1") : symToString.call(obj);
+        return typeof obj === "object" && !hasShammedSymbols ? markBoxed(symString) : symString;
+      }
+      if (isElement(obj)) {
+        var s2 = "<" + $toLowerCase.call(String(obj.nodeName));
+        var attrs = obj.attributes || [];
+        for (var i2 = 0; i2 < attrs.length; i2++) {
+          s2 += " " + attrs[i2].name + "=" + wrapQuotes(quote(attrs[i2].value), "double", opts);
+        }
+        s2 += ">";
+        if (obj.childNodes && obj.childNodes.length) {
+          s2 += "...";
+        }
+        s2 += "</" + $toLowerCase.call(String(obj.nodeName)) + ">";
+        return s2;
+      }
+      if (isArray(obj)) {
+        if (obj.length === 0) {
+          return "[]";
+        }
+        var xs = arrObjKeys(obj, inspect2);
+        if (indent && !singleLineValues(xs)) {
+          return "[" + indentedJoin(xs, indent) + "]";
+        }
+        return "[ " + $join.call(xs, ", ") + " ]";
+      }
+      if (isError(obj)) {
+        var parts = arrObjKeys(obj, inspect2);
+        if (!("cause" in Error.prototype) && "cause" in obj && !isEnumerable.call(obj, "cause")) {
+          return "{ [" + String(obj) + "] " + $join.call($concat.call("[cause]: " + inspect2(obj.cause), parts), ", ") + " }";
+        }
+        if (parts.length === 0) {
+          return "[" + String(obj) + "]";
+        }
+        return "{ [" + String(obj) + "] " + $join.call(parts, ", ") + " }";
+      }
+      if (typeof obj === "object" && customInspect) {
+        if (inspectSymbol && typeof obj[inspectSymbol] === "function" && utilInspect) {
+          return utilInspect(obj, { depth: maxDepth - depth });
+        } else if (customInspect !== "symbol" && typeof obj.inspect === "function") {
+          return obj.inspect();
+        }
+      }
+      if (isMap(obj)) {
+        var mapParts = [];
+        if (mapForEach) {
+          mapForEach.call(obj, function(value, key) {
+            mapParts.push(inspect2(key, obj, true) + " => " + inspect2(value, obj));
+          });
+        }
+        return collectionOf("Map", mapSize.call(obj), mapParts, indent);
+      }
+      if (isSet(obj)) {
+        var setParts = [];
+        if (setForEach) {
+          setForEach.call(obj, function(value) {
+            setParts.push(inspect2(value, obj));
+          });
+        }
+        return collectionOf("Set", setSize.call(obj), setParts, indent);
+      }
+      if (isWeakMap(obj)) {
+        return weakCollectionOf("WeakMap");
+      }
+      if (isWeakSet(obj)) {
+        return weakCollectionOf("WeakSet");
+      }
+      if (isWeakRef(obj)) {
+        return weakCollectionOf("WeakRef");
+      }
+      if (isNumber(obj)) {
+        return markBoxed(inspect2(Number(obj)));
+      }
+      if (isBigInt(obj)) {
+        return markBoxed(inspect2(bigIntValueOf.call(obj)));
+      }
+      if (isBoolean(obj)) {
+        return markBoxed(booleanValueOf.call(obj));
+      }
+      if (isString(obj)) {
+        return markBoxed(inspect2(String(obj)));
+      }
+      if (typeof window !== "undefined" && obj === window) {
+        return "{ [object Window] }";
+      }
+      if (typeof globalThis !== "undefined" && obj === globalThis || typeof global !== "undefined" && obj === global) {
+        return "{ [object globalThis] }";
+      }
+      if (!isDate(obj) && !isRegExp(obj)) {
+        var ys = arrObjKeys(obj, inspect2);
+        var isPlainObject3 = gPO ? gPO(obj) === Object.prototype : obj instanceof Object || obj.constructor === Object;
+        var protoTag = obj instanceof Object ? "" : "null prototype";
+        var stringTag = !isPlainObject3 && toStringTag && Object(obj) === obj && toStringTag in obj ? $slice.call(toStr(obj), 8, -1) : protoTag ? "Object" : "";
+        var constructorTag = isPlainObject3 || typeof obj.constructor !== "function" ? "" : obj.constructor.name ? obj.constructor.name + " " : "";
+        var tag = constructorTag + (stringTag || protoTag ? "[" + $join.call($concat.call([], stringTag || [], protoTag || []), ": ") + "] " : "");
+        if (ys.length === 0) {
+          return tag + "{}";
+        }
+        if (indent) {
+          return tag + "{" + indentedJoin(ys, indent) + "}";
+        }
+        return tag + "{ " + $join.call(ys, ", ") + " }";
+      }
+      return String(obj);
+    };
+    function wrapQuotes(s2, defaultStyle, opts) {
+      var quoteChar = (opts.quoteStyle || defaultStyle) === "double" ? '"' : "'";
+      return quoteChar + s2 + quoteChar;
+    }
+    function quote(s2) {
+      return $replace.call(String(s2), /"/g, "&quot;");
+    }
+    function isArray(obj) {
+      return toStr(obj) === "[object Array]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isDate(obj) {
+      return toStr(obj) === "[object Date]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isRegExp(obj) {
+      return toStr(obj) === "[object RegExp]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isError(obj) {
+      return toStr(obj) === "[object Error]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isString(obj) {
+      return toStr(obj) === "[object String]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isNumber(obj) {
+      return toStr(obj) === "[object Number]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isBoolean(obj) {
+      return toStr(obj) === "[object Boolean]" && (!toStringTag || !(typeof obj === "object" && toStringTag in obj));
+    }
+    function isSymbol(obj) {
+      if (hasShammedSymbols) {
+        return obj && typeof obj === "object" && obj instanceof Symbol;
+      }
+      if (typeof obj === "symbol") {
+        return true;
+      }
+      if (!obj || typeof obj !== "object" || !symToString) {
+        return false;
+      }
+      try {
+        symToString.call(obj);
+        return true;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isBigInt(obj) {
+      if (!obj || typeof obj !== "object" || !bigIntValueOf) {
+        return false;
+      }
+      try {
+        bigIntValueOf.call(obj);
+        return true;
+      } catch (e2) {
+      }
+      return false;
+    }
+    var hasOwn2 = Object.prototype.hasOwnProperty || function(key) {
+      return key in this;
+    };
+    function has(obj, key) {
+      return hasOwn2.call(obj, key);
+    }
+    function toStr(obj) {
+      return objectToString.call(obj);
+    }
+    function nameOf(f2) {
+      if (f2.name) {
+        return f2.name;
+      }
+      var m2 = $match.call(functionToString.call(f2), /^function\s*([\w$]+)/);
+      if (m2) {
+        return m2[1];
+      }
+      return null;
+    }
+    function indexOf(xs, x2) {
+      if (xs.indexOf) {
+        return xs.indexOf(x2);
+      }
+      for (var i2 = 0, l2 = xs.length; i2 < l2; i2++) {
+        if (xs[i2] === x2) {
+          return i2;
+        }
+      }
+      return -1;
+    }
+    function isMap(x2) {
+      if (!mapSize || !x2 || typeof x2 !== "object") {
+        return false;
+      }
+      try {
+        mapSize.call(x2);
+        try {
+          setSize.call(x2);
+        } catch (s2) {
+          return true;
+        }
+        return x2 instanceof Map;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isWeakMap(x2) {
+      if (!weakMapHas || !x2 || typeof x2 !== "object") {
+        return false;
+      }
+      try {
+        weakMapHas.call(x2, weakMapHas);
+        try {
+          weakSetHas.call(x2, weakSetHas);
+        } catch (s2) {
+          return true;
+        }
+        return x2 instanceof WeakMap;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isWeakRef(x2) {
+      if (!weakRefDeref || !x2 || typeof x2 !== "object") {
+        return false;
+      }
+      try {
+        weakRefDeref.call(x2);
+        return true;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isSet(x2) {
+      if (!setSize || !x2 || typeof x2 !== "object") {
+        return false;
+      }
+      try {
+        setSize.call(x2);
+        try {
+          mapSize.call(x2);
+        } catch (m2) {
+          return true;
+        }
+        return x2 instanceof Set;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isWeakSet(x2) {
+      if (!weakSetHas || !x2 || typeof x2 !== "object") {
+        return false;
+      }
+      try {
+        weakSetHas.call(x2, weakSetHas);
+        try {
+          weakMapHas.call(x2, weakMapHas);
+        } catch (s2) {
+          return true;
+        }
+        return x2 instanceof WeakSet;
+      } catch (e2) {
+      }
+      return false;
+    }
+    function isElement(x2) {
+      if (!x2 || typeof x2 !== "object") {
+        return false;
+      }
+      if (typeof HTMLElement !== "undefined" && x2 instanceof HTMLElement) {
+        return true;
+      }
+      return typeof x2.nodeName === "string" && typeof x2.getAttribute === "function";
+    }
+    function inspectString(str2, opts) {
+      if (str2.length > opts.maxStringLength) {
+        var remaining = str2.length - opts.maxStringLength;
+        var trailer = "... " + remaining + " more character" + (remaining > 1 ? "s" : "");
+        return inspectString($slice.call(str2, 0, opts.maxStringLength), opts) + trailer;
+      }
+      var s2 = $replace.call($replace.call(str2, /(['\\])/g, "\\$1"), /[\x00-\x1f]/g, lowbyte);
+      return wrapQuotes(s2, "single", opts);
+    }
+    function lowbyte(c2) {
+      var n2 = c2.charCodeAt(0);
+      var x2 = {
+        8: "b",
+        9: "t",
+        10: "n",
+        12: "f",
+        13: "r"
+      }[n2];
+      if (x2) {
+        return "\\" + x2;
+      }
+      return "\\x" + (n2 < 16 ? "0" : "") + $toUpperCase.call(n2.toString(16));
+    }
+    function markBoxed(str2) {
+      return "Object(" + str2 + ")";
+    }
+    function weakCollectionOf(type) {
+      return type + " { ? }";
+    }
+    function collectionOf(type, size, entries, indent) {
+      var joinedEntries = indent ? indentedJoin(entries, indent) : $join.call(entries, ", ");
+      return type + " (" + size + ") {" + joinedEntries + "}";
+    }
+    function singleLineValues(xs) {
+      for (var i2 = 0; i2 < xs.length; i2++) {
+        if (indexOf(xs[i2], "\n") >= 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+    function getIndent(opts, depth) {
+      var baseIndent;
+      if (opts.indent === "	") {
+        baseIndent = "	";
+      } else if (typeof opts.indent === "number" && opts.indent > 0) {
+        baseIndent = $join.call(Array(opts.indent + 1), " ");
+      } else {
+        return null;
+      }
+      return {
+        base: baseIndent,
+        prev: $join.call(Array(depth + 1), baseIndent)
+      };
+    }
+    function indentedJoin(xs, indent) {
+      if (xs.length === 0) {
+        return "";
+      }
+      var lineJoiner = "\n" + indent.prev + indent.base;
+      return lineJoiner + $join.call(xs, "," + lineJoiner) + "\n" + indent.prev;
+    }
+    function arrObjKeys(obj, inspect2) {
+      var isArr = isArray(obj);
+      var xs = [];
+      if (isArr) {
+        xs.length = obj.length;
+        for (var i2 = 0; i2 < obj.length; i2++) {
+          xs[i2] = has(obj, i2) ? inspect2(obj[i2], obj) : "";
+        }
+      }
+      var syms = typeof gOPS === "function" ? gOPS(obj) : [];
+      var symMap;
+      if (hasShammedSymbols) {
+        symMap = {};
+        for (var k2 = 0; k2 < syms.length; k2++) {
+          symMap["$" + syms[k2]] = syms[k2];
+        }
+      }
+      for (var key in obj) {
+        if (!has(obj, key)) {
+          continue;
+        }
+        if (isArr && String(Number(key)) === key && key < obj.length) {
+          continue;
+        }
+        if (hasShammedSymbols && symMap["$" + key] instanceof Symbol) {
+          continue;
+        } else if ($test.call(/[^\w$]/, key)) {
+          xs.push(inspect2(key, obj) + ": " + inspect2(obj[key], obj));
+        } else {
+          xs.push(key + ": " + inspect2(obj[key], obj));
+        }
+      }
+      if (typeof gOPS === "function") {
+        for (var j2 = 0; j2 < syms.length; j2++) {
+          if (isEnumerable.call(obj, syms[j2])) {
+            xs.push("[" + inspect2(syms[j2]) + "]: " + inspect2(obj[syms[j2]], obj));
+          }
+        }
+      }
+      return xs;
+    }
+  }
+});
+
+// node_modules/side-channel/index.js
+var require_side_channel = __commonJS({
+  "node_modules/side-channel/index.js"(exports2, module2) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var callBound = require_callBound();
+    var inspect2 = require_object_inspect();
+    var $TypeError = require_type();
+    var $WeakMap = GetIntrinsic("%WeakMap%", true);
+    var $Map = GetIntrinsic("%Map%", true);
+    var $weakMapGet = callBound("WeakMap.prototype.get", true);
+    var $weakMapSet = callBound("WeakMap.prototype.set", true);
+    var $weakMapHas = callBound("WeakMap.prototype.has", true);
+    var $mapGet = callBound("Map.prototype.get", true);
+    var $mapSet = callBound("Map.prototype.set", true);
+    var $mapHas = callBound("Map.prototype.has", true);
+    var listGetNode = function(list, key) {
+      var prev = list;
+      var curr;
+      for (; (curr = prev.next) !== null; prev = curr) {
+        if (curr.key === key) {
+          prev.next = curr.next;
+          curr.next = /** @type {NonNullable<typeof list.next>} */
+          list.next;
+          list.next = curr;
+          return curr;
+        }
+      }
+    };
+    var listGet = function(objects, key) {
+      var node = listGetNode(objects, key);
+      return node && node.value;
+    };
+    var listSet = function(objects, key, value) {
+      var node = listGetNode(objects, key);
+      if (node) {
+        node.value = value;
+      } else {
+        objects.next = /** @type {import('.').ListNode<typeof value>} */
+        {
+          // eslint-disable-line no-param-reassign, no-extra-parens
+          key,
+          next: objects.next,
+          value
+        };
+      }
+    };
+    var listHas = function(objects, key) {
+      return !!listGetNode(objects, key);
+    };
+    module2.exports = function getSideChannel() {
+      var $wm;
+      var $m;
+      var $o;
+      var channel = {
+        assert: function(key) {
+          if (!channel.has(key)) {
+            throw new $TypeError("Side channel does not contain " + inspect2(key));
+          }
+        },
+        get: function(key) {
+          if ($WeakMap && key && (typeof key === "object" || typeof key === "function")) {
+            if ($wm) {
+              return $weakMapGet($wm, key);
+            }
+          } else if ($Map) {
+            if ($m) {
+              return $mapGet($m, key);
+            }
+          } else {
+            if ($o) {
+              return listGet($o, key);
+            }
+          }
+        },
+        has: function(key) {
+          if ($WeakMap && key && (typeof key === "object" || typeof key === "function")) {
+            if ($wm) {
+              return $weakMapHas($wm, key);
+            }
+          } else if ($Map) {
+            if ($m) {
+              return $mapHas($m, key);
+            }
+          } else {
+            if ($o) {
+              return listHas($o, key);
+            }
+          }
+          return false;
+        },
+        set: function(key, value) {
+          if ($WeakMap && key && (typeof key === "object" || typeof key === "function")) {
+            if (!$wm) {
+              $wm = new $WeakMap();
+            }
+            $weakMapSet($wm, key, value);
+          } else if ($Map) {
+            if (!$m) {
+              $m = new $Map();
+            }
+            $mapSet($m, key, value);
+          } else {
+            if (!$o) {
+              $o = { key: {}, next: null };
+            }
+            listSet($o, key, value);
+          }
+        }
+      };
+      return channel;
+    };
+  }
+});
+
+// node_modules/qs/lib/formats.js
+var require_formats = __commonJS({
+  "node_modules/qs/lib/formats.js"(exports2, module2) {
+    "use strict";
+    var replace = String.prototype.replace;
+    var percentTwenties = /%20/g;
+    var Format = {
+      RFC1738: "RFC1738",
+      RFC3986: "RFC3986"
+    };
+    module2.exports = {
+      "default": Format.RFC3986,
+      formatters: {
+        RFC1738: function(value) {
+          return replace.call(value, percentTwenties, "+");
+        },
+        RFC3986: function(value) {
+          return String(value);
+        }
+      },
+      RFC1738: Format.RFC1738,
+      RFC3986: Format.RFC3986
+    };
+  }
+});
+
+// node_modules/qs/lib/utils.js
+var require_utils2 = __commonJS({
+  "node_modules/qs/lib/utils.js"(exports2, module2) {
+    "use strict";
+    var formats = require_formats();
+    var has = Object.prototype.hasOwnProperty;
+    var isArray = Array.isArray;
+    var hexTable = function() {
+      var array = [];
+      for (var i2 = 0; i2 < 256; ++i2) {
+        array.push("%" + ((i2 < 16 ? "0" : "") + i2.toString(16)).toUpperCase());
+      }
+      return array;
+    }();
+    var compactQueue = function compactQueue2(queue) {
+      while (queue.length > 1) {
+        var item = queue.pop();
+        var obj = item.obj[item.prop];
+        if (isArray(obj)) {
+          var compacted = [];
+          for (var j2 = 0; j2 < obj.length; ++j2) {
+            if (typeof obj[j2] !== "undefined") {
+              compacted.push(obj[j2]);
+            }
+          }
+          item.obj[item.prop] = compacted;
+        }
+      }
+    };
+    var arrayToObject = function arrayToObject2(source, options) {
+      var obj = options && options.plainObjects ? /* @__PURE__ */ Object.create(null) : {};
+      for (var i2 = 0; i2 < source.length; ++i2) {
+        if (typeof source[i2] !== "undefined") {
+          obj[i2] = source[i2];
+        }
+      }
+      return obj;
+    };
+    var merge = function merge2(target, source, options) {
+      if (!source) {
+        return target;
+      }
+      if (typeof source !== "object") {
+        if (isArray(target)) {
+          target.push(source);
+        } else if (target && typeof target === "object") {
+          if (options && (options.plainObjects || options.allowPrototypes) || !has.call(Object.prototype, source)) {
+            target[source] = true;
+          }
+        } else {
+          return [target, source];
+        }
+        return target;
+      }
+      if (!target || typeof target !== "object") {
+        return [target].concat(source);
+      }
+      var mergeTarget = target;
+      if (isArray(target) && !isArray(source)) {
+        mergeTarget = arrayToObject(target, options);
+      }
+      if (isArray(target) && isArray(source)) {
+        source.forEach(function(item, i2) {
+          if (has.call(target, i2)) {
+            var targetItem = target[i2];
+            if (targetItem && typeof targetItem === "object" && item && typeof item === "object") {
+              target[i2] = merge2(targetItem, item, options);
+            } else {
+              target.push(item);
+            }
+          } else {
+            target[i2] = item;
+          }
+        });
+        return target;
+      }
+      return Object.keys(source).reduce(function(acc, key) {
+        var value = source[key];
+        if (has.call(acc, key)) {
+          acc[key] = merge2(acc[key], value, options);
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      }, mergeTarget);
+    };
+    var assign = function assignSingleSource(target, source) {
+      return Object.keys(source).reduce(function(acc, key) {
+        acc[key] = source[key];
+        return acc;
+      }, target);
+    };
+    var decode = function(str2, decoder, charset) {
+      var strWithoutPlus = str2.replace(/\+/g, " ");
+      if (charset === "iso-8859-1") {
+        return strWithoutPlus.replace(/%[0-9a-f]{2}/gi, unescape);
+      }
+      try {
+        return decodeURIComponent(strWithoutPlus);
+      } catch (e2) {
+        return strWithoutPlus;
+      }
+    };
+    var limit = 1024;
+    var encode = function encode2(str2, defaultEncoder, charset, kind2, format) {
+      if (str2.length === 0) {
+        return str2;
+      }
+      var string = str2;
+      if (typeof str2 === "symbol") {
+        string = Symbol.prototype.toString.call(str2);
+      } else if (typeof str2 !== "string") {
+        string = String(str2);
+      }
+      if (charset === "iso-8859-1") {
+        return escape(string).replace(/%u[0-9a-f]{4}/gi, function($0) {
+          return "%26%23" + parseInt($0.slice(2), 16) + "%3B";
+        });
+      }
+      var out = "";
+      for (var j2 = 0; j2 < string.length; j2 += limit) {
+        var segment = string.length >= limit ? string.slice(j2, j2 + limit) : string;
+        var arr = [];
+        for (var i2 = 0; i2 < segment.length; ++i2) {
+          var c2 = segment.charCodeAt(i2);
+          if (c2 === 45 || c2 === 46 || c2 === 95 || c2 === 126 || c2 >= 48 && c2 <= 57 || c2 >= 65 && c2 <= 90 || c2 >= 97 && c2 <= 122 || format === formats.RFC1738 && (c2 === 40 || c2 === 41)) {
+            arr[arr.length] = segment.charAt(i2);
+            continue;
+          }
+          if (c2 < 128) {
+            arr[arr.length] = hexTable[c2];
+            continue;
+          }
+          if (c2 < 2048) {
+            arr[arr.length] = hexTable[192 | c2 >> 6] + hexTable[128 | c2 & 63];
+            continue;
+          }
+          if (c2 < 55296 || c2 >= 57344) {
+            arr[arr.length] = hexTable[224 | c2 >> 12] + hexTable[128 | c2 >> 6 & 63] + hexTable[128 | c2 & 63];
+            continue;
+          }
+          i2 += 1;
+          c2 = 65536 + ((c2 & 1023) << 10 | segment.charCodeAt(i2) & 1023);
+          arr[arr.length] = hexTable[240 | c2 >> 18] + hexTable[128 | c2 >> 12 & 63] + hexTable[128 | c2 >> 6 & 63] + hexTable[128 | c2 & 63];
+        }
+        out += arr.join("");
+      }
+      return out;
+    };
+    var compact = function compact2(value) {
+      var queue = [{ obj: { o: value }, prop: "o" }];
+      var refs = [];
+      for (var i2 = 0; i2 < queue.length; ++i2) {
+        var item = queue[i2];
+        var obj = item.obj[item.prop];
+        var keys = Object.keys(obj);
+        for (var j2 = 0; j2 < keys.length; ++j2) {
+          var key = keys[j2];
+          var val = obj[key];
+          if (typeof val === "object" && val !== null && refs.indexOf(val) === -1) {
+            queue.push({ obj, prop: key });
+            refs.push(val);
+          }
+        }
+      }
+      compactQueue(queue);
+      return value;
+    };
+    var isRegExp = function isRegExp2(obj) {
+      return Object.prototype.toString.call(obj) === "[object RegExp]";
+    };
+    var isBuffer = function isBuffer2(obj) {
+      if (!obj || typeof obj !== "object") {
+        return false;
+      }
+      return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+    };
+    var combine = function combine2(a2, b2) {
+      return [].concat(a2, b2);
+    };
+    var maybeMap = function maybeMap2(val, fn) {
+      if (isArray(val)) {
+        var mapped = [];
+        for (var i2 = 0; i2 < val.length; i2 += 1) {
+          mapped.push(fn(val[i2]));
+        }
+        return mapped;
+      }
+      return fn(val);
+    };
+    module2.exports = {
+      arrayToObject,
+      assign,
+      combine,
+      compact,
+      decode,
+      encode,
+      isBuffer,
+      isRegExp,
+      maybeMap,
+      merge
+    };
+  }
+});
+
+// node_modules/qs/lib/stringify.js
+var require_stringify = __commonJS({
+  "node_modules/qs/lib/stringify.js"(exports2, module2) {
+    "use strict";
+    var getSideChannel = require_side_channel();
+    var utils = require_utils2();
+    var formats = require_formats();
+    var has = Object.prototype.hasOwnProperty;
+    var arrayPrefixGenerators = {
+      brackets: function brackets(prefix) {
+        return prefix + "[]";
+      },
+      comma: "comma",
+      indices: function indices(prefix, key) {
+        return prefix + "[" + key + "]";
+      },
+      repeat: function repeat(prefix) {
+        return prefix;
+      }
+    };
+    var isArray = Array.isArray;
+    var push = Array.prototype.push;
+    var pushToArray = function(arr, valueOrArray) {
+      push.apply(arr, isArray(valueOrArray) ? valueOrArray : [valueOrArray]);
+    };
+    var toISO = Date.prototype.toISOString;
+    var defaultFormat = formats["default"];
+    var defaults = {
+      addQueryPrefix: false,
+      allowDots: false,
+      allowEmptyArrays: false,
+      arrayFormat: "indices",
+      charset: "utf-8",
+      charsetSentinel: false,
+      delimiter: "&",
+      encode: true,
+      encodeDotInKeys: false,
+      encoder: utils.encode,
+      encodeValuesOnly: false,
+      format: defaultFormat,
+      formatter: formats.formatters[defaultFormat],
+      // deprecated
+      indices: false,
+      serializeDate: function serializeDate(date) {
+        return toISO.call(date);
+      },
+      skipNulls: false,
+      strictNullHandling: false
+    };
+    var isNonNullishPrimitive = function isNonNullishPrimitive2(v2) {
+      return typeof v2 === "string" || typeof v2 === "number" || typeof v2 === "boolean" || typeof v2 === "symbol" || typeof v2 === "bigint";
+    };
+    var sentinel = {};
+    var stringify2 = function stringify3(object, prefix, generateArrayPrefix, commaRoundTrip, allowEmptyArrays, strictNullHandling, skipNulls, encodeDotInKeys, encoder, filter, sort, allowDots, serializeDate, format, formatter, encodeValuesOnly, charset, sideChannel) {
+      var obj = object;
+      var tmpSc = sideChannel;
+      var step = 0;
+      var findFlag = false;
+      while ((tmpSc = tmpSc.get(sentinel)) !== void 0 && !findFlag) {
+        var pos = tmpSc.get(object);
+        step += 1;
+        if (typeof pos !== "undefined") {
+          if (pos === step) {
+            throw new RangeError("Cyclic object value");
+          } else {
+            findFlag = true;
+          }
+        }
+        if (typeof tmpSc.get(sentinel) === "undefined") {
+          step = 0;
+        }
+      }
+      if (typeof filter === "function") {
+        obj = filter(prefix, obj);
+      } else if (obj instanceof Date) {
+        obj = serializeDate(obj);
+      } else if (generateArrayPrefix === "comma" && isArray(obj)) {
+        obj = utils.maybeMap(obj, function(value2) {
+          if (value2 instanceof Date) {
+            return serializeDate(value2);
+          }
+          return value2;
+        });
+      }
+      if (obj === null) {
+        if (strictNullHandling) {
+          return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder, charset, "key", format) : prefix;
+        }
+        obj = "";
+      }
+      if (isNonNullishPrimitive(obj) || utils.isBuffer(obj)) {
+        if (encoder) {
+          var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder, charset, "key", format);
+          return [formatter(keyValue) + "=" + formatter(encoder(obj, defaults.encoder, charset, "value", format))];
+        }
+        return [formatter(prefix) + "=" + formatter(String(obj))];
+      }
+      var values = [];
+      if (typeof obj === "undefined") {
+        return values;
+      }
+      var objKeys;
+      if (generateArrayPrefix === "comma" && isArray(obj)) {
+        if (encodeValuesOnly && encoder) {
+          obj = utils.maybeMap(obj, encoder);
+        }
+        objKeys = [{ value: obj.length > 0 ? obj.join(",") || null : void 0 }];
+      } else if (isArray(filter)) {
+        objKeys = filter;
+      } else {
+        var keys = Object.keys(obj);
+        objKeys = sort ? keys.sort(sort) : keys;
+      }
+      var encodedPrefix = encodeDotInKeys ? prefix.replace(/\./g, "%2E") : prefix;
+      var adjustedPrefix = commaRoundTrip && isArray(obj) && obj.length === 1 ? encodedPrefix + "[]" : encodedPrefix;
+      if (allowEmptyArrays && isArray(obj) && obj.length === 0) {
+        return adjustedPrefix + "[]";
+      }
+      for (var j2 = 0; j2 < objKeys.length; ++j2) {
+        var key = objKeys[j2];
+        var value = typeof key === "object" && typeof key.value !== "undefined" ? key.value : obj[key];
+        if (skipNulls && value === null) {
+          continue;
+        }
+        var encodedKey = allowDots && encodeDotInKeys ? key.replace(/\./g, "%2E") : key;
+        var keyPrefix = isArray(obj) ? typeof generateArrayPrefix === "function" ? generateArrayPrefix(adjustedPrefix, encodedKey) : adjustedPrefix : adjustedPrefix + (allowDots ? "." + encodedKey : "[" + encodedKey + "]");
+        sideChannel.set(object, step);
+        var valueSideChannel = getSideChannel();
+        valueSideChannel.set(sentinel, sideChannel);
+        pushToArray(values, stringify3(
+          value,
+          keyPrefix,
+          generateArrayPrefix,
+          commaRoundTrip,
+          allowEmptyArrays,
+          strictNullHandling,
+          skipNulls,
+          encodeDotInKeys,
+          generateArrayPrefix === "comma" && encodeValuesOnly && isArray(obj) ? null : encoder,
+          filter,
+          sort,
+          allowDots,
+          serializeDate,
+          format,
+          formatter,
+          encodeValuesOnly,
+          charset,
+          valueSideChannel
+        ));
+      }
+      return values;
+    };
+    var normalizeStringifyOptions = function normalizeStringifyOptions2(opts) {
+      if (!opts) {
+        return defaults;
+      }
+      if (typeof opts.allowEmptyArrays !== "undefined" && typeof opts.allowEmptyArrays !== "boolean") {
+        throw new TypeError("`allowEmptyArrays` option can only be `true` or `false`, when provided");
+      }
+      if (typeof opts.encodeDotInKeys !== "undefined" && typeof opts.encodeDotInKeys !== "boolean") {
+        throw new TypeError("`encodeDotInKeys` option can only be `true` or `false`, when provided");
+      }
+      if (opts.encoder !== null && typeof opts.encoder !== "undefined" && typeof opts.encoder !== "function") {
+        throw new TypeError("Encoder has to be a function.");
+      }
+      var charset = opts.charset || defaults.charset;
+      if (typeof opts.charset !== "undefined" && opts.charset !== "utf-8" && opts.charset !== "iso-8859-1") {
+        throw new TypeError("The charset option must be either utf-8, iso-8859-1, or undefined");
+      }
+      var format = formats["default"];
+      if (typeof opts.format !== "undefined") {
+        if (!has.call(formats.formatters, opts.format)) {
+          throw new TypeError("Unknown format option provided.");
+        }
+        format = opts.format;
+      }
+      var formatter = formats.formatters[format];
+      var filter = defaults.filter;
+      if (typeof opts.filter === "function" || isArray(opts.filter)) {
+        filter = opts.filter;
+      }
+      var arrayFormat;
+      if (opts.arrayFormat in arrayPrefixGenerators) {
+        arrayFormat = opts.arrayFormat;
+      } else if ("indices" in opts) {
+        arrayFormat = opts.indices ? "indices" : "repeat";
+      } else {
+        arrayFormat = defaults.arrayFormat;
+      }
+      if ("commaRoundTrip" in opts && typeof opts.commaRoundTrip !== "boolean") {
+        throw new TypeError("`commaRoundTrip` must be a boolean, or absent");
+      }
+      var allowDots = typeof opts.allowDots === "undefined" ? opts.encodeDotInKeys === true ? true : defaults.allowDots : !!opts.allowDots;
+      return {
+        addQueryPrefix: typeof opts.addQueryPrefix === "boolean" ? opts.addQueryPrefix : defaults.addQueryPrefix,
+        allowDots,
+        allowEmptyArrays: typeof opts.allowEmptyArrays === "boolean" ? !!opts.allowEmptyArrays : defaults.allowEmptyArrays,
+        arrayFormat,
+        charset,
+        charsetSentinel: typeof opts.charsetSentinel === "boolean" ? opts.charsetSentinel : defaults.charsetSentinel,
+        commaRoundTrip: opts.commaRoundTrip,
+        delimiter: typeof opts.delimiter === "undefined" ? defaults.delimiter : opts.delimiter,
+        encode: typeof opts.encode === "boolean" ? opts.encode : defaults.encode,
+        encodeDotInKeys: typeof opts.encodeDotInKeys === "boolean" ? opts.encodeDotInKeys : defaults.encodeDotInKeys,
+        encoder: typeof opts.encoder === "function" ? opts.encoder : defaults.encoder,
+        encodeValuesOnly: typeof opts.encodeValuesOnly === "boolean" ? opts.encodeValuesOnly : defaults.encodeValuesOnly,
+        filter,
+        format,
+        formatter,
+        serializeDate: typeof opts.serializeDate === "function" ? opts.serializeDate : defaults.serializeDate,
+        skipNulls: typeof opts.skipNulls === "boolean" ? opts.skipNulls : defaults.skipNulls,
+        sort: typeof opts.sort === "function" ? opts.sort : null,
+        strictNullHandling: typeof opts.strictNullHandling === "boolean" ? opts.strictNullHandling : defaults.strictNullHandling
+      };
+    };
+    module2.exports = function(object, opts) {
+      var obj = object;
+      var options = normalizeStringifyOptions(opts);
+      var objKeys;
+      var filter;
+      if (typeof options.filter === "function") {
+        filter = options.filter;
+        obj = filter("", obj);
+      } else if (isArray(options.filter)) {
+        filter = options.filter;
+        objKeys = filter;
+      }
+      var keys = [];
+      if (typeof obj !== "object" || obj === null) {
+        return "";
+      }
+      var generateArrayPrefix = arrayPrefixGenerators[options.arrayFormat];
+      var commaRoundTrip = generateArrayPrefix === "comma" && options.commaRoundTrip;
+      if (!objKeys) {
+        objKeys = Object.keys(obj);
+      }
+      if (options.sort) {
+        objKeys.sort(options.sort);
+      }
+      var sideChannel = getSideChannel();
+      for (var i2 = 0; i2 < objKeys.length; ++i2) {
+        var key = objKeys[i2];
+        if (options.skipNulls && obj[key] === null) {
+          continue;
+        }
+        pushToArray(keys, stringify2(
+          obj[key],
+          key,
+          generateArrayPrefix,
+          commaRoundTrip,
+          options.allowEmptyArrays,
+          options.strictNullHandling,
+          options.skipNulls,
+          options.encodeDotInKeys,
+          options.encode ? options.encoder : null,
+          options.filter,
+          options.sort,
+          options.allowDots,
+          options.serializeDate,
+          options.format,
+          options.formatter,
+          options.encodeValuesOnly,
+          options.charset,
+          sideChannel
+        ));
+      }
+      var joined = keys.join(options.delimiter);
+      var prefix = options.addQueryPrefix === true ? "?" : "";
+      if (options.charsetSentinel) {
+        if (options.charset === "iso-8859-1") {
+          prefix += "utf8=%26%2310003%3B&";
+        } else {
+          prefix += "utf8=%E2%9C%93&";
+        }
+      }
+      return joined.length > 0 ? prefix + joined : "";
+    };
+  }
+});
+
+// node_modules/qs/lib/parse.js
+var require_parse = __commonJS({
+  "node_modules/qs/lib/parse.js"(exports2, module2) {
+    "use strict";
+    var utils = require_utils2();
+    var has = Object.prototype.hasOwnProperty;
+    var isArray = Array.isArray;
+    var defaults = {
+      allowDots: false,
+      allowEmptyArrays: false,
+      allowPrototypes: false,
+      allowSparse: false,
+      arrayLimit: 20,
+      charset: "utf-8",
+      charsetSentinel: false,
+      comma: false,
+      decodeDotInKeys: false,
+      decoder: utils.decode,
+      delimiter: "&",
+      depth: 5,
+      duplicates: "combine",
+      ignoreQueryPrefix: false,
+      interpretNumericEntities: false,
+      parameterLimit: 1e3,
+      parseArrays: true,
+      plainObjects: false,
+      strictDepth: false,
+      strictNullHandling: false
+    };
+    var interpretNumericEntities = function(str2) {
+      return str2.replace(/&#(\d+);/g, function($0, numberStr) {
+        return String.fromCharCode(parseInt(numberStr, 10));
+      });
+    };
+    var parseArrayValue = function(val, options) {
+      if (val && typeof val === "string" && options.comma && val.indexOf(",") > -1) {
+        return val.split(",");
+      }
+      return val;
+    };
+    var isoSentinel = "utf8=%26%2310003%3B";
+    var charsetSentinel = "utf8=%E2%9C%93";
+    var parseValues = function parseQueryStringValues(str2, options) {
+      var obj = { __proto__: null };
+      var cleanStr = options.ignoreQueryPrefix ? str2.replace(/^\?/, "") : str2;
+      cleanStr = cleanStr.replace(/%5B/gi, "[").replace(/%5D/gi, "]");
+      var limit = options.parameterLimit === Infinity ? void 0 : options.parameterLimit;
+      var parts = cleanStr.split(options.delimiter, limit);
+      var skipIndex = -1;
+      var i2;
+      var charset = options.charset;
+      if (options.charsetSentinel) {
+        for (i2 = 0; i2 < parts.length; ++i2) {
+          if (parts[i2].indexOf("utf8=") === 0) {
+            if (parts[i2] === charsetSentinel) {
+              charset = "utf-8";
+            } else if (parts[i2] === isoSentinel) {
+              charset = "iso-8859-1";
+            }
+            skipIndex = i2;
+            i2 = parts.length;
+          }
+        }
+      }
+      for (i2 = 0; i2 < parts.length; ++i2) {
+        if (i2 === skipIndex) {
+          continue;
+        }
+        var part = parts[i2];
+        var bracketEqualsPos = part.indexOf("]=");
+        var pos = bracketEqualsPos === -1 ? part.indexOf("=") : bracketEqualsPos + 1;
+        var key, val;
+        if (pos === -1) {
+          key = options.decoder(part, defaults.decoder, charset, "key");
+          val = options.strictNullHandling ? null : "";
+        } else {
+          key = options.decoder(part.slice(0, pos), defaults.decoder, charset, "key");
+          val = utils.maybeMap(
+            parseArrayValue(part.slice(pos + 1), options),
+            function(encodedVal) {
+              return options.decoder(encodedVal, defaults.decoder, charset, "value");
+            }
+          );
+        }
+        if (val && options.interpretNumericEntities && charset === "iso-8859-1") {
+          val = interpretNumericEntities(val);
+        }
+        if (part.indexOf("[]=") > -1) {
+          val = isArray(val) ? [val] : val;
+        }
+        var existing = has.call(obj, key);
+        if (existing && options.duplicates === "combine") {
+          obj[key] = utils.combine(obj[key], val);
+        } else if (!existing || options.duplicates === "last") {
+          obj[key] = val;
+        }
+      }
+      return obj;
+    };
+    var parseObject = function(chain, val, options, valuesParsed) {
+      var leaf = valuesParsed ? val : parseArrayValue(val, options);
+      for (var i2 = chain.length - 1; i2 >= 0; --i2) {
+        var obj;
+        var root = chain[i2];
+        if (root === "[]" && options.parseArrays) {
+          obj = options.allowEmptyArrays && (leaf === "" || options.strictNullHandling && leaf === null) ? [] : [].concat(leaf);
+        } else {
+          obj = options.plainObjects ? /* @__PURE__ */ Object.create(null) : {};
+          var cleanRoot = root.charAt(0) === "[" && root.charAt(root.length - 1) === "]" ? root.slice(1, -1) : root;
+          var decodedRoot = options.decodeDotInKeys ? cleanRoot.replace(/%2E/g, ".") : cleanRoot;
+          var index = parseInt(decodedRoot, 10);
+          if (!options.parseArrays && decodedRoot === "") {
+            obj = { 0: leaf };
+          } else if (!isNaN(index) && root !== decodedRoot && String(index) === decodedRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
+            obj = [];
+            obj[index] = leaf;
+          } else if (decodedRoot !== "__proto__") {
+            obj[decodedRoot] = leaf;
+          }
+        }
+        leaf = obj;
+      }
+      return leaf;
+    };
+    var parseKeys = function parseQueryStringKeys(givenKey, val, options, valuesParsed) {
+      if (!givenKey) {
+        return;
+      }
+      var key = options.allowDots ? givenKey.replace(/\.([^.[]+)/g, "[$1]") : givenKey;
+      var brackets = /(\[[^[\]]*])/;
+      var child = /(\[[^[\]]*])/g;
+      var segment = options.depth > 0 && brackets.exec(key);
+      var parent = segment ? key.slice(0, segment.index) : key;
+      var keys = [];
+      if (parent) {
+        if (!options.plainObjects && has.call(Object.prototype, parent)) {
+          if (!options.allowPrototypes) {
+            return;
+          }
+        }
+        keys.push(parent);
+      }
+      var i2 = 0;
+      while (options.depth > 0 && (segment = child.exec(key)) !== null && i2 < options.depth) {
+        i2 += 1;
+        if (!options.plainObjects && has.call(Object.prototype, segment[1].slice(1, -1))) {
+          if (!options.allowPrototypes) {
+            return;
+          }
+        }
+        keys.push(segment[1]);
+      }
+      if (segment) {
+        if (options.strictDepth === true) {
+          throw new RangeError("Input depth exceeded depth option of " + options.depth + " and strictDepth is true");
+        }
+        keys.push("[" + key.slice(segment.index) + "]");
+      }
+      return parseObject(keys, val, options, valuesParsed);
+    };
+    var normalizeParseOptions = function normalizeParseOptions2(opts) {
+      if (!opts) {
+        return defaults;
+      }
+      if (typeof opts.allowEmptyArrays !== "undefined" && typeof opts.allowEmptyArrays !== "boolean") {
+        throw new TypeError("`allowEmptyArrays` option can only be `true` or `false`, when provided");
+      }
+      if (typeof opts.decodeDotInKeys !== "undefined" && typeof opts.decodeDotInKeys !== "boolean") {
+        throw new TypeError("`decodeDotInKeys` option can only be `true` or `false`, when provided");
+      }
+      if (opts.decoder !== null && typeof opts.decoder !== "undefined" && typeof opts.decoder !== "function") {
+        throw new TypeError("Decoder has to be a function.");
+      }
+      if (typeof opts.charset !== "undefined" && opts.charset !== "utf-8" && opts.charset !== "iso-8859-1") {
+        throw new TypeError("The charset option must be either utf-8, iso-8859-1, or undefined");
+      }
+      var charset = typeof opts.charset === "undefined" ? defaults.charset : opts.charset;
+      var duplicates = typeof opts.duplicates === "undefined" ? defaults.duplicates : opts.duplicates;
+      if (duplicates !== "combine" && duplicates !== "first" && duplicates !== "last") {
+        throw new TypeError("The duplicates option must be either combine, first, or last");
+      }
+      var allowDots = typeof opts.allowDots === "undefined" ? opts.decodeDotInKeys === true ? true : defaults.allowDots : !!opts.allowDots;
+      return {
+        allowDots,
+        allowEmptyArrays: typeof opts.allowEmptyArrays === "boolean" ? !!opts.allowEmptyArrays : defaults.allowEmptyArrays,
+        allowPrototypes: typeof opts.allowPrototypes === "boolean" ? opts.allowPrototypes : defaults.allowPrototypes,
+        allowSparse: typeof opts.allowSparse === "boolean" ? opts.allowSparse : defaults.allowSparse,
+        arrayLimit: typeof opts.arrayLimit === "number" ? opts.arrayLimit : defaults.arrayLimit,
+        charset,
+        charsetSentinel: typeof opts.charsetSentinel === "boolean" ? opts.charsetSentinel : defaults.charsetSentinel,
+        comma: typeof opts.comma === "boolean" ? opts.comma : defaults.comma,
+        decodeDotInKeys: typeof opts.decodeDotInKeys === "boolean" ? opts.decodeDotInKeys : defaults.decodeDotInKeys,
+        decoder: typeof opts.decoder === "function" ? opts.decoder : defaults.decoder,
+        delimiter: typeof opts.delimiter === "string" || utils.isRegExp(opts.delimiter) ? opts.delimiter : defaults.delimiter,
+        // eslint-disable-next-line no-implicit-coercion, no-extra-parens
+        depth: typeof opts.depth === "number" || opts.depth === false ? +opts.depth : defaults.depth,
+        duplicates,
+        ignoreQueryPrefix: opts.ignoreQueryPrefix === true,
+        interpretNumericEntities: typeof opts.interpretNumericEntities === "boolean" ? opts.interpretNumericEntities : defaults.interpretNumericEntities,
+        parameterLimit: typeof opts.parameterLimit === "number" ? opts.parameterLimit : defaults.parameterLimit,
+        parseArrays: opts.parseArrays !== false,
+        plainObjects: typeof opts.plainObjects === "boolean" ? opts.plainObjects : defaults.plainObjects,
+        strictDepth: typeof opts.strictDepth === "boolean" ? !!opts.strictDepth : defaults.strictDepth,
+        strictNullHandling: typeof opts.strictNullHandling === "boolean" ? opts.strictNullHandling : defaults.strictNullHandling
+      };
+    };
+    module2.exports = function(str2, opts) {
+      var options = normalizeParseOptions(opts);
+      if (str2 === "" || str2 === null || typeof str2 === "undefined") {
+        return options.plainObjects ? /* @__PURE__ */ Object.create(null) : {};
+      }
+      var tempObj = typeof str2 === "string" ? parseValues(str2, options) : str2;
+      var obj = options.plainObjects ? /* @__PURE__ */ Object.create(null) : {};
+      var keys = Object.keys(tempObj);
+      for (var i2 = 0; i2 < keys.length; ++i2) {
+        var key = keys[i2];
+        var newObj = parseKeys(key, tempObj[key], options, typeof str2 === "string");
+        obj = utils.merge(obj, newObj, options);
+      }
+      if (options.allowSparse === true) {
+        return obj;
+      }
+      return utils.compact(obj);
+    };
+  }
+});
+
+// node_modules/qs/lib/index.js
+var require_lib3 = __commonJS({
+  "node_modules/qs/lib/index.js"(exports2, module2) {
+    "use strict";
+    var stringify2 = require_stringify();
+    var parse = require_parse();
+    var formats = require_formats();
+    module2.exports = {
+      formats,
+      parse,
+      stringify: stringify2
+    };
+  }
+});
+
+// src/extension.ts
+var extension_exports = {};
+__export(extension_exports, {
+  activate: () => activate,
+  deactivate: () => deactivate
+});
+module.exports = __toCommonJS(extension_exports);
+var vscode = __toESM(require("vscode"));
+
+// node_modules/openai/error.mjs
+var error_exports = {};
+__export(error_exports, {
+  APIConnectionError: () => APIConnectionError,
+  APIConnectionTimeoutError: () => APIConnectionTimeoutError,
+  APIError: () => APIError,
+  APIUserAbortError: () => APIUserAbortError,
+  AuthenticationError: () => AuthenticationError,
+  BadRequestError: () => BadRequestError,
+  ConflictError: () => ConflictError,
+  ContentFilterFinishReasonError: () => ContentFilterFinishReasonError,
+  InternalServerError: () => InternalServerError,
+  LengthFinishReasonError: () => LengthFinishReasonError,
+  NotFoundError: () => NotFoundError,
+  OpenAIError: () => OpenAIError,
+  PermissionDeniedError: () => PermissionDeniedError,
+  RateLimitError: () => RateLimitError,
+  UnprocessableEntityError: () => UnprocessableEntityError
+});
+
+// node_modules/openai/version.mjs
+var VERSION = "4.61.1";
+
+// node_modules/openai/_shims/registry.mjs
+var auto = false;
+var kind = void 0;
+var fetch = void 0;
+var Request = void 0;
+var Response = void 0;
+var Headers = void 0;
+var FormData = void 0;
+var Blob = void 0;
+var File = void 0;
+var ReadableStream = void 0;
+var getMultipartRequestOptions = void 0;
+var getDefaultAgent = void 0;
+var fileFromPath = void 0;
+var isFsReadStream = void 0;
+function setShims(shims, options = { auto: false }) {
+  if (auto) {
+    throw new Error(`you must \`import 'openai/shims/${shims.kind}'\` before importing anything else from openai`);
+  }
+  if (kind) {
+    throw new Error(`can't \`import 'openai/shims/${shims.kind}'\` after \`import 'openai/shims/${kind}'\``);
+  }
+  auto = options.auto;
+  kind = shims.kind;
+  fetch = shims.fetch;
+  Request = shims.Request;
+  Response = shims.Response;
+  Headers = shims.Headers;
+  FormData = shims.FormData;
+  Blob = shims.Blob;
+  File = shims.File;
+  ReadableStream = shims.ReadableStream;
+  getMultipartRequestOptions = shims.getMultipartRequestOptions;
+  getDefaultAgent = shims.getDefaultAgent;
+  fileFromPath = shims.fileFromPath;
+  isFsReadStream = shims.isFsReadStream;
+}
+
+// node_modules/openai/_shims/node-runtime.mjs
+var nf = __toESM(require_lib2(), 1);
+
+// node_modules/formdata-node/lib/esm/FormData.js
+var import_util2 = require("util");
+init_File();
+init_isFile();
 
 // node_modules/formdata-node/lib/esm/isBlob.js
-var isBlob = (value) => value instanceof Blob;
+init_Blob();
+var isBlob = (value) => value instanceof Blob2;
+
+// node_modules/formdata-node/lib/esm/FormData.js
+init_isFunction();
 
 // node_modules/formdata-node/lib/esm/deprecateConstructorEntries.js
 var import_util = require("util");
@@ -6652,15 +8678,15 @@ var deprecateConstructorEntries = (0, import_util.deprecate)(() => {
 }, 'Constructor "entries" argument is not spec-compliant and will be removed in next major release.');
 
 // node_modules/formdata-node/lib/esm/FormData.js
-var __classPrivateFieldGet3 = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+var __classPrivateFieldGet3 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
   if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
 };
 var _FormData_instances;
 var _FormData_entries;
 var _FormData_setEntry;
-var FormData = class {
+var FormData2 = class {
   constructor(entries) {
     _FormData_instances.add(this);
     _FormData_entries.set(this, /* @__PURE__ */ new Map());
@@ -6736,12 +8762,12 @@ var FormData = class {
     name = String(name);
     let value;
     if (isFile(rawValue)) {
-      value = fileName === void 0 ? rawValue : new File([rawValue], fileName, {
+      value = fileName === void 0 ? rawValue : new File2([rawValue], fileName, {
         type: rawValue.type,
         lastModified: rawValue.lastModified
       });
     } else if (isBlob(rawValue)) {
-      value = new File([rawValue], fileName === void 0 ? "blob" : fileName, {
+      value = new File2([rawValue], fileName === void 0 ? "blob" : fileName, {
         type: rawValue.type
       });
     } else if (fileName) {
@@ -6773,8 +8799,14 @@ var FormData = class {
   }
 };
 
-// node_modules/openai/_shims/getMultipartRequestOptions.node.mjs
-var import_node_stream = require("node:stream");
+// node_modules/formdata-node/lib/esm/index.js
+init_Blob();
+init_File();
+
+// node_modules/openai/_shims/node-runtime.mjs
+var import_agentkeepalive = __toESM(require_agentkeepalive(), 1);
+var import_abort_controller = __toESM(require_abort_controller(), 1);
+var import_node_fs = require("node:fs");
 
 // node_modules/form-data-encoder/lib/esm/util/createBoundary.js
 var alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -6804,8 +8836,8 @@ function isPlainObject(value) {
 var isPlainObject_default = isPlainObject;
 
 // node_modules/form-data-encoder/lib/esm/util/normalizeValue.js
-var normalizeValue = (value) => String(value).replace(/\r|\n/g, (match, i2, str) => {
-  if (match === "\r" && str[i2 + 1] !== "\n" || match === "\n" && str[i2 - 1] !== "\r") {
+var normalizeValue = (value) => String(value).replace(/\r|\n/g, (match, i2, str2) => {
+  if (match === "\r" && str2[i2 + 1] !== "\n" || match === "\n" && str2[i2 - 1] !== "\r") {
     return "\r\n";
   }
   return match;
@@ -6827,16 +8859,16 @@ var isFileLike = (value) => Boolean(value && typeof value === "object" && isFunc
 var isFormData = (value) => Boolean(value && isFunction_default(value.constructor) && value[Symbol.toStringTag] === "FormData" && isFunction_default(value.append) && isFunction_default(value.getAll) && isFunction_default(value.entries) && isFunction_default(value[Symbol.iterator]));
 
 // node_modules/form-data-encoder/lib/esm/FormDataEncoder.js
-var __classPrivateFieldSet3 = function(receiver, state, value, kind, f2) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+var __classPrivateFieldSet3 = function(receiver, state, value, kind2, f2) {
+  if (kind2 === "m") throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
   if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+  return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
 };
-var __classPrivateFieldGet4 = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+var __classPrivateFieldGet4 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
   if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
 };
 var _FormDataEncoder_instances;
 var _FormDataEncoder_CRLF;
@@ -6947,8 +8979,33 @@ var FormDataEncoder = class {
   }
 };
 
-// node_modules/openai/_shims/getMultipartRequestOptions.node.mjs
-async function getMultipartRequestOptions(form, opts) {
+// node_modules/openai/_shims/node-runtime.mjs
+var import_node_stream = require("node:stream");
+
+// node_modules/openai/_shims/MultipartBody.mjs
+var MultipartBody = class {
+  constructor(body) {
+    this.body = body;
+  }
+  get [Symbol.toStringTag]() {
+    return "MultipartBody";
+  }
+};
+
+// node_modules/openai/_shims/node-runtime.mjs
+var import_web = require("node:stream/web");
+var fileFromPathWarned = false;
+async function fileFromPath3(path, ...args) {
+  const { fileFromPath: _fileFromPath } = await Promise.resolve().then(() => (init_fileFromPath(), fileFromPath_exports));
+  if (!fileFromPathWarned) {
+    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path)}) instead`);
+    fileFromPathWarned = true;
+  }
+  return await _fileFromPath(path, ...args);
+}
+var defaultHttpAgent = new import_agentkeepalive.default({ keepAlive: true, timeout: 5 * 60 * 1e3 });
+var defaultHttpsAgent = new import_agentkeepalive.default.HttpsAgent({ keepAlive: true, timeout: 5 * 60 * 1e3 });
+async function getMultipartRequestOptions2(form, opts) {
   const encoder = new FormDataEncoder(form);
   const readable = import_node_stream.Readable.from(encoder);
   const body = new MultipartBody(readable);
@@ -6959,111 +9016,394 @@ async function getMultipartRequestOptions(form, opts) {
   };
   return { ...opts, body, headers };
 }
-
-// node_modules/formdata-node/lib/esm/fileFromPath.js
-var import_fs = require("fs");
-var import_path = require("path");
-var import_node_domexception = __toESM(require_node_domexception(), 1);
-
-// node_modules/formdata-node/lib/esm/isPlainObject.js
-var getType2 = (value) => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
-function isPlainObject2(value) {
-  if (getType2(value) !== "object") {
-    return false;
+function getRuntime() {
+  if (typeof AbortController === "undefined") {
+    globalThis.AbortController = import_abort_controller.AbortController;
   }
-  const pp = Object.getPrototypeOf(value);
-  if (pp === null || pp === void 0) {
-    return true;
-  }
-  const Ctor = pp.constructor && pp.constructor.toString();
-  return Ctor === Object.toString();
+  return {
+    kind: "node",
+    fetch: nf.default,
+    Request: nf.Request,
+    Response: nf.Response,
+    Headers: nf.Headers,
+    FormData: FormData2,
+    Blob: Blob2,
+    File: File2,
+    ReadableStream: import_web.ReadableStream,
+    getMultipartRequestOptions: getMultipartRequestOptions2,
+    getDefaultAgent: (url) => url.startsWith("https") ? defaultHttpsAgent : defaultHttpAgent,
+    fileFromPath: fileFromPath3,
+    isFsReadStream: (value) => value instanceof import_node_fs.ReadStream
+  };
 }
-var isPlainObject_default2 = isPlainObject2;
 
-// node_modules/formdata-node/lib/esm/fileFromPath.js
-var __classPrivateFieldSet4 = function(receiver, state, value, kind, f2) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
-};
-var __classPrivateFieldGet5 = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
-};
-var _FileFromPath_path;
-var _FileFromPath_start;
-var MESSAGE = "The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.";
-var FileFromPath = class _FileFromPath {
-  constructor(input) {
-    _FileFromPath_path.set(this, void 0);
-    _FileFromPath_start.set(this, void 0);
-    __classPrivateFieldSet4(this, _FileFromPath_path, input.path, "f");
-    __classPrivateFieldSet4(this, _FileFromPath_start, input.start || 0, "f");
-    this.name = (0, import_path.basename)(__classPrivateFieldGet5(this, _FileFromPath_path, "f"));
-    this.size = input.size;
-    this.lastModified = input.lastModified;
+// node_modules/openai/_shims/index.mjs
+if (!kind) setShims(getRuntime(), { auto: true });
+
+// node_modules/openai/streaming.mjs
+var Stream = class _Stream {
+  constructor(iterator, controller) {
+    this.iterator = iterator;
+    this.controller = controller;
   }
-  slice(start, end) {
-    return new _FileFromPath({
-      path: __classPrivateFieldGet5(this, _FileFromPath_path, "f"),
-      lastModified: this.lastModified,
-      size: end - start,
-      start
+  static fromSSEResponse(response, controller) {
+    let consumed = false;
+    async function* iterator() {
+      if (consumed) {
+        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const sse of _iterSSEMessages(response, controller)) {
+          if (done)
+            continue;
+          if (sse.data.startsWith("[DONE]")) {
+            done = true;
+            continue;
+          }
+          if (sse.event === null) {
+            let data;
+            try {
+              data = JSON.parse(sse.data);
+            } catch (e2) {
+              console.error(`Could not parse message into JSON:`, sse.data);
+              console.error(`From chunk:`, sse.raw);
+              throw e2;
+            }
+            if (data && data.error) {
+              throw new APIError(void 0, data.error, void 0, void 0);
+            }
+            yield data;
+          } else {
+            let data;
+            try {
+              data = JSON.parse(sse.data);
+            } catch (e2) {
+              console.error(`Could not parse message into JSON:`, sse.data);
+              console.error(`From chunk:`, sse.raw);
+              throw e2;
+            }
+            if (sse.event == "error") {
+              throw new APIError(void 0, data.error, data.message, void 0);
+            }
+            yield { event: sse.event, data };
+          }
+        }
+        done = true;
+      } catch (e2) {
+        if (e2 instanceof Error && e2.name === "AbortError")
+          return;
+        throw e2;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new _Stream(iterator, controller);
+  }
+  /**
+   * Generates a Stream from a newline-separated ReadableStream
+   * where each item is a JSON value.
+   */
+  static fromReadableStream(readableStream, controller) {
+    let consumed = false;
+    async function* iterLines() {
+      const lineDecoder = new LineDecoder();
+      const iter = readableStreamAsyncIterable(readableStream);
+      for await (const chunk of iter) {
+        for (const line of lineDecoder.decode(chunk)) {
+          yield line;
+        }
+      }
+      for (const line of lineDecoder.flush()) {
+        yield line;
+      }
+    }
+    async function* iterator() {
+      if (consumed) {
+        throw new Error("Cannot iterate over a consumed stream, use `.tee()` to split the stream.");
+      }
+      consumed = true;
+      let done = false;
+      try {
+        for await (const line of iterLines()) {
+          if (done)
+            continue;
+          if (line)
+            yield JSON.parse(line);
+        }
+        done = true;
+      } catch (e2) {
+        if (e2 instanceof Error && e2.name === "AbortError")
+          return;
+        throw e2;
+      } finally {
+        if (!done)
+          controller.abort();
+      }
+    }
+    return new _Stream(iterator, controller);
+  }
+  [Symbol.asyncIterator]() {
+    return this.iterator();
+  }
+  /**
+   * Splits the stream into two streams which can be
+   * independently read from at different speeds.
+   */
+  tee() {
+    const left = [];
+    const right = [];
+    const iterator = this.iterator();
+    const teeIterator = (queue) => {
+      return {
+        next: () => {
+          if (queue.length === 0) {
+            const result = iterator.next();
+            left.push(result);
+            right.push(result);
+          }
+          return queue.shift();
+        }
+      };
+    };
+    return [
+      new _Stream(() => teeIterator(left), this.controller),
+      new _Stream(() => teeIterator(right), this.controller)
+    ];
+  }
+  /**
+   * Converts this stream to a newline-separated ReadableStream of
+   * JSON stringified values in the stream
+   * which can be turned back into a Stream with `Stream.fromReadableStream()`.
+   */
+  toReadableStream() {
+    const self = this;
+    let iter;
+    const encoder = new TextEncoder();
+    return new ReadableStream({
+      async start() {
+        iter = self[Symbol.asyncIterator]();
+      },
+      async pull(ctrl) {
+        try {
+          const { value, done } = await iter.next();
+          if (done)
+            return ctrl.close();
+          const bytes = encoder.encode(JSON.stringify(value) + "\n");
+          ctrl.enqueue(bytes);
+        } catch (err) {
+          ctrl.error(err);
+        }
+      },
+      async cancel() {
+        await iter.return?.();
+      }
     });
   }
-  async *stream() {
-    const { mtimeMs } = await import_fs.promises.stat(__classPrivateFieldGet5(this, _FileFromPath_path, "f"));
-    if (mtimeMs > this.lastModified) {
-      throw new import_node_domexception.default(MESSAGE, "NotReadableError");
-    }
-    if (this.size) {
-      yield* (0, import_fs.createReadStream)(__classPrivateFieldGet5(this, _FileFromPath_path, "f"), {
-        start: __classPrivateFieldGet5(this, _FileFromPath_start, "f"),
-        end: __classPrivateFieldGet5(this, _FileFromPath_start, "f") + this.size - 1
-      });
+};
+async function* _iterSSEMessages(response, controller) {
+  if (!response.body) {
+    controller.abort();
+    throw new OpenAIError(`Attempted to iterate over a response with no body`);
+  }
+  const sseDecoder = new SSEDecoder();
+  const lineDecoder = new LineDecoder();
+  const iter = readableStreamAsyncIterable(response.body);
+  for await (const sseChunk of iterSSEChunks(iter)) {
+    for (const line of lineDecoder.decode(sseChunk)) {
+      const sse = sseDecoder.decode(line);
+      if (sse)
+        yield sse;
     }
   }
-  get [(_FileFromPath_path = /* @__PURE__ */ new WeakMap(), _FileFromPath_start = /* @__PURE__ */ new WeakMap(), Symbol.toStringTag)]() {
-    return "File";
+  for (const line of lineDecoder.flush()) {
+    const sse = sseDecoder.decode(line);
+    if (sse)
+      yield sse;
+  }
+}
+async function* iterSSEChunks(iterator) {
+  let data = new Uint8Array();
+  for await (const chunk of iterator) {
+    if (chunk == null) {
+      continue;
+    }
+    const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk) : typeof chunk === "string" ? new TextEncoder().encode(chunk) : chunk;
+    let newData = new Uint8Array(data.length + binaryChunk.length);
+    newData.set(data);
+    newData.set(binaryChunk, data.length);
+    data = newData;
+    let patternIndex;
+    while ((patternIndex = findDoubleNewlineIndex(data)) !== -1) {
+      yield data.slice(0, patternIndex);
+      data = data.slice(patternIndex);
+    }
+  }
+  if (data.length > 0) {
+    yield data;
+  }
+}
+function findDoubleNewlineIndex(buffer) {
+  const newline = 10;
+  const carriage = 13;
+  for (let i2 = 0; i2 < buffer.length - 2; i2++) {
+    if (buffer[i2] === newline && buffer[i2 + 1] === newline) {
+      return i2 + 2;
+    }
+    if (buffer[i2] === carriage && buffer[i2 + 1] === carriage) {
+      return i2 + 2;
+    }
+    if (buffer[i2] === carriage && buffer[i2 + 1] === newline && i2 + 3 < buffer.length && buffer[i2 + 2] === carriage && buffer[i2 + 3] === newline) {
+      return i2 + 4;
+    }
+  }
+  return -1;
+}
+var SSEDecoder = class {
+  constructor() {
+    this.event = null;
+    this.data = [];
+    this.chunks = [];
+  }
+  decode(line) {
+    if (line.endsWith("\r")) {
+      line = line.substring(0, line.length - 1);
+    }
+    if (!line) {
+      if (!this.event && !this.data.length)
+        return null;
+      const sse = {
+        event: this.event,
+        data: this.data.join("\n"),
+        raw: this.chunks
+      };
+      this.event = null;
+      this.data = [];
+      this.chunks = [];
+      return sse;
+    }
+    this.chunks.push(line);
+    if (line.startsWith(":")) {
+      return null;
+    }
+    let [fieldname, _2, value] = partition(line, ":");
+    if (value.startsWith(" ")) {
+      value = value.substring(1);
+    }
+    if (fieldname === "event") {
+      this.event = value;
+    } else if (fieldname === "data") {
+      this.data.push(value);
+    }
+    return null;
   }
 };
-function createFileFromPath(path, { mtimeMs, size }, filenameOrOptions, options = {}) {
-  let filename;
-  if (isPlainObject_default2(filenameOrOptions)) {
-    [options, filename] = [filenameOrOptions, void 0];
-  } else {
-    filename = filenameOrOptions;
+var LineDecoder = class _LineDecoder {
+  constructor() {
+    this.buffer = [];
+    this.trailingCR = false;
   }
-  const file = new FileFromPath({ path, size, lastModified: mtimeMs });
-  if (!filename) {
-    filename = file.name;
+  decode(chunk) {
+    let text = this.decodeText(chunk);
+    if (this.trailingCR) {
+      text = "\r" + text;
+      this.trailingCR = false;
+    }
+    if (text.endsWith("\r")) {
+      this.trailingCR = true;
+      text = text.slice(0, -1);
+    }
+    if (!text) {
+      return [];
+    }
+    const trailingNewline = _LineDecoder.NEWLINE_CHARS.has(text[text.length - 1] || "");
+    let lines = text.split(_LineDecoder.NEWLINE_REGEXP);
+    if (trailingNewline) {
+      lines.pop();
+    }
+    if (lines.length === 1 && !trailingNewline) {
+      this.buffer.push(lines[0]);
+      return [];
+    }
+    if (this.buffer.length > 0) {
+      lines = [this.buffer.join("") + lines[0], ...lines.slice(1)];
+      this.buffer = [];
+    }
+    if (!trailingNewline) {
+      this.buffer = [lines.pop() || ""];
+    }
+    return lines;
   }
-  return new File([file], filename, {
-    ...options,
-    lastModified: file.lastModified
-  });
-}
-async function fileFromPath(path, filenameOrOptions, options) {
-  const stats = await import_fs.promises.stat(path);
-  return createFileFromPath(path, stats, filenameOrOptions, options);
-}
-
-// node_modules/openai/_shims/fileFromPath.node.mjs
-var warned = false;
-async function fileFromPath2(path, ...args) {
-  if (!warned) {
-    console.warn(`fileFromPath is deprecated; use fs.createReadStream(${JSON.stringify(path)}) instead`);
-    warned = true;
+  decodeText(bytes) {
+    if (bytes == null)
+      return "";
+    if (typeof bytes === "string")
+      return bytes;
+    if (typeof Buffer !== "undefined") {
+      if (bytes instanceof Buffer) {
+        return bytes.toString();
+      }
+      if (bytes instanceof Uint8Array) {
+        return Buffer.from(bytes).toString();
+      }
+      throw new OpenAIError(`Unexpected: received non-Uint8Array (${bytes.constructor.name}) stream chunk in an environment with a global "Buffer" defined, which this library assumes to be Node. Please report this error.`);
+    }
+    if (typeof TextDecoder !== "undefined") {
+      if (bytes instanceof Uint8Array || bytes instanceof ArrayBuffer) {
+        this.textDecoder ?? (this.textDecoder = new TextDecoder("utf8"));
+        return this.textDecoder.decode(bytes);
+      }
+      throw new OpenAIError(`Unexpected: received non-Uint8Array/ArrayBuffer (${bytes.constructor.name}) in a web platform. Please report this error.`);
+    }
+    throw new OpenAIError(`Unexpected: neither Buffer nor TextDecoder are available as globals. Please report this error.`);
   }
-  return await fileFromPath(path, ...args);
+  flush() {
+    if (!this.buffer.length && !this.trailingCR) {
+      return [];
+    }
+    const lines = [this.buffer.join("")];
+    this.buffer = [];
+    this.trailingCR = false;
+    return lines;
+  }
+};
+LineDecoder.NEWLINE_CHARS = /* @__PURE__ */ new Set(["\n", "\r"]);
+LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r]/g;
+function partition(str2, delimiter) {
+  const index = str2.indexOf(delimiter);
+  if (index !== -1) {
+    return [str2.substring(0, index), delimiter, str2.substring(index + delimiter.length)];
+  }
+  return [str2, "", ""];
 }
-
-// node_modules/openai/_shims/node-readable.node.mjs
-var import_node_fs = require("node:fs");
-function isFsReadStream(value) {
-  return value instanceof import_node_fs.ReadStream;
+function readableStreamAsyncIterable(stream) {
+  if (stream[Symbol.asyncIterator])
+    return stream;
+  const reader = stream.getReader();
+  return {
+    async next() {
+      try {
+        const result = await reader.read();
+        if (result?.done)
+          reader.releaseLock();
+        return result;
+      } catch (e2) {
+        reader.releaseLock();
+        throw e2;
+      }
+    },
+    async return() {
+      const cancelPromise = reader.cancel();
+      reader.releaseLock();
+      await cancelPromise;
+      return { done: true, value: void 0 };
+    },
+    [Symbol.asyncIterator]() {
+      return this;
+    }
+  };
 }
 
 // node_modules/openai/uploads.mjs
@@ -7073,18 +9413,21 @@ var isBlobLike = (value) => value != null && typeof value === "object" && typeof
 var isUploadable = (value) => {
   return isFileLike2(value) || isResponseLike(value) || isFsReadStream(value);
 };
-async function toFile(value, name, options = {}) {
-  var _a2, _b, _c;
+async function toFile(value, name, options) {
   value = await value;
+  if (isFileLike2(value)) {
+    return value;
+  }
   if (isResponseLike(value)) {
     const blob = await value.blob();
-    name || (name = (_a2 = new URL(value.url).pathname.split(/[\\/]/).pop()) !== null && _a2 !== void 0 ? _a2 : "unknown_file");
-    return new File([blob], name, options);
+    name || (name = new URL(value.url).pathname.split(/[\\/]/).pop() ?? "unknown_file");
+    const data = isBlobLike(blob) ? [await blob.arrayBuffer()] : [blob];
+    return new File(data, name, options);
   }
   const bits = await getBytes(value);
-  name || (name = (_b = getName(value)) !== null && _b !== void 0 ? _b : "unknown_file");
-  if (!options.type) {
-    const type = (_c = bits[0]) === null || _c === void 0 ? void 0 : _c.type;
+  name || (name = getName(value) ?? "unknown_file");
+  if (!options?.type) {
+    const type = bits[0]?.type;
     if (typeof type === "string") {
       options = { ...options, type };
     }
@@ -7092,7 +9435,6 @@ async function toFile(value, name, options = {}) {
   return new File(bits, name, options);
 }
 async function getBytes(value) {
-  var _a2;
   let parts = [];
   if (typeof value === "string" || ArrayBuffer.isView(value) || // includes Uint8Array, Buffer, etc.
   value instanceof ArrayBuffer) {
@@ -7104,9 +9446,7 @@ async function getBytes(value) {
       parts.push(chunk);
     }
   } else {
-    throw new Error(
-      `Unexpected data type: ${typeof value}; constructor: ${(_a2 = value === null || value === void 0 ? void 0 : value.constructor) === null || _a2 === void 0 ? void 0 : _a2.name}; props: ${propsForError(value)}`
-    );
+    throw new Error(`Unexpected data type: ${typeof value}; constructor: ${value?.constructor?.name}; props: ${propsForError(value)}`);
   }
   return parts;
 }
@@ -7115,24 +9455,17 @@ function propsForError(value) {
   return `[${props.map((p2) => `"${p2}"`).join(", ")}]`;
 }
 function getName(value) {
-  var _a2;
   return getStringFromMaybeBuffer(value.name) || getStringFromMaybeBuffer(value.filename) || // For fs.ReadStream
-  ((_a2 = getStringFromMaybeBuffer(value.path)) === null || _a2 === void 0 ? void 0 : _a2.split(/[\\/]/).pop());
+  getStringFromMaybeBuffer(value.path)?.split(/[\\/]/).pop();
 }
 var getStringFromMaybeBuffer = (x2) => {
-  if (typeof x2 === "string") return x2;
-  if (typeof Buffer !== "undefined" && x2 instanceof Buffer) return String(x2);
+  if (typeof x2 === "string")
+    return x2;
+  if (typeof Buffer !== "undefined" && x2 instanceof Buffer)
+    return String(x2);
   return void 0;
 };
 var isAsyncIterableIterator = (value) => value != null && typeof value === "object" && typeof value[Symbol.asyncIterator] === "function";
-var MultipartBody = class {
-  constructor(body) {
-    this.body = body;
-  }
-  get [Symbol.toStringTag]() {
-    return "MultipartBody";
-  }
-};
 var isMultipartBody = (body) => body && typeof body === "object" && body.body && body[Symbol.toStringTag] === "MultipartBody";
 var multipartFormRequestOptions = async (opts) => {
   const form = await createForm(opts.body);
@@ -7144,11 +9477,10 @@ var createForm = async (body) => {
   return form;
 };
 var addFormValue = async (form, key, value) => {
-  if (value === void 0) return;
+  if (value === void 0)
+    return;
   if (value == null) {
-    throw new TypeError(
-      `Received null for "${key}"; to pass null in FormData, you must use the string 'null'`
-    );
+    throw new TypeError(`Received null for "${key}"; to pass null in FormData, you must use the string 'null'`);
   }
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     form.append(key, String(value));
@@ -7158,39 +9490,43 @@ var addFormValue = async (form, key, value) => {
   } else if (Array.isArray(value)) {
     await Promise.all(value.map((entry) => addFormValue(form, key + "[]", entry)));
   } else if (typeof value === "object") {
-    await Promise.all(
-      Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop))
-    );
+    await Promise.all(Object.entries(value).map(([name, prop]) => addFormValue(form, `${key}[${name}]`, prop)));
   } else {
-    throw new TypeError(
-      `Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${value} instead`
-    );
+    throw new TypeError(`Invalid value given to form, expected a string, number, boolean, object, Array, File or Blob but got ${value} instead`);
   }
 };
 
 // node_modules/openai/core.mjs
-var __classPrivateFieldSet5 = function(receiver, state, value, kind, f2) {
-  if (kind === "m") throw new TypeError("Private method is not writable");
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver))
-    throw new TypeError("Cannot write private member to an object whose class did not declare it");
-  return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+var __classPrivateFieldSet5 = function(receiver, state, value, kind2, f2) {
+  if (kind2 === "m") throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
 };
-var __classPrivateFieldGet6 = function(receiver, state, kind, f2) {
-  if (kind === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver))
-    throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+var __classPrivateFieldGet6 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
 };
 var _AbstractPage_client;
-var MAX_RETRIES = 2;
 async function defaultParseResponse(props) {
   const { response } = props;
   if (props.options.stream) {
-    return new Stream(response, props.controller);
+    debug("response", response.status, response.url, response.headers, response.body);
+    if (props.options.__streamClass) {
+      return props.options.__streamClass.fromSSEResponse(response, props.controller);
+    }
+    return Stream.fromSSEResponse(response, props.controller);
+  }
+  if (response.status === 204) {
+    return null;
+  }
+  if (props.options.__binaryResponse) {
+    return response;
   }
   const contentType = response.headers.get("content-type");
-  if (contentType === null || contentType === void 0 ? void 0 : contentType.includes("application/json")) {
+  const isJSON = contentType?.includes("application/json") || contentType?.includes("application/vnd.api+json");
+  if (isJSON) {
     const json = await response.json();
     debug("response", response.status, response.url, response.headers, json);
     return json;
@@ -7216,6 +9552,12 @@ var APIPromise = class _APIPromise extends Promise {
    *
    * If you want to parse the response body but still get the `Response`
    * instance, you can use {@link withResponse()}.
+   *
+   * 👋 Getting the wrong TypeScript type for `Response`?
+   * Try setting `"moduleResolution": "NodeNext"` if you can,
+   * or add one of these imports before your first `import … from 'openai'`:
+   * - `import 'openai/shims/node'` (if you're running on Node)
+   * - `import 'openai/shims/web'` (otherwise)
    */
   asResponse() {
     return this.responsePromise.then((p2) => p2.response);
@@ -7225,6 +9567,13 @@ var APIPromise = class _APIPromise extends Promise {
    *
    * If you just want to get the raw `Response` instance without parsing it,
    * you can use {@link asResponse()}.
+   *
+   *
+   * 👋 Getting the wrong TypeScript type for `Response`?
+   * Try setting `"moduleResolution": "NodeNext"` if you can,
+   * or add one of these imports before your first `import … from 'openai'`:
+   * - `import 'openai/shims/node'` (if you're running on Node)
+   * - `import 'openai/shims/web'` (otherwise)
    */
   async withResponse() {
     const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
@@ -7249,22 +9598,19 @@ var APIPromise = class _APIPromise extends Promise {
 var APIClient = class {
   constructor({
     baseURL,
-    maxRetries,
+    maxRetries = 2,
     timeout = 6e5,
     // 10 minutes
     httpAgent,
     fetch: overridenFetch
   }) {
     this.baseURL = baseURL;
-    this.maxRetries = validatePositiveInteger(
-      "maxRetries",
-      maxRetries !== null && maxRetries !== void 0 ? maxRetries : MAX_RETRIES
-    );
+    this.maxRetries = validatePositiveInteger("maxRetries", maxRetries);
     this.timeout = validatePositiveInteger("timeout", timeout);
     this.httpAgent = httpAgent;
-    this.fetch = overridenFetch !== null && overridenFetch !== void 0 ? overridenFetch : _fetch;
+    this.fetch = overridenFetch ?? fetch;
   }
-  authHeaders() {
+  authHeaders(opts) {
     return {};
   }
   /**
@@ -7275,13 +9621,13 @@ var APIClient = class {
    *    Authorization: 'Bearer 123',
    *  }
    */
-  defaultHeaders() {
+  defaultHeaders(opts) {
     return {
       Accept: "application/json",
       "Content-Type": "application/json",
       "User-Agent": this.getUserAgent(),
       ...getPlatformHeaders(),
-      ...this.authHeaders()
+      ...this.authHeaders(opts)
     };
   }
   /**
@@ -7308,7 +9654,10 @@ var APIClient = class {
     return this.methodRequest("delete", path, opts);
   }
   methodRequest(method, path, opts) {
-    return this.request(Promise.resolve(opts).then((opts2) => ({ method, path, ...opts2 })));
+    return this.request(Promise.resolve(opts).then(async (opts2) => {
+      const body = opts2 && isBlobLike(opts2?.body) ? new DataView(await opts2.body.arrayBuffer()) : opts2?.body instanceof DataView ? opts2.body : opts2?.body instanceof ArrayBuffer ? new DataView(opts2.body) : opts2 && ArrayBuffer.isView(opts2?.body) ? new DataView(opts2.body.buffer) : opts2?.body;
+      return { method, path, ...opts2, body };
+    }));
   }
   getAPIList(path, Page2, opts) {
     return this.requestAPIList(Page2, { method: "get", path, ...opts });
@@ -7323,35 +9672,30 @@ var APIClient = class {
         const encoded = encoder.encode(body);
         return encoded.length.toString();
       }
+    } else if (ArrayBuffer.isView(body)) {
+      return body.byteLength.toString();
     }
     return null;
   }
   buildRequest(options) {
-    var _a2, _b, _c, _d, _e2, _f;
     const { method, path, query, headers = {} } = options;
-    const body = isMultipartBody(options.body) ? options.body.body : options.body ? JSON.stringify(options.body, null, 2) : null;
+    const body = ArrayBuffer.isView(options.body) || options.__binaryRequest && typeof options.body === "string" ? options.body : isMultipartBody(options.body) ? options.body.body : options.body ? JSON.stringify(options.body, null, 2) : null;
     const contentLength = this.calculateContentLength(body);
     const url = this.buildURL(path, query);
-    if ("timeout" in options) validatePositiveInteger("timeout", options.timeout);
-    const timeout = (_a2 = options.timeout) !== null && _a2 !== void 0 ? _a2 : this.timeout;
-    const httpAgent = (_c = (_b = options.httpAgent) !== null && _b !== void 0 ? _b : this.httpAgent) !== null && _c !== void 0 ? _c : getDefaultAgent(url);
+    if ("timeout" in options)
+      validatePositiveInteger("timeout", options.timeout);
+    const timeout = options.timeout ?? this.timeout;
+    const httpAgent = options.httpAgent ?? this.httpAgent ?? getDefaultAgent(url);
     const minAgentTimeout = timeout + 1e3;
-    if (typeof ((_d = httpAgent === null || httpAgent === void 0 ? void 0 : httpAgent.options) === null || _d === void 0 ? void 0 : _d.timeout) === "number" && minAgentTimeout > ((_e2 = httpAgent.options.timeout) !== null && _e2 !== void 0 ? _e2 : 0)) {
+    if (typeof httpAgent?.options?.timeout === "number" && minAgentTimeout > (httpAgent.options.timeout ?? 0)) {
       httpAgent.options.timeout = minAgentTimeout;
     }
     if (this.idempotencyHeader && method !== "get") {
-      if (!options.idempotencyKey) options.idempotencyKey = this.defaultIdempotencyKey();
+      if (!options.idempotencyKey)
+        options.idempotencyKey = this.defaultIdempotencyKey();
       headers[this.idempotencyHeader] = options.idempotencyKey;
     }
-    const reqHeaders = {
-      ...contentLength && { "Content-Length": contentLength },
-      ...this.defaultHeaders(),
-      ...headers
-    };
-    if (isMultipartBody(options.body) && !isPolyfilled) {
-      delete reqHeaders["Content-Type"];
-    }
-    Object.keys(reqHeaders).forEach((key) => reqHeaders[key] === null && delete reqHeaders[key]);
+    const reqHeaders = this.buildHeaders({ options, headers, contentLength });
     const req = {
       method,
       ...body && { body },
@@ -7359,10 +9703,28 @@ var APIClient = class {
       ...httpAgent && { agent: httpAgent },
       // @ts-ignore node-fetch uses a custom AbortSignal type that is
       // not compatible with standard web types
-      signal: (_f = options.signal) !== null && _f !== void 0 ? _f : null
+      signal: options.signal ?? null
     };
-    this.validateHeaders(reqHeaders, headers);
     return { req, url, timeout };
+  }
+  buildHeaders({ options, headers, contentLength }) {
+    const reqHeaders = {};
+    if (contentLength) {
+      reqHeaders["content-length"] = contentLength;
+    }
+    const defaultHeaders = this.defaultHeaders(options);
+    applyHeadersMut(reqHeaders, defaultHeaders);
+    applyHeadersMut(reqHeaders, headers);
+    if (isMultipartBody(options.body) && kind !== "node") {
+      delete reqHeaders["content-type"];
+    }
+    this.validateHeaders(reqHeaders, headers);
+    return reqHeaders;
+  }
+  /**
+   * Used as a callback for mutating the given `FinalRequestOptions` object.
+   */
+  async prepareOptions(options) {
   }
   /**
    * Used as a callback for mutating the given `RequestInit` object.
@@ -7370,7 +9732,10 @@ var APIClient = class {
    * This is useful for cases where you want to add certain headers based off of
    * the request properties, e.g. `method` or `url`.
    */
-  async prepareRequest(request, { url }) {
+  async prepareRequest(request, { url, options }) {
+  }
+  parseHeaders(headers) {
+    return !headers ? {} : Symbol.iterator in headers ? Object.fromEntries(Array.from(headers).map((header) => [...header])) : { ...headers };
   }
   makeStatusError(status, error, message, headers) {
     return APIError.generate(status, error, message, headers);
@@ -7379,21 +9744,21 @@ var APIClient = class {
     return new APIPromise(this.makeRequest(options, remainingRetries));
   }
   async makeRequest(optionsInput, retriesRemaining) {
-    var _a2, _b, _c;
     const options = await optionsInput;
     if (retriesRemaining == null) {
-      retriesRemaining = (_a2 = options.maxRetries) !== null && _a2 !== void 0 ? _a2 : this.maxRetries;
+      retriesRemaining = options.maxRetries ?? this.maxRetries;
     }
+    await this.prepareOptions(options);
     const { req, url, timeout } = this.buildRequest(options);
-    await this.prepareRequest(req, { url });
+    await this.prepareRequest(req, { url, options });
     debug("request", url, options, req.headers);
-    if ((_b = options.signal) === null || _b === void 0 ? void 0 : _b.aborted) {
+    if (options.signal?.aborted) {
       throw new APIUserAbortError();
     }
     const controller = new AbortController();
     const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     if (response instanceof Error) {
-      if ((_c = options.signal) === null || _c === void 0 ? void 0 : _c.aborted) {
+      if (options.signal?.aborted) {
         throw new APIUserAbortError();
       }
       if (retriesRemaining) {
@@ -7407,12 +9772,15 @@ var APIClient = class {
     const responseHeaders = createResponseHeaders(response.headers);
     if (!response.ok) {
       if (retriesRemaining && this.shouldRetry(response)) {
+        const retryMessage2 = `retrying, ${retriesRemaining} attempts remaining`;
+        debug(`response (error; ${retryMessage2})`, response.status, url, responseHeaders);
         return this.retryRequest(options, retriesRemaining, responseHeaders);
       }
-      const errText = await response.text().catch(() => "Unknown");
+      const errText = await response.text().catch((e2) => castToError(e2).message);
       const errJSON = safeJSON(errText);
       const errMessage = errJSON ? void 0 : errText;
-      debug("response", response.status, url, responseHeaders, errMessage);
+      const retryMessage = retriesRemaining ? `(error; no more retries left)` : `(error; not retryable)`;
+      debug(`response (error; ${retryMessage})`, response.status, url, responseHeaders, errMessage);
       const err = this.makeStatusError(response.status, errJSON, errMessage, responseHeaders);
       throw err;
     }
@@ -7428,7 +9796,7 @@ var APIClient = class {
     if (!isEmptyObj(defaultQuery)) {
       query = { ...defaultQuery, ...query };
     }
-    if (query) {
+    if (typeof query === "object" && query && !Array.isArray(query)) {
       url.search = this.stringifyQuery(query);
     }
     return url.toString();
@@ -7441,16 +9809,15 @@ var APIClient = class {
       if (value === null) {
         return `${encodeURIComponent(key)}=`;
       }
-      throw new Error(
-        `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`
-      );
+      throw new OpenAIError(`Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`);
     }).join("&");
   }
   async fetchWithTimeout(url, init, ms, controller) {
     const { signal, ...options } = init || {};
-    if (signal) signal.addEventListener("abort", () => controller.abort());
+    if (signal)
+      signal.addEventListener("abort", () => controller.abort());
     const timeout = setTimeout(() => controller.abort(), ms);
-    return this.getRequestClient().fetch(url, { signal: controller.signal, ...options }).finally(() => {
+    return this.getRequestClient().fetch.call(void 0, url, { signal: controller.signal, ...options }).finally(() => {
       clearTimeout(timeout);
     });
   }
@@ -7459,34 +9826,52 @@ var APIClient = class {
   }
   shouldRetry(response) {
     const shouldRetryHeader = response.headers.get("x-should-retry");
-    if (shouldRetryHeader === "true") return true;
-    if (shouldRetryHeader === "false") return false;
-    if (response.status === 409) return true;
-    if (response.status === 429) return true;
-    if (response.status >= 500) return true;
+    if (shouldRetryHeader === "true")
+      return true;
+    if (shouldRetryHeader === "false")
+      return false;
+    if (response.status === 408)
+      return true;
+    if (response.status === 409)
+      return true;
+    if (response.status === 429)
+      return true;
+    if (response.status >= 500)
+      return true;
     return false;
   }
   async retryRequest(options, retriesRemaining, responseHeaders) {
-    var _a2;
-    retriesRemaining -= 1;
-    const retryAfter = parseInt(
-      (responseHeaders === null || responseHeaders === void 0 ? void 0 : responseHeaders["retry-after"]) || ""
-    );
-    const maxRetries = (_a2 = options.maxRetries) !== null && _a2 !== void 0 ? _a2 : this.maxRetries;
-    const timeout = this.calculateRetryTimeoutSeconds(retriesRemaining, retryAfter, maxRetries) * 1e3;
-    await sleep(timeout);
-    return this.makeRequest(options, retriesRemaining);
-  }
-  calculateRetryTimeoutSeconds(retriesRemaining, retryAfter, maxRetries) {
-    const initialRetryDelay = 0.5;
-    const maxRetryDelay = 2;
-    if (Number.isInteger(retryAfter) && retryAfter <= 60) {
-      return retryAfter;
+    let timeoutMillis;
+    const retryAfterMillisHeader = responseHeaders?.["retry-after-ms"];
+    if (retryAfterMillisHeader) {
+      const timeoutMs = parseFloat(retryAfterMillisHeader);
+      if (!Number.isNaN(timeoutMs)) {
+        timeoutMillis = timeoutMs;
+      }
     }
+    const retryAfterHeader = responseHeaders?.["retry-after"];
+    if (retryAfterHeader && !timeoutMillis) {
+      const timeoutSeconds = parseFloat(retryAfterHeader);
+      if (!Number.isNaN(timeoutSeconds)) {
+        timeoutMillis = timeoutSeconds * 1e3;
+      } else {
+        timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
+      }
+    }
+    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1e3)) {
+      const maxRetries = options.maxRetries ?? this.maxRetries;
+      timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
+    }
+    await sleep(timeoutMillis);
+    return this.makeRequest(options, retriesRemaining - 1);
+  }
+  calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
+    const initialRetryDelay = 0.5;
+    const maxRetryDelay = 8;
     const numRetries = maxRetries - retriesRemaining;
-    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(numRetries - 1, 2), maxRetryDelay);
-    const jitter = Math.random() - 0.5;
-    return sleepSeconds + jitter;
+    const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
+    const jitter = 1 - Math.random() * 0.25;
+    return sleepSeconds * jitter * 1e3;
   }
   getUserAgent() {
     return `${this.constructor.name}/JS ${VERSION}`;
@@ -7502,18 +9887,17 @@ var AbstractPage = class {
   }
   hasNextPage() {
     const items = this.getPaginatedItems();
-    if (!items.length) return false;
+    if (!items.length)
+      return false;
     return this.nextPageInfo() != null;
   }
   async getNextPage() {
     const nextInfo = this.nextPageInfo();
     if (!nextInfo) {
-      throw new Error(
-        "No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`."
-      );
+      throw new OpenAIError("No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.");
     }
     const nextOptions = { ...this.options };
-    if ("params" in nextInfo) {
+    if ("params" in nextInfo && typeof nextOptions.query === "object") {
       nextOptions.query = { ...nextOptions.query, ...nextInfo.params };
     } else if ("url" in nextInfo) {
       const params = [...Object.entries(nextOptions.query || {}), ...nextInfo.url.searchParams.entries()];
@@ -7523,10 +9907,7 @@ var AbstractPage = class {
       nextOptions.query = void 0;
       nextOptions.path = nextInfo.url.toString();
     }
-    return await __classPrivateFieldGet6(this, _AbstractPage_client, "f").requestAPIList(
-      this.constructor,
-      nextOptions
-    );
+    return await __classPrivateFieldGet6(this, _AbstractPage_client, "f").requestAPIList(this.constructor, nextOptions);
   }
   async *iterPages() {
     let page = this;
@@ -7546,10 +9927,7 @@ var AbstractPage = class {
 };
 var PagePromise = class extends APIPromise {
   constructor(client, request, Page2) {
-    super(
-      request,
-      async (props) => new Page2(client, props.response, await defaultParseResponse(props), props.options)
-    );
+    super(request, async (props) => new Page2(client, props.response, await defaultParseResponse(props), props.options));
   }
   /**
    * Allow auto-paginating iteration on an unawaited list call, eg:
@@ -7566,18 +9944,34 @@ var PagePromise = class extends APIPromise {
   }
 };
 var createResponseHeaders = (headers) => {
-  return new Proxy(
-    Object.fromEntries(
-      // @ts-ignore
-      headers.entries()
-    ),
-    {
-      get(target, name) {
-        const key = name.toString();
-        return target[key.toLowerCase()] || target[key];
-      }
+  return new Proxy(Object.fromEntries(
+    // @ts-ignore
+    headers.entries()
+  ), {
+    get(target, name) {
+      const key = name.toString();
+      return target[key.toLowerCase()] || target[key];
     }
-  );
+  });
+};
+var requestOptionsKeys = {
+  method: true,
+  path: true,
+  query: true,
+  body: true,
+  headers: true,
+  maxRetries: true,
+  stream: true,
+  timeout: true,
+  httpAgent: true,
+  signal: true,
+  idempotencyKey: true,
+  __binaryRequest: true,
+  __binaryResponse: true,
+  __streamClass: true
+};
+var isRequestOptions = (obj) => {
+  return typeof obj === "object" && obj !== null && !isEmptyObj(obj) && Object.keys(obj).every((k2) => hasOwn(requestOptionsKeys, k2));
 };
 var getPlatformProperties = () => {
   if (typeof Deno !== "undefined" && Deno.build != null) {
@@ -7587,7 +9981,7 @@ var getPlatformProperties = () => {
       "X-Stainless-OS": normalizePlatform(Deno.build.os),
       "X-Stainless-Arch": normalizeArch(Deno.build.arch),
       "X-Stainless-Runtime": "deno",
-      "X-Stainless-Runtime-Version": Deno.version
+      "X-Stainless-Runtime-Version": typeof Deno.version === "string" ? Deno.version : Deno.version?.deno ?? "unknown"
     };
   }
   if (typeof EdgeRuntime !== "undefined") {
@@ -7631,7 +10025,7 @@ var getPlatformProperties = () => {
   };
 };
 function getBrowserInfo() {
-  if (!navigator || typeof navigator === "undefined") {
+  if (typeof navigator === "undefined" || !navigator) {
     return null;
   }
   const browserPatterns = [
@@ -7654,28 +10048,41 @@ function getBrowserInfo() {
   return null;
 }
 var normalizeArch = (arch) => {
-  if (arch === "x32") return "x32";
-  if (arch === "x86_64" || arch === "x64") return "x64";
-  if (arch === "arm") return "arm";
-  if (arch === "aarch64" || arch === "arm64") return "arm64";
-  if (arch) return `other:${arch}`;
+  if (arch === "x32")
+    return "x32";
+  if (arch === "x86_64" || arch === "x64")
+    return "x64";
+  if (arch === "arm")
+    return "arm";
+  if (arch === "aarch64" || arch === "arm64")
+    return "arm64";
+  if (arch)
+    return `other:${arch}`;
   return "unknown";
 };
 var normalizePlatform = (platform) => {
   platform = platform.toLowerCase();
-  if (platform.includes("ios")) return "iOS";
-  if (platform === "android") return "Android";
-  if (platform === "darwin") return "MacOS";
-  if (platform === "win32") return "Windows";
-  if (platform === "freebsd") return "FreeBSD";
-  if (platform === "openbsd") return "OpenBSD";
-  if (platform === "linux") return "Linux";
-  if (platform) return `Other:${platform}`;
+  if (platform.includes("ios"))
+    return "iOS";
+  if (platform === "android")
+    return "Android";
+  if (platform === "darwin")
+    return "MacOS";
+  if (platform === "win32")
+    return "Windows";
+  if (platform === "freebsd")
+    return "FreeBSD";
+  if (platform === "openbsd")
+    return "OpenBSD";
+  if (platform === "linux")
+    return "Linux";
+  if (platform)
+    return `Other:${platform}`;
   return "Unknown";
 };
 var _platformHeaders;
 var getPlatformHeaders = () => {
-  return _platformHeaders !== null && _platformHeaders !== void 0 ? _platformHeaders : _platformHeaders = getPlatformProperties();
+  return _platformHeaders ?? (_platformHeaders = getPlatformProperties());
 };
 var safeJSON = (text) => {
   try {
@@ -7691,34 +10098,60 @@ var isAbsoluteURL = (url) => {
 var sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 var validatePositiveInteger = (name, n2) => {
   if (typeof n2 !== "number" || !Number.isInteger(n2)) {
-    throw new Error(`${name} must be an integer`);
+    throw new OpenAIError(`${name} must be an integer`);
   }
   if (n2 < 0) {
-    throw new Error(`${name} must be a positive integer`);
+    throw new OpenAIError(`${name} must be a positive integer`);
   }
   return n2;
 };
 var castToError = (err) => {
-  if (err instanceof Error) return err;
+  if (err instanceof Error)
+    return err;
+  if (typeof err === "object" && err !== null) {
+    try {
+      return new Error(JSON.stringify(err));
+    } catch {
+    }
+  }
   return new Error(err);
 };
 var readEnv = (env) => {
-  var _a2, _b, _c, _d;
   if (typeof process !== "undefined") {
-    return (_b = (_a2 = process.env) === null || _a2 === void 0 ? void 0 : _a2[env]) !== null && _b !== void 0 ? _b : void 0;
+    return process.env?.[env]?.trim() ?? void 0;
   }
   if (typeof Deno !== "undefined") {
-    return (_d = (_c = Deno.env) === null || _c === void 0 ? void 0 : _c.get) === null || _d === void 0 ? void 0 : _d.call(_c, env);
+    return Deno.env?.get?.(env)?.trim();
   }
   return void 0;
 };
 function isEmptyObj(obj) {
-  if (!obj) return true;
-  for (const _k in obj) return false;
+  if (!obj)
+    return true;
+  for (const _k in obj)
+    return false;
   return true;
 }
+function hasOwn(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+function applyHeadersMut(targetHeaders, newHeaders) {
+  for (const k2 in newHeaders) {
+    if (!hasOwn(newHeaders, k2))
+      continue;
+    const lowerKey = k2.toLowerCase();
+    if (!lowerKey)
+      continue;
+    const val = newHeaders[k2];
+    if (val === null) {
+      delete targetHeaders[lowerKey];
+    } else if (val !== void 0) {
+      targetHeaders[lowerKey] = val;
+    }
+  }
+}
 function debug(action, ...args) {
-  if (typeof process !== "undefined" && process.env["DEBUG"] === "true") {
+  if (typeof process !== "undefined" && process?.env?.["DEBUG"] === "true") {
     console.log(`OpenAI:DEBUG:${action}`, ...args);
   }
 }
@@ -7737,16 +10170,156 @@ var isRunningInBrowser = () => {
     typeof navigator !== "undefined"
   );
 };
+function isObj(obj) {
+  return obj != null && typeof obj === "object" && !Array.isArray(obj);
+}
+
+// node_modules/openai/error.mjs
+var OpenAIError = class extends Error {
+};
+var APIError = class _APIError extends OpenAIError {
+  constructor(status, error, message, headers) {
+    super(`${_APIError.makeMessage(status, error, message)}`);
+    this.status = status;
+    this.headers = headers;
+    this.request_id = headers?.["x-request-id"];
+    const data = error;
+    this.error = data;
+    this.code = data?.["code"];
+    this.param = data?.["param"];
+    this.type = data?.["type"];
+  }
+  static makeMessage(status, error, message) {
+    const msg = error?.message ? typeof error.message === "string" ? error.message : JSON.stringify(error.message) : error ? JSON.stringify(error) : message;
+    if (status && msg) {
+      return `${status} ${msg}`;
+    }
+    if (status) {
+      return `${status} status code (no body)`;
+    }
+    if (msg) {
+      return msg;
+    }
+    return "(no status code or body)";
+  }
+  static generate(status, errorResponse, message, headers) {
+    if (!status) {
+      return new APIConnectionError({ message, cause: castToError(errorResponse) });
+    }
+    const error = errorResponse?.["error"];
+    if (status === 400) {
+      return new BadRequestError(status, error, message, headers);
+    }
+    if (status === 401) {
+      return new AuthenticationError(status, error, message, headers);
+    }
+    if (status === 403) {
+      return new PermissionDeniedError(status, error, message, headers);
+    }
+    if (status === 404) {
+      return new NotFoundError(status, error, message, headers);
+    }
+    if (status === 409) {
+      return new ConflictError(status, error, message, headers);
+    }
+    if (status === 422) {
+      return new UnprocessableEntityError(status, error, message, headers);
+    }
+    if (status === 429) {
+      return new RateLimitError(status, error, message, headers);
+    }
+    if (status >= 500) {
+      return new InternalServerError(status, error, message, headers);
+    }
+    return new _APIError(status, error, message, headers);
+  }
+};
+var APIUserAbortError = class extends APIError {
+  constructor({ message } = {}) {
+    super(void 0, void 0, message || "Request was aborted.", void 0);
+    this.status = void 0;
+  }
+};
+var APIConnectionError = class extends APIError {
+  constructor({ message, cause }) {
+    super(void 0, void 0, message || "Connection error.", void 0);
+    this.status = void 0;
+    if (cause)
+      this.cause = cause;
+  }
+};
+var APIConnectionTimeoutError = class extends APIConnectionError {
+  constructor({ message } = {}) {
+    super({ message: message ?? "Request timed out." });
+  }
+};
+var BadRequestError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 400;
+  }
+};
+var AuthenticationError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 401;
+  }
+};
+var PermissionDeniedError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 403;
+  }
+};
+var NotFoundError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 404;
+  }
+};
+var ConflictError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 409;
+  }
+};
+var UnprocessableEntityError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 422;
+  }
+};
+var RateLimitError = class extends APIError {
+  constructor() {
+    super(...arguments);
+    this.status = 429;
+  }
+};
+var InternalServerError = class extends APIError {
+};
+var LengthFinishReasonError = class extends OpenAIError {
+  constructor() {
+    super(`Could not parse response content as the length limit was reached`);
+  }
+};
+var ContentFilterFinishReasonError = class extends OpenAIError {
+  constructor() {
+    super(`Could not parse response content as the request was rejected by the content filter`);
+  }
+};
+
+// node_modules/openai/index.mjs
+var qs = __toESM(require_lib3(), 1);
 
 // node_modules/openai/pagination.mjs
 var Page = class extends AbstractPage {
   constructor(client, response, body, options) {
     super(client, response, body, options);
+    this.data = body.data || [];
     this.object = body.object;
-    this.data = body.data;
   }
   getPaginatedItems() {
-    return this.data;
+    return this.data ?? [];
   }
   // @deprecated Please use `nextPageInfo()` instead
   /**
@@ -7760,19 +10333,77 @@ var Page = class extends AbstractPage {
     return null;
   }
 };
+var CursorPage = class extends AbstractPage {
+  constructor(client, response, body, options) {
+    super(client, response, body, options);
+    this.data = body.data || [];
+  }
+  getPaginatedItems() {
+    return this.data ?? [];
+  }
+  // @deprecated Please use `nextPageInfo()` instead
+  nextPageParams() {
+    const info = this.nextPageInfo();
+    if (!info)
+      return null;
+    if ("params" in info)
+      return info.params;
+    const params = Object.fromEntries(info.url.searchParams);
+    if (!Object.keys(params).length)
+      return null;
+    return params;
+  }
+  nextPageInfo() {
+    const data = this.getPaginatedItems();
+    if (!data.length) {
+      return null;
+    }
+    const id = data[data.length - 1]?.id;
+    if (!id) {
+      return null;
+    }
+    return { params: { after: id } };
+  }
+};
 
 // node_modules/openai/resource.mjs
 var APIResource = class {
   constructor(client) {
-    this.client = client;
-    this.get = client.get.bind(client);
-    this.post = client.post.bind(client);
-    this.patch = client.patch.bind(client);
-    this.put = client.put.bind(client);
-    this.delete = client.delete.bind(client);
-    this.getAPIList = client.getAPIList.bind(client);
+    this._client = client;
   }
 };
+
+// node_modules/openai/resources/chat/completions.mjs
+var Completions = class extends APIResource {
+  create(body, options) {
+    return this._client.post("/chat/completions", { body, ...options, stream: body.stream ?? false });
+  }
+};
+/* @__PURE__ */ (function(Completions4) {
+})(Completions || (Completions = {}));
+
+// node_modules/openai/resources/chat/chat.mjs
+var Chat = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.completions = new Completions(this._client);
+  }
+};
+(function(Chat3) {
+  Chat3.Completions = Completions;
+})(Chat || (Chat = {}));
+
+// node_modules/openai/resources/audio/speech.mjs
+var Speech = class extends APIResource {
+  /**
+   * Generates audio from the input text.
+   */
+  create(body, options) {
+    return this._client.post("/audio/speech", { body, ...options, __binaryResponse: true });
+  }
+};
+/* @__PURE__ */ (function(Speech2) {
+})(Speech || (Speech = {}));
 
 // node_modules/openai/resources/audio/transcriptions.mjs
 var Transcriptions = class extends APIResource {
@@ -7780,7 +10411,7 @@ var Transcriptions = class extends APIResource {
    * Transcribes audio into the input language.
    */
   create(body, options) {
-    return this.post("/audio/transcriptions", multipartFormRequestOptions({ body, ...options }));
+    return this._client.post("/audio/transcriptions", multipartFormRequestOptions({ body, ...options }));
   }
 };
 /* @__PURE__ */ (function(Transcriptions2) {
@@ -7792,7 +10423,7 @@ var Translations = class extends APIResource {
    * Translates audio into English.
    */
   create(body, options) {
-    return this.post("/audio/translations", multipartFormRequestOptions({ body, ...options }));
+    return this._client.post("/audio/translations", multipartFormRequestOptions({ body, ...options }));
   }
 };
 /* @__PURE__ */ (function(Translations2) {
@@ -7802,53 +10433,2762 @@ var Translations = class extends APIResource {
 var Audio = class extends APIResource {
   constructor() {
     super(...arguments);
-    this.transcriptions = new Transcriptions(this.client);
-    this.translations = new Translations(this.client);
+    this.transcriptions = new Transcriptions(this._client);
+    this.translations = new Translations(this._client);
+    this.speech = new Speech(this._client);
   }
 };
 (function(Audio2) {
   Audio2.Transcriptions = Transcriptions;
   Audio2.Translations = Translations;
+  Audio2.Speech = Speech;
 })(Audio || (Audio = {}));
 
-// node_modules/openai/resources/chat/completions.mjs
-var Completions = class extends APIResource {
+// node_modules/openai/resources/batches.mjs
+var Batches = class extends APIResource {
+  /**
+   * Creates and executes a batch from an uploaded file of requests
+   */
   create(body, options) {
-    var _a2;
-    return this.post("/chat/completions", {
+    return this._client.post("/batches", { body, ...options });
+  }
+  /**
+   * Retrieves a batch.
+   */
+  retrieve(batchId, options) {
+    return this._client.get(`/batches/${batchId}`, options);
+  }
+  list(query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this._client.getAPIList("/batches", BatchesPage, { query, ...options });
+  }
+  /**
+   * Cancels an in-progress batch. The batch will be in status `cancelling` for up to
+   * 10 minutes, before changing to `cancelled`, where it will have partial results
+   * (if any) available in the output file.
+   */
+  cancel(batchId, options) {
+    return this._client.post(`/batches/${batchId}/cancel`, options);
+  }
+};
+var BatchesPage = class extends CursorPage {
+};
+(function(Batches2) {
+  Batches2.BatchesPage = BatchesPage;
+})(Batches || (Batches = {}));
+
+// node_modules/openai/resources/beta/assistants.mjs
+var Assistants = class extends APIResource {
+  /**
+   * Create an assistant with a model and instructions.
+   */
+  create(body, options) {
+    return this._client.post("/assistants", {
       body,
       ...options,
-      stream: (_a2 = body.stream) !== null && _a2 !== void 0 ? _a2 : false
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieves an assistant.
+   */
+  retrieve(assistantId, options) {
+    return this._client.get(`/assistants/${assistantId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Modifies an assistant.
+   */
+  update(assistantId, body, options) {
+    return this._client.post(`/assistants/${assistantId}`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this._client.getAPIList("/assistants", AssistantsPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Delete an assistant.
+   */
+  del(assistantId, options) {
+    return this._client.delete(`/assistants/${assistantId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
     });
   }
 };
-/* @__PURE__ */ (function(Completions3) {
-})(Completions || (Completions = {}));
+var AssistantsPage = class extends CursorPage {
+};
+(function(Assistants2) {
+  Assistants2.AssistantsPage = AssistantsPage;
+})(Assistants || (Assistants = {}));
 
-// node_modules/openai/resources/chat/chat.mjs
-var Chat = class extends APIResource {
+// node_modules/openai/lib/RunnableFunction.mjs
+function isRunnableFunctionWithParse(fn) {
+  return typeof fn.parse === "function";
+}
+
+// node_modules/openai/lib/chatCompletionUtils.mjs
+var isAssistantMessage = (message) => {
+  return message?.role === "assistant";
+};
+var isFunctionMessage = (message) => {
+  return message?.role === "function";
+};
+var isToolMessage = (message) => {
+  return message?.role === "tool";
+};
+
+// node_modules/openai/lib/EventStream.mjs
+var __classPrivateFieldSet6 = function(receiver, state, value, kind2, f2) {
+  if (kind2 === "m") throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+};
+var __classPrivateFieldGet7 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+};
+var _EventStream_instances;
+var _EventStream_connectedPromise;
+var _EventStream_resolveConnectedPromise;
+var _EventStream_rejectConnectedPromise;
+var _EventStream_endPromise;
+var _EventStream_resolveEndPromise;
+var _EventStream_rejectEndPromise;
+var _EventStream_listeners;
+var _EventStream_ended;
+var _EventStream_errored;
+var _EventStream_aborted;
+var _EventStream_catchingPromiseCreated;
+var _EventStream_handleError;
+var EventStream = class {
+  constructor() {
+    _EventStream_instances.add(this);
+    this.controller = new AbortController();
+    _EventStream_connectedPromise.set(this, void 0);
+    _EventStream_resolveConnectedPromise.set(this, () => {
+    });
+    _EventStream_rejectConnectedPromise.set(this, () => {
+    });
+    _EventStream_endPromise.set(this, void 0);
+    _EventStream_resolveEndPromise.set(this, () => {
+    });
+    _EventStream_rejectEndPromise.set(this, () => {
+    });
+    _EventStream_listeners.set(this, {});
+    _EventStream_ended.set(this, false);
+    _EventStream_errored.set(this, false);
+    _EventStream_aborted.set(this, false);
+    _EventStream_catchingPromiseCreated.set(this, false);
+    __classPrivateFieldSet6(this, _EventStream_connectedPromise, new Promise((resolve, reject) => {
+      __classPrivateFieldSet6(this, _EventStream_resolveConnectedPromise, resolve, "f");
+      __classPrivateFieldSet6(this, _EventStream_rejectConnectedPromise, reject, "f");
+    }), "f");
+    __classPrivateFieldSet6(this, _EventStream_endPromise, new Promise((resolve, reject) => {
+      __classPrivateFieldSet6(this, _EventStream_resolveEndPromise, resolve, "f");
+      __classPrivateFieldSet6(this, _EventStream_rejectEndPromise, reject, "f");
+    }), "f");
+    __classPrivateFieldGet7(this, _EventStream_connectedPromise, "f").catch(() => {
+    });
+    __classPrivateFieldGet7(this, _EventStream_endPromise, "f").catch(() => {
+    });
+  }
+  _run(executor) {
+    setTimeout(() => {
+      executor().then(() => {
+        this._emitFinal();
+        this._emit("end");
+      }, __classPrivateFieldGet7(this, _EventStream_instances, "m", _EventStream_handleError).bind(this));
+    }, 0);
+  }
+  _connected() {
+    if (this.ended)
+      return;
+    __classPrivateFieldGet7(this, _EventStream_resolveConnectedPromise, "f").call(this);
+    this._emit("connect");
+  }
+  get ended() {
+    return __classPrivateFieldGet7(this, _EventStream_ended, "f");
+  }
+  get errored() {
+    return __classPrivateFieldGet7(this, _EventStream_errored, "f");
+  }
+  get aborted() {
+    return __classPrivateFieldGet7(this, _EventStream_aborted, "f");
+  }
+  abort() {
+    this.controller.abort();
+  }
+  /**
+   * Adds the listener function to the end of the listeners array for the event.
+   * No checks are made to see if the listener has already been added. Multiple calls passing
+   * the same combination of event and listener will result in the listener being added, and
+   * called, multiple times.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  on(event, listener) {
+    const listeners = __classPrivateFieldGet7(this, _EventStream_listeners, "f")[event] || (__classPrivateFieldGet7(this, _EventStream_listeners, "f")[event] = []);
+    listeners.push({ listener });
+    return this;
+  }
+  /**
+   * Removes the specified listener from the listener array for the event.
+   * off() will remove, at most, one instance of a listener from the listener array. If any single
+   * listener has been added multiple times to the listener array for the specified event, then
+   * off() must be called multiple times to remove each instance.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  off(event, listener) {
+    const listeners = __classPrivateFieldGet7(this, _EventStream_listeners, "f")[event];
+    if (!listeners)
+      return this;
+    const index = listeners.findIndex((l2) => l2.listener === listener);
+    if (index >= 0)
+      listeners.splice(index, 1);
+    return this;
+  }
+  /**
+   * Adds a one-time listener function for the event. The next time the event is triggered,
+   * this listener is removed and then invoked.
+   * @returns this ChatCompletionStream, so that calls can be chained
+   */
+  once(event, listener) {
+    const listeners = __classPrivateFieldGet7(this, _EventStream_listeners, "f")[event] || (__classPrivateFieldGet7(this, _EventStream_listeners, "f")[event] = []);
+    listeners.push({ listener, once: true });
+    return this;
+  }
+  /**
+   * This is similar to `.once()`, but returns a Promise that resolves the next time
+   * the event is triggered, instead of calling a listener callback.
+   * @returns a Promise that resolves the next time given event is triggered,
+   * or rejects if an error is emitted.  (If you request the 'error' event,
+   * returns a promise that resolves with the error).
+   *
+   * Example:
+   *
+   *   const message = await stream.emitted('message') // rejects if the stream errors
+   */
+  emitted(event) {
+    return new Promise((resolve, reject) => {
+      __classPrivateFieldSet6(this, _EventStream_catchingPromiseCreated, true, "f");
+      if (event !== "error")
+        this.once("error", reject);
+      this.once(event, resolve);
+    });
+  }
+  async done() {
+    __classPrivateFieldSet6(this, _EventStream_catchingPromiseCreated, true, "f");
+    await __classPrivateFieldGet7(this, _EventStream_endPromise, "f");
+  }
+  _emit(event, ...args) {
+    if (__classPrivateFieldGet7(this, _EventStream_ended, "f")) {
+      return;
+    }
+    if (event === "end") {
+      __classPrivateFieldSet6(this, _EventStream_ended, true, "f");
+      __classPrivateFieldGet7(this, _EventStream_resolveEndPromise, "f").call(this);
+    }
+    const listeners = __classPrivateFieldGet7(this, _EventStream_listeners, "f")[event];
+    if (listeners) {
+      __classPrivateFieldGet7(this, _EventStream_listeners, "f")[event] = listeners.filter((l2) => !l2.once);
+      listeners.forEach(({ listener }) => listener(...args));
+    }
+    if (event === "abort") {
+      const error = args[0];
+      if (!__classPrivateFieldGet7(this, _EventStream_catchingPromiseCreated, "f") && !listeners?.length) {
+        Promise.reject(error);
+      }
+      __classPrivateFieldGet7(this, _EventStream_rejectConnectedPromise, "f").call(this, error);
+      __classPrivateFieldGet7(this, _EventStream_rejectEndPromise, "f").call(this, error);
+      this._emit("end");
+      return;
+    }
+    if (event === "error") {
+      const error = args[0];
+      if (!__classPrivateFieldGet7(this, _EventStream_catchingPromiseCreated, "f") && !listeners?.length) {
+        Promise.reject(error);
+      }
+      __classPrivateFieldGet7(this, _EventStream_rejectConnectedPromise, "f").call(this, error);
+      __classPrivateFieldGet7(this, _EventStream_rejectEndPromise, "f").call(this, error);
+      this._emit("end");
+    }
+  }
+  _emitFinal() {
+  }
+};
+_EventStream_connectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_resolveConnectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_rejectConnectedPromise = /* @__PURE__ */ new WeakMap(), _EventStream_endPromise = /* @__PURE__ */ new WeakMap(), _EventStream_resolveEndPromise = /* @__PURE__ */ new WeakMap(), _EventStream_rejectEndPromise = /* @__PURE__ */ new WeakMap(), _EventStream_listeners = /* @__PURE__ */ new WeakMap(), _EventStream_ended = /* @__PURE__ */ new WeakMap(), _EventStream_errored = /* @__PURE__ */ new WeakMap(), _EventStream_aborted = /* @__PURE__ */ new WeakMap(), _EventStream_catchingPromiseCreated = /* @__PURE__ */ new WeakMap(), _EventStream_instances = /* @__PURE__ */ new WeakSet(), _EventStream_handleError = function _EventStream_handleError2(error) {
+  __classPrivateFieldSet6(this, _EventStream_errored, true, "f");
+  if (error instanceof Error && error.name === "AbortError") {
+    error = new APIUserAbortError();
+  }
+  if (error instanceof APIUserAbortError) {
+    __classPrivateFieldSet6(this, _EventStream_aborted, true, "f");
+    return this._emit("abort", error);
+  }
+  if (error instanceof OpenAIError) {
+    return this._emit("error", error);
+  }
+  if (error instanceof Error) {
+    const openAIError = new OpenAIError(error.message);
+    openAIError.cause = error;
+    return this._emit("error", openAIError);
+  }
+  return this._emit("error", new OpenAIError(String(error)));
+};
+
+// node_modules/openai/lib/parser.mjs
+function isAutoParsableResponseFormat(response_format) {
+  return response_format?.["$brand"] === "auto-parseable-response-format";
+}
+function isAutoParsableTool(tool) {
+  return tool?.["$brand"] === "auto-parseable-tool";
+}
+function maybeParseChatCompletion(completion, params) {
+  if (!params || !hasAutoParseableInput(params)) {
+    return {
+      ...completion,
+      choices: completion.choices.map((choice) => ({
+        ...choice,
+        message: { ...choice.message, parsed: null, tool_calls: choice.message.tool_calls ?? [] }
+      }))
+    };
+  }
+  return parseChatCompletion(completion, params);
+}
+function parseChatCompletion(completion, params) {
+  const choices = completion.choices.map((choice) => {
+    if (choice.finish_reason === "length") {
+      throw new LengthFinishReasonError();
+    }
+    if (choice.finish_reason === "content_filter") {
+      throw new ContentFilterFinishReasonError();
+    }
+    return {
+      ...choice,
+      message: {
+        ...choice.message,
+        tool_calls: choice.message.tool_calls?.map((toolCall) => parseToolCall(params, toolCall)) ?? [],
+        parsed: choice.message.content && !choice.message.refusal ? parseResponseFormat(params, choice.message.content) : null
+      }
+    };
+  });
+  return { ...completion, choices };
+}
+function parseResponseFormat(params, content) {
+  if (params.response_format?.type !== "json_schema") {
+    return null;
+  }
+  if (params.response_format?.type === "json_schema") {
+    if ("$parseRaw" in params.response_format) {
+      const response_format = params.response_format;
+      return response_format.$parseRaw(content);
+    }
+    return JSON.parse(content);
+  }
+  return null;
+}
+function parseToolCall(params, toolCall) {
+  const inputTool = params.tools?.find((inputTool2) => inputTool2.function?.name === toolCall.function.name);
+  return {
+    ...toolCall,
+    function: {
+      ...toolCall.function,
+      parsed_arguments: isAutoParsableTool(inputTool) ? inputTool.$parseRaw(toolCall.function.arguments) : inputTool?.function.strict ? JSON.parse(toolCall.function.arguments) : null
+    }
+  };
+}
+function shouldParseToolCall(params, toolCall) {
+  if (!params) {
+    return false;
+  }
+  const inputTool = params.tools?.find((inputTool2) => inputTool2.function?.name === toolCall.function.name);
+  return isAutoParsableTool(inputTool) || inputTool?.function.strict || false;
+}
+function hasAutoParseableInput(params) {
+  if (isAutoParsableResponseFormat(params.response_format)) {
+    return true;
+  }
+  return params.tools?.some((t2) => isAutoParsableTool(t2) || t2.type === "function" && t2.function.strict === true) ?? false;
+}
+function validateInputTools(tools) {
+  for (const tool of tools ?? []) {
+    if (tool.type !== "function") {
+      throw new OpenAIError(`Currently only \`function\` tool types support auto-parsing; Received \`${tool.type}\``);
+    }
+    if (tool.function.strict !== true) {
+      throw new OpenAIError(`The \`${tool.function.name}\` tool is not marked with \`strict: true\`. Only strict function tools can be auto-parsed`);
+    }
+  }
+}
+
+// node_modules/openai/lib/AbstractChatCompletionRunner.mjs
+var __classPrivateFieldGet8 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+};
+var _AbstractChatCompletionRunner_instances;
+var _AbstractChatCompletionRunner_getFinalContent;
+var _AbstractChatCompletionRunner_getFinalMessage;
+var _AbstractChatCompletionRunner_getFinalFunctionCall;
+var _AbstractChatCompletionRunner_getFinalFunctionCallResult;
+var _AbstractChatCompletionRunner_calculateTotalUsage;
+var _AbstractChatCompletionRunner_validateParams;
+var _AbstractChatCompletionRunner_stringifyFunctionCallResult;
+var DEFAULT_MAX_CHAT_COMPLETIONS = 10;
+var AbstractChatCompletionRunner = class extends EventStream {
   constructor() {
     super(...arguments);
-    this.completions = new Completions(this.client);
+    _AbstractChatCompletionRunner_instances.add(this);
+    this._chatCompletions = [];
+    this.messages = [];
+  }
+  _addChatCompletion(chatCompletion) {
+    this._chatCompletions.push(chatCompletion);
+    this._emit("chatCompletion", chatCompletion);
+    const message = chatCompletion.choices[0]?.message;
+    if (message)
+      this._addMessage(message);
+    return chatCompletion;
+  }
+  _addMessage(message, emit = true) {
+    if (!("content" in message))
+      message.content = null;
+    this.messages.push(message);
+    if (emit) {
+      this._emit("message", message);
+      if ((isFunctionMessage(message) || isToolMessage(message)) && message.content) {
+        this._emit("functionCallResult", message.content);
+      } else if (isAssistantMessage(message) && message.function_call) {
+        this._emit("functionCall", message.function_call);
+      } else if (isAssistantMessage(message) && message.tool_calls) {
+        for (const tool_call of message.tool_calls) {
+          if (tool_call.type === "function") {
+            this._emit("functionCall", tool_call.function);
+          }
+        }
+      }
+    }
+  }
+  /**
+   * @returns a promise that resolves with the final ChatCompletion, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletion.
+   */
+  async finalChatCompletion() {
+    await this.done();
+    const completion = this._chatCompletions[this._chatCompletions.length - 1];
+    if (!completion)
+      throw new OpenAIError("stream ended without producing a ChatCompletion");
+    return completion;
+  }
+  /**
+   * @returns a promise that resolves with the content of the final ChatCompletionMessage, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalContent() {
+    await this.done();
+    return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalContent).call(this);
+  }
+  /**
+   * @returns a promise that resolves with the the final assistant ChatCompletionMessage response,
+   * or rejects if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalMessage() {
+    await this.done();
+    return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this);
+  }
+  /**
+   * @returns a promise that resolves with the content of the final FunctionCall, or rejects
+   * if an error occurred or the stream ended prematurely without producing a ChatCompletionMessage.
+   */
+  async finalFunctionCall() {
+    await this.done();
+    return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionCall).call(this);
+  }
+  async finalFunctionCallResult() {
+    await this.done();
+    return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionCallResult).call(this);
+  }
+  async totalUsage() {
+    await this.done();
+    return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_calculateTotalUsage).call(this);
+  }
+  allChatCompletions() {
+    return [...this._chatCompletions];
+  }
+  _emitFinal() {
+    const completion = this._chatCompletions[this._chatCompletions.length - 1];
+    if (completion)
+      this._emit("finalChatCompletion", completion);
+    const finalMessage = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this);
+    if (finalMessage)
+      this._emit("finalMessage", finalMessage);
+    const finalContent = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalContent).call(this);
+    if (finalContent)
+      this._emit("finalContent", finalContent);
+    const finalFunctionCall = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionCall).call(this);
+    if (finalFunctionCall)
+      this._emit("finalFunctionCall", finalFunctionCall);
+    const finalFunctionCallResult = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalFunctionCallResult).call(this);
+    if (finalFunctionCallResult != null)
+      this._emit("finalFunctionCallResult", finalFunctionCallResult);
+    if (this._chatCompletions.some((c2) => c2.usage)) {
+      this._emit("totalUsage", __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_calculateTotalUsage).call(this));
+    }
+  }
+  async _createChatCompletion(client, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_validateParams).call(this, params);
+    const chatCompletion = await client.chat.completions.create({ ...params, stream: false }, { ...options, signal: this.controller.signal });
+    this._connected();
+    return this._addChatCompletion(parseChatCompletion(chatCompletion, params));
+  }
+  async _runChatCompletion(client, params, options) {
+    for (const message of params.messages) {
+      this._addMessage(message, false);
+    }
+    return await this._createChatCompletion(client, params, options);
+  }
+  async _runFunctions(client, params, options) {
+    const role = "function";
+    const { function_call = "auto", stream, ...restParams } = params;
+    const singleFunctionToCall = typeof function_call !== "string" && function_call?.name;
+    const { maxChatCompletions = DEFAULT_MAX_CHAT_COMPLETIONS } = options || {};
+    const functionsByName = {};
+    for (const f2 of params.functions) {
+      functionsByName[f2.name || f2.function.name] = f2;
+    }
+    const functions = params.functions.map((f2) => ({
+      name: f2.name || f2.function.name,
+      parameters: f2.parameters,
+      description: f2.description
+    }));
+    for (const message of params.messages) {
+      this._addMessage(message, false);
+    }
+    for (let i2 = 0; i2 < maxChatCompletions; ++i2) {
+      const chatCompletion = await this._createChatCompletion(client, {
+        ...restParams,
+        function_call,
+        functions,
+        messages: [...this.messages]
+      }, options);
+      const message = chatCompletion.choices[0]?.message;
+      if (!message) {
+        throw new OpenAIError(`missing message in ChatCompletion response`);
+      }
+      if (!message.function_call)
+        return;
+      const { name, arguments: args } = message.function_call;
+      const fn = functionsByName[name];
+      if (!fn) {
+        const content2 = `Invalid function_call: ${JSON.stringify(name)}. Available options are: ${functions.map((f2) => JSON.stringify(f2.name)).join(", ")}. Please try again`;
+        this._addMessage({ role, name, content: content2 });
+        continue;
+      } else if (singleFunctionToCall && singleFunctionToCall !== name) {
+        const content2 = `Invalid function_call: ${JSON.stringify(name)}. ${JSON.stringify(singleFunctionToCall)} requested. Please try again`;
+        this._addMessage({ role, name, content: content2 });
+        continue;
+      }
+      let parsed;
+      try {
+        parsed = isRunnableFunctionWithParse(fn) ? await fn.parse(args) : args;
+      } catch (error) {
+        this._addMessage({
+          role,
+          name,
+          content: error instanceof Error ? error.message : String(error)
+        });
+        continue;
+      }
+      const rawContent = await fn.function(parsed, this);
+      const content = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_stringifyFunctionCallResult).call(this, rawContent);
+      this._addMessage({ role, name, content });
+      if (singleFunctionToCall)
+        return;
+    }
+  }
+  async _runTools(client, params, options) {
+    const role = "tool";
+    const { tool_choice = "auto", stream, ...restParams } = params;
+    const singleFunctionToCall = typeof tool_choice !== "string" && tool_choice?.function?.name;
+    const { maxChatCompletions = DEFAULT_MAX_CHAT_COMPLETIONS } = options || {};
+    const inputTools = params.tools.map((tool) => {
+      if (isAutoParsableTool(tool)) {
+        if (!tool.$callback) {
+          throw new OpenAIError("Tool given to `.runTools()` that does not have an associated function");
+        }
+        return {
+          type: "function",
+          function: {
+            function: tool.$callback,
+            name: tool.function.name,
+            description: tool.function.description || "",
+            parameters: tool.function.parameters,
+            parse: tool.$parseRaw,
+            strict: true
+          }
+        };
+      }
+      return tool;
+    });
+    const functionsByName = {};
+    for (const f2 of inputTools) {
+      if (f2.type === "function") {
+        functionsByName[f2.function.name || f2.function.function.name] = f2.function;
+      }
+    }
+    const tools = "tools" in params ? inputTools.map((t2) => t2.type === "function" ? {
+      type: "function",
+      function: {
+        name: t2.function.name || t2.function.function.name,
+        parameters: t2.function.parameters,
+        description: t2.function.description,
+        strict: t2.function.strict
+      }
+    } : t2) : void 0;
+    for (const message of params.messages) {
+      this._addMessage(message, false);
+    }
+    for (let i2 = 0; i2 < maxChatCompletions; ++i2) {
+      const chatCompletion = await this._createChatCompletion(client, {
+        ...restParams,
+        tool_choice,
+        tools,
+        messages: [...this.messages]
+      }, options);
+      const message = chatCompletion.choices[0]?.message;
+      if (!message) {
+        throw new OpenAIError(`missing message in ChatCompletion response`);
+      }
+      if (!message.tool_calls?.length) {
+        return;
+      }
+      for (const tool_call of message.tool_calls) {
+        if (tool_call.type !== "function")
+          continue;
+        const tool_call_id = tool_call.id;
+        const { name, arguments: args } = tool_call.function;
+        const fn = functionsByName[name];
+        if (!fn) {
+          const content2 = `Invalid tool_call: ${JSON.stringify(name)}. Available options are: ${Object.keys(functionsByName).map((name2) => JSON.stringify(name2)).join(", ")}. Please try again`;
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        } else if (singleFunctionToCall && singleFunctionToCall !== name) {
+          const content2 = `Invalid tool_call: ${JSON.stringify(name)}. ${JSON.stringify(singleFunctionToCall)} requested. Please try again`;
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        }
+        let parsed;
+        try {
+          parsed = isRunnableFunctionWithParse(fn) ? await fn.parse(args) : args;
+        } catch (error) {
+          const content2 = error instanceof Error ? error.message : String(error);
+          this._addMessage({ role, tool_call_id, content: content2 });
+          continue;
+        }
+        const rawContent = await fn.function(parsed, this);
+        const content = __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_stringifyFunctionCallResult).call(this, rawContent);
+        this._addMessage({ role, tool_call_id, content });
+        if (singleFunctionToCall) {
+          return;
+        }
+      }
+    }
+    return;
   }
 };
-(function(Chat2) {
-  Chat2.Completions = Completions;
-})(Chat || (Chat = {}));
+_AbstractChatCompletionRunner_instances = /* @__PURE__ */ new WeakSet(), _AbstractChatCompletionRunner_getFinalContent = function _AbstractChatCompletionRunner_getFinalContent2() {
+  return __classPrivateFieldGet8(this, _AbstractChatCompletionRunner_instances, "m", _AbstractChatCompletionRunner_getFinalMessage).call(this).content ?? null;
+}, _AbstractChatCompletionRunner_getFinalMessage = function _AbstractChatCompletionRunner_getFinalMessage2() {
+  let i2 = this.messages.length;
+  while (i2-- > 0) {
+    const message = this.messages[i2];
+    if (isAssistantMessage(message)) {
+      const { function_call, ...rest } = message;
+      const ret = {
+        ...rest,
+        content: message.content ?? null,
+        refusal: message.refusal ?? null
+      };
+      if (function_call) {
+        ret.function_call = function_call;
+      }
+      return ret;
+    }
+  }
+  throw new OpenAIError("stream ended without producing a ChatCompletionMessage with role=assistant");
+}, _AbstractChatCompletionRunner_getFinalFunctionCall = function _AbstractChatCompletionRunner_getFinalFunctionCall2() {
+  for (let i2 = this.messages.length - 1; i2 >= 0; i2--) {
+    const message = this.messages[i2];
+    if (isAssistantMessage(message) && message?.function_call) {
+      return message.function_call;
+    }
+    if (isAssistantMessage(message) && message?.tool_calls?.length) {
+      return message.tool_calls.at(-1)?.function;
+    }
+  }
+  return;
+}, _AbstractChatCompletionRunner_getFinalFunctionCallResult = function _AbstractChatCompletionRunner_getFinalFunctionCallResult2() {
+  for (let i2 = this.messages.length - 1; i2 >= 0; i2--) {
+    const message = this.messages[i2];
+    if (isFunctionMessage(message) && message.content != null) {
+      return message.content;
+    }
+    if (isToolMessage(message) && message.content != null && typeof message.content === "string" && this.messages.some((x2) => x2.role === "assistant" && x2.tool_calls?.some((y2) => y2.type === "function" && y2.id === message.tool_call_id))) {
+      return message.content;
+    }
+  }
+  return;
+}, _AbstractChatCompletionRunner_calculateTotalUsage = function _AbstractChatCompletionRunner_calculateTotalUsage2() {
+  const total = {
+    completion_tokens: 0,
+    prompt_tokens: 0,
+    total_tokens: 0
+  };
+  for (const { usage } of this._chatCompletions) {
+    if (usage) {
+      total.completion_tokens += usage.completion_tokens;
+      total.prompt_tokens += usage.prompt_tokens;
+      total.total_tokens += usage.total_tokens;
+    }
+  }
+  return total;
+}, _AbstractChatCompletionRunner_validateParams = function _AbstractChatCompletionRunner_validateParams2(params) {
+  if (params.n != null && params.n > 1) {
+    throw new OpenAIError("ChatCompletion convenience helpers only support n=1 at this time. To use n>1, please use chat.completions.create() directly.");
+  }
+}, _AbstractChatCompletionRunner_stringifyFunctionCallResult = function _AbstractChatCompletionRunner_stringifyFunctionCallResult2(rawContent) {
+  return typeof rawContent === "string" ? rawContent : rawContent === void 0 ? "undefined" : JSON.stringify(rawContent);
+};
 
-// node_modules/openai/resources/completions.mjs
+// node_modules/openai/lib/ChatCompletionRunner.mjs
+var ChatCompletionRunner = class _ChatCompletionRunner extends AbstractChatCompletionRunner {
+  /** @deprecated - please use `runTools` instead. */
+  static runFunctions(client, params, options) {
+    const runner = new _ChatCompletionRunner();
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runFunctions" }
+    };
+    runner._run(() => runner._runFunctions(client, params, opts));
+    return runner;
+  }
+  static runTools(client, params, options) {
+    const runner = new _ChatCompletionRunner();
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runTools" }
+    };
+    runner._run(() => runner._runTools(client, params, opts));
+    return runner;
+  }
+  _addMessage(message, emit = true) {
+    super._addMessage(message, emit);
+    if (isAssistantMessage(message) && message.content) {
+      this._emit("content", message.content);
+    }
+  }
+};
+
+// node_modules/openai/_vendor/partial-json-parser/parser.mjs
+var STR = 1;
+var NUM = 2;
+var ARR = 4;
+var OBJ = 8;
+var NULL = 16;
+var BOOL = 32;
+var NAN = 64;
+var INFINITY = 128;
+var MINUS_INFINITY = 256;
+var INF = INFINITY | MINUS_INFINITY;
+var SPECIAL = NULL | BOOL | INF | NAN;
+var ATOM = STR | NUM | SPECIAL;
+var COLLECTION = ARR | OBJ;
+var ALL = ATOM | COLLECTION;
+var Allow = {
+  STR,
+  NUM,
+  ARR,
+  OBJ,
+  NULL,
+  BOOL,
+  NAN,
+  INFINITY,
+  MINUS_INFINITY,
+  INF,
+  SPECIAL,
+  ATOM,
+  COLLECTION,
+  ALL
+};
+var PartialJSON = class extends Error {
+};
+var MalformedJSON = class extends Error {
+};
+function parseJSON(jsonString, allowPartial = Allow.ALL) {
+  if (typeof jsonString !== "string") {
+    throw new TypeError(`expecting str, got ${typeof jsonString}`);
+  }
+  if (!jsonString.trim()) {
+    throw new Error(`${jsonString} is empty`);
+  }
+  return _parseJSON(jsonString.trim(), allowPartial);
+}
+var _parseJSON = (jsonString, allow) => {
+  const length = jsonString.length;
+  let index = 0;
+  const markPartialJSON = (msg) => {
+    throw new PartialJSON(`${msg} at position ${index}`);
+  };
+  const throwMalformedError = (msg) => {
+    throw new MalformedJSON(`${msg} at position ${index}`);
+  };
+  const parseAny = () => {
+    skipBlank();
+    if (index >= length)
+      markPartialJSON("Unexpected end of input");
+    if (jsonString[index] === '"')
+      return parseStr();
+    if (jsonString[index] === "{")
+      return parseObj();
+    if (jsonString[index] === "[")
+      return parseArr();
+    if (jsonString.substring(index, index + 4) === "null" || Allow.NULL & allow && length - index < 4 && "null".startsWith(jsonString.substring(index))) {
+      index += 4;
+      return null;
+    }
+    if (jsonString.substring(index, index + 4) === "true" || Allow.BOOL & allow && length - index < 4 && "true".startsWith(jsonString.substring(index))) {
+      index += 4;
+      return true;
+    }
+    if (jsonString.substring(index, index + 5) === "false" || Allow.BOOL & allow && length - index < 5 && "false".startsWith(jsonString.substring(index))) {
+      index += 5;
+      return false;
+    }
+    if (jsonString.substring(index, index + 8) === "Infinity" || Allow.INFINITY & allow && length - index < 8 && "Infinity".startsWith(jsonString.substring(index))) {
+      index += 8;
+      return Infinity;
+    }
+    if (jsonString.substring(index, index + 9) === "-Infinity" || Allow.MINUS_INFINITY & allow && 1 < length - index && length - index < 9 && "-Infinity".startsWith(jsonString.substring(index))) {
+      index += 9;
+      return -Infinity;
+    }
+    if (jsonString.substring(index, index + 3) === "NaN" || Allow.NAN & allow && length - index < 3 && "NaN".startsWith(jsonString.substring(index))) {
+      index += 3;
+      return NaN;
+    }
+    return parseNum();
+  };
+  const parseStr = () => {
+    const start = index;
+    let escape2 = false;
+    index++;
+    while (index < length && (jsonString[index] !== '"' || escape2 && jsonString[index - 1] === "\\")) {
+      escape2 = jsonString[index] === "\\" ? !escape2 : false;
+      index++;
+    }
+    if (jsonString.charAt(index) == '"') {
+      try {
+        return JSON.parse(jsonString.substring(start, ++index - Number(escape2)));
+      } catch (e2) {
+        throwMalformedError(String(e2));
+      }
+    } else if (Allow.STR & allow) {
+      try {
+        return JSON.parse(jsonString.substring(start, index - Number(escape2)) + '"');
+      } catch (e2) {
+        return JSON.parse(jsonString.substring(start, jsonString.lastIndexOf("\\")) + '"');
+      }
+    }
+    markPartialJSON("Unterminated string literal");
+  };
+  const parseObj = () => {
+    index++;
+    skipBlank();
+    const obj = {};
+    try {
+      while (jsonString[index] !== "}") {
+        skipBlank();
+        if (index >= length && Allow.OBJ & allow)
+          return obj;
+        const key = parseStr();
+        skipBlank();
+        index++;
+        try {
+          const value = parseAny();
+          Object.defineProperty(obj, key, { value, writable: true, enumerable: true, configurable: true });
+        } catch (e2) {
+          if (Allow.OBJ & allow)
+            return obj;
+          else
+            throw e2;
+        }
+        skipBlank();
+        if (jsonString[index] === ",")
+          index++;
+      }
+    } catch (e2) {
+      if (Allow.OBJ & allow)
+        return obj;
+      else
+        markPartialJSON("Expected '}' at end of object");
+    }
+    index++;
+    return obj;
+  };
+  const parseArr = () => {
+    index++;
+    const arr = [];
+    try {
+      while (jsonString[index] !== "]") {
+        arr.push(parseAny());
+        skipBlank();
+        if (jsonString[index] === ",") {
+          index++;
+        }
+      }
+    } catch (e2) {
+      if (Allow.ARR & allow) {
+        return arr;
+      }
+      markPartialJSON("Expected ']' at end of array");
+    }
+    index++;
+    return arr;
+  };
+  const parseNum = () => {
+    if (index === 0) {
+      if (jsonString === "-" && Allow.NUM & allow)
+        markPartialJSON("Not sure what '-' is");
+      try {
+        return JSON.parse(jsonString);
+      } catch (e2) {
+        if (Allow.NUM & allow) {
+          try {
+            if ("." === jsonString[jsonString.length - 1])
+              return JSON.parse(jsonString.substring(0, jsonString.lastIndexOf(".")));
+            return JSON.parse(jsonString.substring(0, jsonString.lastIndexOf("e")));
+          } catch (e3) {
+          }
+        }
+        throwMalformedError(String(e2));
+      }
+    }
+    const start = index;
+    if (jsonString[index] === "-")
+      index++;
+    while (jsonString[index] && !",]}".includes(jsonString[index]))
+      index++;
+    if (index == length && !(Allow.NUM & allow))
+      markPartialJSON("Unterminated number literal");
+    try {
+      return JSON.parse(jsonString.substring(start, index));
+    } catch (e2) {
+      if (jsonString.substring(start, index) === "-" && Allow.NUM & allow)
+        markPartialJSON("Not sure what '-' is");
+      try {
+        return JSON.parse(jsonString.substring(start, jsonString.lastIndexOf("e")));
+      } catch (e3) {
+        throwMalformedError(String(e3));
+      }
+    }
+  };
+  const skipBlank = () => {
+    while (index < length && " \n\r	".includes(jsonString[index])) {
+      index++;
+    }
+  };
+  return parseAny();
+};
+var partialParse = (input) => parseJSON(input, Allow.ALL ^ Allow.NUM);
+
+// node_modules/openai/lib/ChatCompletionStream.mjs
+var __classPrivateFieldSet7 = function(receiver, state, value, kind2, f2) {
+  if (kind2 === "m") throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+};
+var __classPrivateFieldGet9 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+};
+var _ChatCompletionStream_instances;
+var _ChatCompletionStream_params;
+var _ChatCompletionStream_choiceEventStates;
+var _ChatCompletionStream_currentChatCompletionSnapshot;
+var _ChatCompletionStream_beginRequest;
+var _ChatCompletionStream_getChoiceEventState;
+var _ChatCompletionStream_addChunk;
+var _ChatCompletionStream_emitToolCallDoneEvent;
+var _ChatCompletionStream_emitContentDoneEvents;
+var _ChatCompletionStream_endRequest;
+var _ChatCompletionStream_getAutoParseableResponseFormat;
+var _ChatCompletionStream_accumulateChatCompletion;
+var ChatCompletionStream = class _ChatCompletionStream extends AbstractChatCompletionRunner {
+  constructor(params) {
+    super();
+    _ChatCompletionStream_instances.add(this);
+    _ChatCompletionStream_params.set(this, void 0);
+    _ChatCompletionStream_choiceEventStates.set(this, void 0);
+    _ChatCompletionStream_currentChatCompletionSnapshot.set(this, void 0);
+    __classPrivateFieldSet7(this, _ChatCompletionStream_params, params, "f");
+    __classPrivateFieldSet7(this, _ChatCompletionStream_choiceEventStates, [], "f");
+  }
+  get currentChatCompletionSnapshot() {
+    return __classPrivateFieldGet9(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+  }
+  /**
+   * Intended for use on the frontend, consuming a stream produced with
+   * `.toReadableStream()` on the backend.
+   *
+   * Note that messages sent to the model do not appear in `.on('message')`
+   * in this context.
+   */
+  static fromReadableStream(stream) {
+    const runner = new _ChatCompletionStream(null);
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  static createChatCompletion(client, params, options) {
+    const runner = new _ChatCompletionStream(params);
+    runner._run(() => runner._runChatCompletion(client, { ...params, stream: true }, { ...options, headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" } }));
+    return runner;
+  }
+  async _createChatCompletion(client, params, options) {
+    super._createChatCompletion;
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_beginRequest).call(this);
+    const stream = await client.chat.completions.create({ ...params, stream: true }, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const chunk of stream) {
+      __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_addChunk).call(this, chunk);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addChatCompletion(__classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+  }
+  async _fromReadableStream(readableStream, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_beginRequest).call(this);
+    this._connected();
+    const stream = Stream.fromReadableStream(readableStream, this.controller);
+    let chatId;
+    for await (const chunk of stream) {
+      if (chatId && chatId !== chunk.id) {
+        this._addChatCompletion(__classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+      }
+      __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_addChunk).call(this, chunk);
+      chatId = chunk.id;
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addChatCompletion(__classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_endRequest).call(this));
+  }
+  [(_ChatCompletionStream_params = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_choiceEventStates = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_currentChatCompletionSnapshot = /* @__PURE__ */ new WeakMap(), _ChatCompletionStream_instances = /* @__PURE__ */ new WeakSet(), _ChatCompletionStream_beginRequest = function _ChatCompletionStream_beginRequest2() {
+    if (this.ended)
+      return;
+    __classPrivateFieldSet7(this, _ChatCompletionStream_currentChatCompletionSnapshot, void 0, "f");
+  }, _ChatCompletionStream_getChoiceEventState = function _ChatCompletionStream_getChoiceEventState2(choice) {
+    let state = __classPrivateFieldGet9(this, _ChatCompletionStream_choiceEventStates, "f")[choice.index];
+    if (state) {
+      return state;
+    }
+    state = {
+      content_done: false,
+      refusal_done: false,
+      logprobs_content_done: false,
+      logprobs_refusal_done: false,
+      done_tool_calls: /* @__PURE__ */ new Set(),
+      current_tool_call_index: null
+    };
+    __classPrivateFieldGet9(this, _ChatCompletionStream_choiceEventStates, "f")[choice.index] = state;
+    return state;
+  }, _ChatCompletionStream_addChunk = function _ChatCompletionStream_addChunk2(chunk) {
+    if (this.ended)
+      return;
+    const completion = __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_accumulateChatCompletion).call(this, chunk);
+    this._emit("chunk", chunk, completion);
+    for (const choice of chunk.choices) {
+      const choiceSnapshot = completion.choices[choice.index];
+      if (choice.delta.content != null && choiceSnapshot.message?.role === "assistant" && choiceSnapshot.message?.content) {
+        this._emit("content", choice.delta.content, choiceSnapshot.message.content);
+        this._emit("content.delta", {
+          delta: choice.delta.content,
+          snapshot: choiceSnapshot.message.content,
+          parsed: choiceSnapshot.message.parsed
+        });
+      }
+      if (choice.delta.refusal != null && choiceSnapshot.message?.role === "assistant" && choiceSnapshot.message?.refusal) {
+        this._emit("refusal.delta", {
+          delta: choice.delta.refusal,
+          snapshot: choiceSnapshot.message.refusal
+        });
+      }
+      if (choice.logprobs?.content != null && choiceSnapshot.message?.role === "assistant") {
+        this._emit("logprobs.content.delta", {
+          content: choice.logprobs?.content,
+          snapshot: choiceSnapshot.logprobs?.content ?? []
+        });
+      }
+      if (choice.logprobs?.refusal != null && choiceSnapshot.message?.role === "assistant") {
+        this._emit("logprobs.refusal.delta", {
+          refusal: choice.logprobs?.refusal,
+          snapshot: choiceSnapshot.logprobs?.refusal ?? []
+        });
+      }
+      const state = __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+      if (choiceSnapshot.finish_reason) {
+        __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitContentDoneEvents).call(this, choiceSnapshot);
+        if (state.current_tool_call_index != null) {
+          __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitToolCallDoneEvent).call(this, choiceSnapshot, state.current_tool_call_index);
+        }
+      }
+      for (const toolCall of choice.delta.tool_calls ?? []) {
+        if (state.current_tool_call_index !== toolCall.index) {
+          __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitContentDoneEvents).call(this, choiceSnapshot);
+          if (state.current_tool_call_index != null) {
+            __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_emitToolCallDoneEvent).call(this, choiceSnapshot, state.current_tool_call_index);
+          }
+        }
+        state.current_tool_call_index = toolCall.index;
+      }
+      for (const toolCallDelta of choice.delta.tool_calls ?? []) {
+        const toolCallSnapshot = choiceSnapshot.message.tool_calls?.[toolCallDelta.index];
+        if (!toolCallSnapshot?.type) {
+          continue;
+        }
+        if (toolCallSnapshot?.type === "function") {
+          this._emit("tool_calls.function.arguments.delta", {
+            name: toolCallSnapshot.function?.name,
+            index: toolCallDelta.index,
+            arguments: toolCallSnapshot.function.arguments,
+            parsed_arguments: toolCallSnapshot.function.parsed_arguments,
+            arguments_delta: toolCallDelta.function?.arguments ?? ""
+          });
+        } else {
+          assertNever(toolCallSnapshot?.type);
+        }
+      }
+    }
+  }, _ChatCompletionStream_emitToolCallDoneEvent = function _ChatCompletionStream_emitToolCallDoneEvent2(choiceSnapshot, toolCallIndex) {
+    const state = __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+    if (state.done_tool_calls.has(toolCallIndex)) {
+      return;
+    }
+    const toolCallSnapshot = choiceSnapshot.message.tool_calls?.[toolCallIndex];
+    if (!toolCallSnapshot) {
+      throw new Error("no tool call snapshot");
+    }
+    if (!toolCallSnapshot.type) {
+      throw new Error("tool call snapshot missing `type`");
+    }
+    if (toolCallSnapshot.type === "function") {
+      const inputTool = __classPrivateFieldGet9(this, _ChatCompletionStream_params, "f")?.tools?.find((tool) => tool.type === "function" && tool.function.name === toolCallSnapshot.function.name);
+      this._emit("tool_calls.function.arguments.done", {
+        name: toolCallSnapshot.function.name,
+        index: toolCallIndex,
+        arguments: toolCallSnapshot.function.arguments,
+        parsed_arguments: isAutoParsableTool(inputTool) ? inputTool.$parseRaw(toolCallSnapshot.function.arguments) : inputTool?.function.strict ? JSON.parse(toolCallSnapshot.function.arguments) : null
+      });
+    } else {
+      assertNever(toolCallSnapshot.type);
+    }
+  }, _ChatCompletionStream_emitContentDoneEvents = function _ChatCompletionStream_emitContentDoneEvents2(choiceSnapshot) {
+    const state = __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getChoiceEventState).call(this, choiceSnapshot);
+    if (choiceSnapshot.message.content && !state.content_done) {
+      state.content_done = true;
+      const responseFormat = __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getAutoParseableResponseFormat).call(this);
+      this._emit("content.done", {
+        content: choiceSnapshot.message.content,
+        parsed: responseFormat ? responseFormat.$parseRaw(choiceSnapshot.message.content) : null
+      });
+    }
+    if (choiceSnapshot.message.refusal && !state.refusal_done) {
+      state.refusal_done = true;
+      this._emit("refusal.done", { refusal: choiceSnapshot.message.refusal });
+    }
+    if (choiceSnapshot.logprobs?.content && !state.logprobs_content_done) {
+      state.logprobs_content_done = true;
+      this._emit("logprobs.content.done", { content: choiceSnapshot.logprobs.content });
+    }
+    if (choiceSnapshot.logprobs?.refusal && !state.logprobs_refusal_done) {
+      state.logprobs_refusal_done = true;
+      this._emit("logprobs.refusal.done", { refusal: choiceSnapshot.logprobs.refusal });
+    }
+  }, _ChatCompletionStream_endRequest = function _ChatCompletionStream_endRequest2() {
+    if (this.ended) {
+      throw new OpenAIError(`stream has ended, this shouldn't happen`);
+    }
+    const snapshot = __classPrivateFieldGet9(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+    if (!snapshot) {
+      throw new OpenAIError(`request ended without sending any chunks`);
+    }
+    __classPrivateFieldSet7(this, _ChatCompletionStream_currentChatCompletionSnapshot, void 0, "f");
+    __classPrivateFieldSet7(this, _ChatCompletionStream_choiceEventStates, [], "f");
+    return finalizeChatCompletion(snapshot, __classPrivateFieldGet9(this, _ChatCompletionStream_params, "f"));
+  }, _ChatCompletionStream_getAutoParseableResponseFormat = function _ChatCompletionStream_getAutoParseableResponseFormat2() {
+    const responseFormat = __classPrivateFieldGet9(this, _ChatCompletionStream_params, "f")?.response_format;
+    if (isAutoParsableResponseFormat(responseFormat)) {
+      return responseFormat;
+    }
+    return null;
+  }, _ChatCompletionStream_accumulateChatCompletion = function _ChatCompletionStream_accumulateChatCompletion2(chunk) {
+    var _a2, _b, _c, _d;
+    let snapshot = __classPrivateFieldGet9(this, _ChatCompletionStream_currentChatCompletionSnapshot, "f");
+    const { choices, ...rest } = chunk;
+    if (!snapshot) {
+      snapshot = __classPrivateFieldSet7(this, _ChatCompletionStream_currentChatCompletionSnapshot, {
+        ...rest,
+        choices: []
+      }, "f");
+    } else {
+      Object.assign(snapshot, rest);
+    }
+    for (const { delta, finish_reason, index, logprobs = null, ...other } of chunk.choices) {
+      let choice = snapshot.choices[index];
+      if (!choice) {
+        choice = snapshot.choices[index] = { finish_reason, index, message: {}, logprobs, ...other };
+      }
+      if (logprobs) {
+        if (!choice.logprobs) {
+          choice.logprobs = Object.assign({}, logprobs);
+        } else {
+          const { content: content2, refusal: refusal2, ...rest3 } = logprobs;
+          assertIsEmpty(rest3);
+          Object.assign(choice.logprobs, rest3);
+          if (content2) {
+            (_a2 = choice.logprobs).content ?? (_a2.content = []);
+            choice.logprobs.content.push(...content2);
+          }
+          if (refusal2) {
+            (_b = choice.logprobs).refusal ?? (_b.refusal = []);
+            choice.logprobs.refusal.push(...refusal2);
+          }
+        }
+      }
+      if (finish_reason) {
+        choice.finish_reason = finish_reason;
+        if (__classPrivateFieldGet9(this, _ChatCompletionStream_params, "f") && hasAutoParseableInput(__classPrivateFieldGet9(this, _ChatCompletionStream_params, "f"))) {
+          if (finish_reason === "length") {
+            throw new LengthFinishReasonError();
+          }
+          if (finish_reason === "content_filter") {
+            throw new ContentFilterFinishReasonError();
+          }
+        }
+      }
+      Object.assign(choice, other);
+      if (!delta)
+        continue;
+      const { content, refusal, function_call, role, tool_calls, ...rest2 } = delta;
+      assertIsEmpty(rest2);
+      Object.assign(choice.message, rest2);
+      if (refusal) {
+        choice.message.refusal = (choice.message.refusal || "") + refusal;
+      }
+      if (role)
+        choice.message.role = role;
+      if (function_call) {
+        if (!choice.message.function_call) {
+          choice.message.function_call = function_call;
+        } else {
+          if (function_call.name)
+            choice.message.function_call.name = function_call.name;
+          if (function_call.arguments) {
+            (_c = choice.message.function_call).arguments ?? (_c.arguments = "");
+            choice.message.function_call.arguments += function_call.arguments;
+          }
+        }
+      }
+      if (content) {
+        choice.message.content = (choice.message.content || "") + content;
+        if (!choice.message.refusal && __classPrivateFieldGet9(this, _ChatCompletionStream_instances, "m", _ChatCompletionStream_getAutoParseableResponseFormat).call(this)) {
+          choice.message.parsed = partialParse(choice.message.content);
+        }
+      }
+      if (tool_calls) {
+        if (!choice.message.tool_calls)
+          choice.message.tool_calls = [];
+        for (const { index: index2, id, type, function: fn, ...rest3 } of tool_calls) {
+          const tool_call = (_d = choice.message.tool_calls)[index2] ?? (_d[index2] = {});
+          Object.assign(tool_call, rest3);
+          if (id)
+            tool_call.id = id;
+          if (type)
+            tool_call.type = type;
+          if (fn)
+            tool_call.function ?? (tool_call.function = { name: fn.name ?? "", arguments: "" });
+          if (fn?.name)
+            tool_call.function.name = fn.name;
+          if (fn?.arguments) {
+            tool_call.function.arguments += fn.arguments;
+            if (shouldParseToolCall(__classPrivateFieldGet9(this, _ChatCompletionStream_params, "f"), tool_call)) {
+              tool_call.function.parsed_arguments = partialParse(tool_call.function.arguments);
+            }
+          }
+        }
+      }
+    }
+    return snapshot;
+  }, Symbol.asyncIterator)]() {
+    const pushQueue = [];
+    const readQueue = [];
+    let done = false;
+    this.on("chunk", (chunk) => {
+      const reader = readQueue.shift();
+      if (reader) {
+        reader.resolve(chunk);
+      } else {
+        pushQueue.push(chunk);
+      }
+    });
+    this.on("end", () => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.resolve(void 0);
+      }
+      readQueue.length = 0;
+    });
+    this.on("abort", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    this.on("error", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    return {
+      next: async () => {
+        if (!pushQueue.length) {
+          if (done) {
+            return { value: void 0, done: true };
+          }
+          return new Promise((resolve, reject) => readQueue.push({ resolve, reject })).then((chunk2) => chunk2 ? { value: chunk2, done: false } : { value: void 0, done: true });
+        }
+        const chunk = pushQueue.shift();
+        return { value: chunk, done: false };
+      },
+      return: async () => {
+        this.abort();
+        return { value: void 0, done: true };
+      }
+    };
+  }
+  toReadableStream() {
+    const stream = new Stream(this[Symbol.asyncIterator].bind(this), this.controller);
+    return stream.toReadableStream();
+  }
+};
+function finalizeChatCompletion(snapshot, params) {
+  const { id, choices, created, model: model2, system_fingerprint, ...rest } = snapshot;
+  const completion = {
+    ...rest,
+    id,
+    choices: choices.map(({ message, finish_reason, index, logprobs, ...choiceRest }) => {
+      if (!finish_reason) {
+        throw new OpenAIError(`missing finish_reason for choice ${index}`);
+      }
+      const { content = null, function_call, tool_calls, ...messageRest } = message;
+      const role = message.role;
+      if (!role) {
+        throw new OpenAIError(`missing role for choice ${index}`);
+      }
+      if (function_call) {
+        const { arguments: args, name } = function_call;
+        if (args == null) {
+          throw new OpenAIError(`missing function_call.arguments for choice ${index}`);
+        }
+        if (!name) {
+          throw new OpenAIError(`missing function_call.name for choice ${index}`);
+        }
+        return {
+          ...choiceRest,
+          message: {
+            content,
+            function_call: { arguments: args, name },
+            role,
+            refusal: message.refusal ?? null
+          },
+          finish_reason,
+          index,
+          logprobs
+        };
+      }
+      if (tool_calls) {
+        return {
+          ...choiceRest,
+          index,
+          finish_reason,
+          logprobs,
+          message: {
+            ...messageRest,
+            role,
+            content,
+            refusal: message.refusal ?? null,
+            tool_calls: tool_calls.map((tool_call, i2) => {
+              const { function: fn, type, id: id2, ...toolRest } = tool_call;
+              const { arguments: args, name, ...fnRest } = fn || {};
+              if (id2 == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i2}].id
+${str(snapshot)}`);
+              }
+              if (type == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i2}].type
+${str(snapshot)}`);
+              }
+              if (name == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i2}].function.name
+${str(snapshot)}`);
+              }
+              if (args == null) {
+                throw new OpenAIError(`missing choices[${index}].tool_calls[${i2}].function.arguments
+${str(snapshot)}`);
+              }
+              return { ...toolRest, id: id2, type, function: { ...fnRest, name, arguments: args } };
+            })
+          }
+        };
+      }
+      return {
+        ...choiceRest,
+        message: { ...messageRest, content, role, refusal: message.refusal ?? null },
+        finish_reason,
+        index,
+        logprobs
+      };
+    }),
+    created,
+    model: model2,
+    object: "chat.completion",
+    ...system_fingerprint ? { system_fingerprint } : {}
+  };
+  return maybeParseChatCompletion(completion, params);
+}
+function str(x2) {
+  return JSON.stringify(x2);
+}
+function assertIsEmpty(obj) {
+  return;
+}
+function assertNever(_x) {
+}
+
+// node_modules/openai/lib/ChatCompletionStreamingRunner.mjs
+var ChatCompletionStreamingRunner = class _ChatCompletionStreamingRunner extends ChatCompletionStream {
+  static fromReadableStream(stream) {
+    const runner = new _ChatCompletionStreamingRunner(null);
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  /** @deprecated - please use `runTools` instead. */
+  static runFunctions(client, params, options) {
+    const runner = new _ChatCompletionStreamingRunner(null);
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runFunctions" }
+    };
+    runner._run(() => runner._runFunctions(client, params, opts));
+    return runner;
+  }
+  static runTools(client, params, options) {
+    const runner = new _ChatCompletionStreamingRunner(
+      // @ts-expect-error TODO these types are incompatible
+      params
+    );
+    const opts = {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "runTools" }
+    };
+    runner._run(() => runner._runTools(client, params, opts));
+    return runner;
+  }
+};
+
+// node_modules/openai/resources/beta/chat/completions.mjs
 var Completions2 = class extends APIResource {
-  create(body, options) {
-    var _a2;
-    return this.post("/completions", {
+  parse(body, options) {
+    validateInputTools(body.tools);
+    return this._client.chat.completions.create(body, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        "X-Stainless-Helper-Method": "beta.chat.completions.parse"
+      }
+    })._thenUnwrap((completion) => parseChatCompletion(completion, body));
+  }
+  runFunctions(body, options) {
+    if (body.stream) {
+      return ChatCompletionStreamingRunner.runFunctions(this._client, body, options);
+    }
+    return ChatCompletionRunner.runFunctions(this._client, body, options);
+  }
+  runTools(body, options) {
+    if (body.stream) {
+      return ChatCompletionStreamingRunner.runTools(this._client, body, options);
+    }
+    return ChatCompletionRunner.runTools(this._client, body, options);
+  }
+  /**
+   * Creates a chat completion stream
+   */
+  stream(body, options) {
+    return ChatCompletionStream.createChatCompletion(this._client, body, options);
+  }
+};
+
+// node_modules/openai/resources/beta/chat/chat.mjs
+var Chat2 = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.completions = new Completions2(this._client);
+  }
+};
+(function(Chat3) {
+  Chat3.Completions = Completions2;
+})(Chat2 || (Chat2 = {}));
+
+// node_modules/openai/lib/AssistantStream.mjs
+var __classPrivateFieldGet10 = function(receiver, state, kind2, f2) {
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a getter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+  return kind2 === "m" ? f2 : kind2 === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
+};
+var __classPrivateFieldSet8 = function(receiver, state, value, kind2, f2) {
+  if (kind2 === "m") throw new TypeError("Private method is not writable");
+  if (kind2 === "a" && !f2) throw new TypeError("Private accessor was defined without a setter");
+  if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+  return kind2 === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
+};
+var _AssistantStream_instances;
+var _AssistantStream_events;
+var _AssistantStream_runStepSnapshots;
+var _AssistantStream_messageSnapshots;
+var _AssistantStream_messageSnapshot;
+var _AssistantStream_finalRun;
+var _AssistantStream_currentContentIndex;
+var _AssistantStream_currentContent;
+var _AssistantStream_currentToolCallIndex;
+var _AssistantStream_currentToolCall;
+var _AssistantStream_currentEvent;
+var _AssistantStream_currentRunSnapshot;
+var _AssistantStream_currentRunStepSnapshot;
+var _AssistantStream_addEvent;
+var _AssistantStream_endRequest;
+var _AssistantStream_handleMessage;
+var _AssistantStream_handleRunStep;
+var _AssistantStream_handleEvent;
+var _AssistantStream_accumulateRunStep;
+var _AssistantStream_accumulateMessage;
+var _AssistantStream_accumulateContent;
+var _AssistantStream_handleRun;
+var AssistantStream = class _AssistantStream extends EventStream {
+  constructor() {
+    super(...arguments);
+    _AssistantStream_instances.add(this);
+    _AssistantStream_events.set(this, []);
+    _AssistantStream_runStepSnapshots.set(this, {});
+    _AssistantStream_messageSnapshots.set(this, {});
+    _AssistantStream_messageSnapshot.set(this, void 0);
+    _AssistantStream_finalRun.set(this, void 0);
+    _AssistantStream_currentContentIndex.set(this, void 0);
+    _AssistantStream_currentContent.set(this, void 0);
+    _AssistantStream_currentToolCallIndex.set(this, void 0);
+    _AssistantStream_currentToolCall.set(this, void 0);
+    _AssistantStream_currentEvent.set(this, void 0);
+    _AssistantStream_currentRunSnapshot.set(this, void 0);
+    _AssistantStream_currentRunStepSnapshot.set(this, void 0);
+  }
+  [(_AssistantStream_events = /* @__PURE__ */ new WeakMap(), _AssistantStream_runStepSnapshots = /* @__PURE__ */ new WeakMap(), _AssistantStream_messageSnapshots = /* @__PURE__ */ new WeakMap(), _AssistantStream_messageSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_finalRun = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentContentIndex = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentContent = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentToolCallIndex = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentToolCall = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentEvent = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentRunSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_currentRunStepSnapshot = /* @__PURE__ */ new WeakMap(), _AssistantStream_instances = /* @__PURE__ */ new WeakSet(), Symbol.asyncIterator)]() {
+    const pushQueue = [];
+    const readQueue = [];
+    let done = false;
+    this.on("event", (event) => {
+      const reader = readQueue.shift();
+      if (reader) {
+        reader.resolve(event);
+      } else {
+        pushQueue.push(event);
+      }
+    });
+    this.on("end", () => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.resolve(void 0);
+      }
+      readQueue.length = 0;
+    });
+    this.on("abort", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    this.on("error", (err) => {
+      done = true;
+      for (const reader of readQueue) {
+        reader.reject(err);
+      }
+      readQueue.length = 0;
+    });
+    return {
+      next: async () => {
+        if (!pushQueue.length) {
+          if (done) {
+            return { value: void 0, done: true };
+          }
+          return new Promise((resolve, reject) => readQueue.push({ resolve, reject })).then((chunk2) => chunk2 ? { value: chunk2, done: false } : { value: void 0, done: true });
+        }
+        const chunk = pushQueue.shift();
+        return { value: chunk, done: false };
+      },
+      return: async () => {
+        this.abort();
+        return { value: void 0, done: true };
+      }
+    };
+  }
+  static fromReadableStream(stream) {
+    const runner = new _AssistantStream();
+    runner._run(() => runner._fromReadableStream(stream));
+    return runner;
+  }
+  async _fromReadableStream(readableStream, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    this._connected();
+    const stream = Stream.fromReadableStream(readableStream, this.controller);
+    for await (const event of stream) {
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  toReadableStream() {
+    const stream = new Stream(this[Symbol.asyncIterator].bind(this), this.controller);
+    return stream.toReadableStream();
+  }
+  static createToolAssistantStream(threadId, runId, runs, params, options) {
+    const runner = new _AssistantStream();
+    runner._run(() => runner._runToolAssistantStream(threadId, runId, runs, params, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  async _createToolAssistantStream(run, threadId, runId, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await run.submitToolOutputs(threadId, runId, body, {
+      ...options,
+      signal: this.controller.signal
+    });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  static createThreadAssistantStream(params, thread, options) {
+    const runner = new _AssistantStream();
+    runner._run(() => runner._threadAssistantStream(params, thread, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  static createAssistantStream(threadId, runs, params, options) {
+    const runner = new _AssistantStream();
+    runner._run(() => runner._runAssistantStream(threadId, runs, params, {
+      ...options,
+      headers: { ...options?.headers, "X-Stainless-Helper-Method": "stream" }
+    }));
+    return runner;
+  }
+  currentEvent() {
+    return __classPrivateFieldGet10(this, _AssistantStream_currentEvent, "f");
+  }
+  currentRun() {
+    return __classPrivateFieldGet10(this, _AssistantStream_currentRunSnapshot, "f");
+  }
+  currentMessageSnapshot() {
+    return __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f");
+  }
+  currentRunStepSnapshot() {
+    return __classPrivateFieldGet10(this, _AssistantStream_currentRunStepSnapshot, "f");
+  }
+  async finalRunSteps() {
+    await this.done();
+    return Object.values(__classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f"));
+  }
+  async finalMessages() {
+    await this.done();
+    return Object.values(__classPrivateFieldGet10(this, _AssistantStream_messageSnapshots, "f"));
+  }
+  async finalRun() {
+    await this.done();
+    if (!__classPrivateFieldGet10(this, _AssistantStream_finalRun, "f"))
+      throw Error("Final run was not received.");
+    return __classPrivateFieldGet10(this, _AssistantStream_finalRun, "f");
+  }
+  async _createThreadAssistantStream(thread, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await thread.createAndRun(body, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  async _createAssistantStream(run, threadId, params, options) {
+    const signal = options?.signal;
+    if (signal) {
+      if (signal.aborted)
+        this.controller.abort();
+      signal.addEventListener("abort", () => this.controller.abort());
+    }
+    const body = { ...params, stream: true };
+    const stream = await run.create(threadId, body, { ...options, signal: this.controller.signal });
+    this._connected();
+    for await (const event of stream) {
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_addEvent).call(this, event);
+    }
+    if (stream.controller.signal?.aborted) {
+      throw new APIUserAbortError();
+    }
+    return this._addRun(__classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_endRequest).call(this));
+  }
+  static accumulateDelta(acc, delta) {
+    for (const [key, deltaValue] of Object.entries(delta)) {
+      if (!acc.hasOwnProperty(key)) {
+        acc[key] = deltaValue;
+        continue;
+      }
+      let accValue = acc[key];
+      if (accValue === null || accValue === void 0) {
+        acc[key] = deltaValue;
+        continue;
+      }
+      if (key === "index" || key === "type") {
+        acc[key] = deltaValue;
+        continue;
+      }
+      if (typeof accValue === "string" && typeof deltaValue === "string") {
+        accValue += deltaValue;
+      } else if (typeof accValue === "number" && typeof deltaValue === "number") {
+        accValue += deltaValue;
+      } else if (isObj(accValue) && isObj(deltaValue)) {
+        accValue = this.accumulateDelta(accValue, deltaValue);
+      } else if (Array.isArray(accValue) && Array.isArray(deltaValue)) {
+        if (accValue.every((x2) => typeof x2 === "string" || typeof x2 === "number")) {
+          accValue.push(...deltaValue);
+          continue;
+        }
+        for (const deltaEntry of deltaValue) {
+          if (!isObj(deltaEntry)) {
+            throw new Error(`Expected array delta entry to be an object but got: ${deltaEntry}`);
+          }
+          const index = deltaEntry["index"];
+          if (index == null) {
+            console.error(deltaEntry);
+            throw new Error("Expected array delta entry to have an `index` property");
+          }
+          if (typeof index !== "number") {
+            throw new Error(`Expected array delta entry \`index\` property to be a number but got ${index}`);
+          }
+          const accEntry = accValue[index];
+          if (accEntry == null) {
+            accValue.push(deltaEntry);
+          } else {
+            accValue[index] = this.accumulateDelta(accEntry, deltaEntry);
+          }
+        }
+        continue;
+      } else {
+        throw Error(`Unhandled record type: ${key}, deltaValue: ${deltaValue}, accValue: ${accValue}`);
+      }
+      acc[key] = accValue;
+    }
+    return acc;
+  }
+  _addRun(run) {
+    return run;
+  }
+  async _threadAssistantStream(params, thread, options) {
+    return await this._createThreadAssistantStream(thread, params, options);
+  }
+  async _runAssistantStream(threadId, runs, params, options) {
+    return await this._createAssistantStream(runs, threadId, params, options);
+  }
+  async _runToolAssistantStream(threadId, runId, runs, params, options) {
+    return await this._createToolAssistantStream(runs, threadId, runId, params, options);
+  }
+};
+_AssistantStream_addEvent = function _AssistantStream_addEvent2(event) {
+  if (this.ended)
+    return;
+  __classPrivateFieldSet8(this, _AssistantStream_currentEvent, event, "f");
+  __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_handleEvent).call(this, event);
+  switch (event.event) {
+    case "thread.created":
+      break;
+    case "thread.run.created":
+    case "thread.run.queued":
+    case "thread.run.in_progress":
+    case "thread.run.requires_action":
+    case "thread.run.completed":
+    case "thread.run.failed":
+    case "thread.run.cancelling":
+    case "thread.run.cancelled":
+    case "thread.run.expired":
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_handleRun).call(this, event);
+      break;
+    case "thread.run.step.created":
+    case "thread.run.step.in_progress":
+    case "thread.run.step.delta":
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_handleRunStep).call(this, event);
+      break;
+    case "thread.message.created":
+    case "thread.message.in_progress":
+    case "thread.message.delta":
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_handleMessage).call(this, event);
+      break;
+    case "error":
+      throw new Error("Encountered an error event in event processing - errors should be processed earlier");
+  }
+}, _AssistantStream_endRequest = function _AssistantStream_endRequest2() {
+  if (this.ended) {
+    throw new OpenAIError(`stream has ended, this shouldn't happen`);
+  }
+  if (!__classPrivateFieldGet10(this, _AssistantStream_finalRun, "f"))
+    throw Error("Final run has not been received");
+  return __classPrivateFieldGet10(this, _AssistantStream_finalRun, "f");
+}, _AssistantStream_handleMessage = function _AssistantStream_handleMessage2(event) {
+  const [accumulatedMessage, newContent] = __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_accumulateMessage).call(this, event, __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f"));
+  __classPrivateFieldSet8(this, _AssistantStream_messageSnapshot, accumulatedMessage, "f");
+  __classPrivateFieldGet10(this, _AssistantStream_messageSnapshots, "f")[accumulatedMessage.id] = accumulatedMessage;
+  for (const content of newContent) {
+    const snapshotContent = accumulatedMessage.content[content.index];
+    if (snapshotContent?.type == "text") {
+      this._emit("textCreated", snapshotContent.text);
+    }
+  }
+  switch (event.event) {
+    case "thread.message.created":
+      this._emit("messageCreated", event.data);
+      break;
+    case "thread.message.in_progress":
+      break;
+    case "thread.message.delta":
+      this._emit("messageDelta", event.data.delta, accumulatedMessage);
+      if (event.data.delta.content) {
+        for (const content of event.data.delta.content) {
+          if (content.type == "text" && content.text) {
+            let textDelta = content.text;
+            let snapshot = accumulatedMessage.content[content.index];
+            if (snapshot && snapshot.type == "text") {
+              this._emit("textDelta", textDelta, snapshot.text);
+            } else {
+              throw Error("The snapshot associated with this text delta is not text or missing");
+            }
+          }
+          if (content.index != __classPrivateFieldGet10(this, _AssistantStream_currentContentIndex, "f")) {
+            if (__classPrivateFieldGet10(this, _AssistantStream_currentContent, "f")) {
+              switch (__classPrivateFieldGet10(this, _AssistantStream_currentContent, "f").type) {
+                case "text":
+                  this._emit("textDone", __classPrivateFieldGet10(this, _AssistantStream_currentContent, "f").text, __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f"));
+                  break;
+                case "image_file":
+                  this._emit("imageFileDone", __classPrivateFieldGet10(this, _AssistantStream_currentContent, "f").image_file, __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f"));
+                  break;
+              }
+            }
+            __classPrivateFieldSet8(this, _AssistantStream_currentContentIndex, content.index, "f");
+          }
+          __classPrivateFieldSet8(this, _AssistantStream_currentContent, accumulatedMessage.content[content.index], "f");
+        }
+      }
+      break;
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      if (__classPrivateFieldGet10(this, _AssistantStream_currentContentIndex, "f") !== void 0) {
+        const currentContent = event.data.content[__classPrivateFieldGet10(this, _AssistantStream_currentContentIndex, "f")];
+        if (currentContent) {
+          switch (currentContent.type) {
+            case "image_file":
+              this._emit("imageFileDone", currentContent.image_file, __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f"));
+              break;
+            case "text":
+              this._emit("textDone", currentContent.text, __classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f"));
+              break;
+          }
+        }
+      }
+      if (__classPrivateFieldGet10(this, _AssistantStream_messageSnapshot, "f")) {
+        this._emit("messageDone", event.data);
+      }
+      __classPrivateFieldSet8(this, _AssistantStream_messageSnapshot, void 0, "f");
+  }
+}, _AssistantStream_handleRunStep = function _AssistantStream_handleRunStep2(event) {
+  const accumulatedRunStep = __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_accumulateRunStep).call(this, event);
+  __classPrivateFieldSet8(this, _AssistantStream_currentRunStepSnapshot, accumulatedRunStep, "f");
+  switch (event.event) {
+    case "thread.run.step.created":
+      this._emit("runStepCreated", event.data);
+      break;
+    case "thread.run.step.delta":
+      const delta = event.data.delta;
+      if (delta.step_details && delta.step_details.type == "tool_calls" && delta.step_details.tool_calls && accumulatedRunStep.step_details.type == "tool_calls") {
+        for (const toolCall of delta.step_details.tool_calls) {
+          if (toolCall.index == __classPrivateFieldGet10(this, _AssistantStream_currentToolCallIndex, "f")) {
+            this._emit("toolCallDelta", toolCall, accumulatedRunStep.step_details.tool_calls[toolCall.index]);
+          } else {
+            if (__classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f")) {
+              this._emit("toolCallDone", __classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f"));
+            }
+            __classPrivateFieldSet8(this, _AssistantStream_currentToolCallIndex, toolCall.index, "f");
+            __classPrivateFieldSet8(this, _AssistantStream_currentToolCall, accumulatedRunStep.step_details.tool_calls[toolCall.index], "f");
+            if (__classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f"))
+              this._emit("toolCallCreated", __classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f"));
+          }
+        }
+      }
+      this._emit("runStepDelta", event.data.delta, accumulatedRunStep);
+      break;
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+      __classPrivateFieldSet8(this, _AssistantStream_currentRunStepSnapshot, void 0, "f");
+      const details = event.data.step_details;
+      if (details.type == "tool_calls") {
+        if (__classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f")) {
+          this._emit("toolCallDone", __classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f"));
+          __classPrivateFieldSet8(this, _AssistantStream_currentToolCall, void 0, "f");
+        }
+      }
+      this._emit("runStepDone", event.data, accumulatedRunStep);
+      break;
+    case "thread.run.step.in_progress":
+      break;
+  }
+}, _AssistantStream_handleEvent = function _AssistantStream_handleEvent2(event) {
+  __classPrivateFieldGet10(this, _AssistantStream_events, "f").push(event);
+  this._emit("event", event);
+}, _AssistantStream_accumulateRunStep = function _AssistantStream_accumulateRunStep2(event) {
+  switch (event.event) {
+    case "thread.run.step.created":
+      __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = event.data;
+      return event.data;
+    case "thread.run.step.delta":
+      let snapshot = __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+      if (!snapshot) {
+        throw Error("Received a RunStepDelta before creation of a snapshot");
+      }
+      let data = event.data;
+      if (data.delta) {
+        const accumulated = AssistantStream.accumulateDelta(snapshot, data.delta);
+        __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = accumulated;
+      }
+      return __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+    case "thread.run.step.completed":
+    case "thread.run.step.failed":
+    case "thread.run.step.cancelled":
+    case "thread.run.step.expired":
+    case "thread.run.step.in_progress":
+      __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id] = event.data;
+      break;
+  }
+  if (__classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id])
+    return __classPrivateFieldGet10(this, _AssistantStream_runStepSnapshots, "f")[event.data.id];
+  throw new Error("No snapshot available");
+}, _AssistantStream_accumulateMessage = function _AssistantStream_accumulateMessage2(event, snapshot) {
+  let newContent = [];
+  switch (event.event) {
+    case "thread.message.created":
+      return [event.data, newContent];
+    case "thread.message.delta":
+      if (!snapshot) {
+        throw Error("Received a delta with no existing snapshot (there should be one from message creation)");
+      }
+      let data = event.data;
+      if (data.delta.content) {
+        for (const contentElement of data.delta.content) {
+          if (contentElement.index in snapshot.content) {
+            let currentContent = snapshot.content[contentElement.index];
+            snapshot.content[contentElement.index] = __classPrivateFieldGet10(this, _AssistantStream_instances, "m", _AssistantStream_accumulateContent).call(this, contentElement, currentContent);
+          } else {
+            snapshot.content[contentElement.index] = contentElement;
+            newContent.push(contentElement);
+          }
+        }
+      }
+      return [snapshot, newContent];
+    case "thread.message.in_progress":
+    case "thread.message.completed":
+    case "thread.message.incomplete":
+      if (snapshot) {
+        return [snapshot, newContent];
+      } else {
+        throw Error("Received thread message event with no existing snapshot");
+      }
+  }
+  throw Error("Tried to accumulate a non-message event");
+}, _AssistantStream_accumulateContent = function _AssistantStream_accumulateContent2(contentElement, currentContent) {
+  return AssistantStream.accumulateDelta(currentContent, contentElement);
+}, _AssistantStream_handleRun = function _AssistantStream_handleRun2(event) {
+  __classPrivateFieldSet8(this, _AssistantStream_currentRunSnapshot, event.data, "f");
+  switch (event.event) {
+    case "thread.run.created":
+      break;
+    case "thread.run.queued":
+      break;
+    case "thread.run.in_progress":
+      break;
+    case "thread.run.requires_action":
+    case "thread.run.cancelled":
+    case "thread.run.failed":
+    case "thread.run.completed":
+    case "thread.run.expired":
+      __classPrivateFieldSet8(this, _AssistantStream_finalRun, event.data, "f");
+      if (__classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f")) {
+        this._emit("toolCallDone", __classPrivateFieldGet10(this, _AssistantStream_currentToolCall, "f"));
+        __classPrivateFieldSet8(this, _AssistantStream_currentToolCall, void 0, "f");
+      }
+      break;
+    case "thread.run.cancelling":
+      break;
+  }
+};
+
+// node_modules/openai/resources/beta/threads/messages.mjs
+var Messages = class extends APIResource {
+  /**
+   * Create a message.
+   */
+  create(threadId, body, options) {
+    return this._client.post(`/threads/${threadId}/messages`, {
       body,
       ...options,
-      stream: (_a2 = body.stream) !== null && _a2 !== void 0 ? _a2 : false
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieve a message.
+   */
+  retrieve(threadId, messageId, options) {
+    return this._client.get(`/threads/${threadId}/messages/${messageId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Modifies a message.
+   */
+  update(threadId, messageId, body, options) {
+    return this._client.post(`/threads/${threadId}/messages/${messageId}`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(threadId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list(threadId, {}, query);
+    }
+    return this._client.getAPIList(`/threads/${threadId}/messages`, MessagesPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Deletes a message.
+   */
+  del(threadId, messageId, options) {
+    return this._client.delete(`/threads/${threadId}/messages/${messageId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
     });
   }
 };
-/* @__PURE__ */ (function(Completions3) {
-})(Completions2 || (Completions2 = {}));
+var MessagesPage = class extends CursorPage {
+};
+(function(Messages2) {
+  Messages2.MessagesPage = MessagesPage;
+})(Messages || (Messages = {}));
+
+// node_modules/openai/resources/beta/threads/runs/steps.mjs
+var Steps = class extends APIResource {
+  retrieve(threadId, runId, stepId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.retrieve(threadId, runId, stepId, {}, query);
+    }
+    return this._client.get(`/threads/${threadId}/runs/${runId}/steps/${stepId}`, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(threadId, runId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list(threadId, runId, {}, query);
+    }
+    return this._client.getAPIList(`/threads/${threadId}/runs/${runId}/steps`, RunStepsPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+};
+var RunStepsPage = class extends CursorPage {
+};
+(function(Steps2) {
+  Steps2.RunStepsPage = RunStepsPage;
+})(Steps || (Steps = {}));
+
+// node_modules/openai/resources/beta/threads/runs/runs.mjs
+var Runs = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.steps = new Steps(this._client);
+  }
+  create(threadId, params, options) {
+    const { include, ...body } = params;
+    return this._client.post(`/threads/${threadId}/runs`, {
+      query: { include },
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers },
+      stream: params.stream ?? false
+    });
+  }
+  /**
+   * Retrieves a run.
+   */
+  retrieve(threadId, runId, options) {
+    return this._client.get(`/threads/${threadId}/runs/${runId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Modifies a run.
+   */
+  update(threadId, runId, body, options) {
+    return this._client.post(`/threads/${threadId}/runs/${runId}`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(threadId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list(threadId, {}, query);
+    }
+    return this._client.getAPIList(`/threads/${threadId}/runs`, RunsPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Cancels a run that is `in_progress`.
+   */
+  cancel(threadId, runId, options) {
+    return this._client.post(`/threads/${threadId}/runs/${runId}/cancel`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * A helper to create a run an poll for a terminal state. More information on Run
+   * lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async createAndPoll(threadId, body, options) {
+    const run = await this.create(threadId, body, options);
+    return await this.poll(threadId, run.id, options);
+  }
+  /**
+   * Create a Run stream
+   *
+   * @deprecated use `stream` instead
+   */
+  createAndStream(threadId, body, options) {
+    return AssistantStream.createAssistantStream(threadId, this._client.beta.threads.runs, body, options);
+  }
+  /**
+   * A helper to poll a run status until it reaches a terminal state. More
+   * information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async poll(threadId, runId, options) {
+    const headers = { ...options?.headers, "X-Stainless-Poll-Helper": "true" };
+    if (options?.pollIntervalMs) {
+      headers["X-Stainless-Custom-Poll-Interval"] = options.pollIntervalMs.toString();
+    }
+    while (true) {
+      const { data: run, response } = await this.retrieve(threadId, runId, {
+        ...options,
+        headers: { ...options?.headers, ...headers }
+      }).withResponse();
+      switch (run.status) {
+        //If we are in any sort of intermediate state we poll
+        case "queued":
+        case "in_progress":
+        case "cancelling":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep(sleepInterval);
+          break;
+        //We return the run in any terminal state.
+        case "requires_action":
+        case "incomplete":
+        case "cancelled":
+        case "completed":
+        case "failed":
+        case "expired":
+          return run;
+      }
+    }
+  }
+  /**
+   * Create a Run stream
+   */
+  stream(threadId, body, options) {
+    return AssistantStream.createAssistantStream(threadId, this._client.beta.threads.runs, body, options);
+  }
+  submitToolOutputs(threadId, runId, body, options) {
+    return this._client.post(`/threads/${threadId}/runs/${runId}/submit_tool_outputs`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers },
+      stream: body.stream ?? false
+    });
+  }
+  /**
+   * A helper to submit a tool output to a run and poll for a terminal run state.
+   * More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async submitToolOutputsAndPoll(threadId, runId, body, options) {
+    const run = await this.submitToolOutputs(threadId, runId, body, options);
+    return await this.poll(threadId, run.id, options);
+  }
+  /**
+   * Submit the tool outputs from a previous run and stream the run to a terminal
+   * state. More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  submitToolOutputsStream(threadId, runId, body, options) {
+    return AssistantStream.createToolAssistantStream(threadId, runId, this._client.beta.threads.runs, body, options);
+  }
+};
+var RunsPage = class extends CursorPage {
+};
+(function(Runs2) {
+  Runs2.RunsPage = RunsPage;
+  Runs2.Steps = Steps;
+  Runs2.RunStepsPage = RunStepsPage;
+})(Runs || (Runs = {}));
+
+// node_modules/openai/resources/beta/threads/threads.mjs
+var Threads = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.runs = new Runs(this._client);
+    this.messages = new Messages(this._client);
+  }
+  create(body = {}, options) {
+    if (isRequestOptions(body)) {
+      return this.create({}, body);
+    }
+    return this._client.post("/threads", {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieves a thread.
+   */
+  retrieve(threadId, options) {
+    return this._client.get(`/threads/${threadId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Modifies a thread.
+   */
+  update(threadId, body, options) {
+    return this._client.post(`/threads/${threadId}`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Delete a thread.
+   */
+  del(threadId, options) {
+    return this._client.delete(`/threads/${threadId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  createAndRun(body, options) {
+    return this._client.post("/threads/runs", {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers },
+      stream: body.stream ?? false
+    });
+  }
+  /**
+   * A helper to create a thread, start a run and then poll for a terminal state.
+   * More information on Run lifecycles can be found here:
+   * https://platform.openai.com/docs/assistants/how-it-works/runs-and-run-steps
+   */
+  async createAndRunPoll(body, options) {
+    const run = await this.createAndRun(body, options);
+    return await this.runs.poll(run.thread_id, run.id, options);
+  }
+  /**
+   * Create a thread and stream the run back
+   */
+  createAndRunStream(body, options) {
+    return AssistantStream.createThreadAssistantStream(body, this._client.beta.threads, options);
+  }
+};
+(function(Threads2) {
+  Threads2.Runs = Runs;
+  Threads2.RunsPage = RunsPage;
+  Threads2.Messages = Messages;
+  Threads2.MessagesPage = MessagesPage;
+})(Threads || (Threads = {}));
+
+// node_modules/openai/lib/Util.mjs
+var allSettledWithThrow = async (promises) => {
+  const results = await Promise.allSettled(promises);
+  const rejected = results.filter((result) => result.status === "rejected");
+  if (rejected.length) {
+    for (const result of rejected) {
+      console.error(result.reason);
+    }
+    throw new Error(`${rejected.length} promise(s) failed - see the above errors`);
+  }
+  const values = [];
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      values.push(result.value);
+    }
+  }
+  return values;
+};
+
+// node_modules/openai/resources/beta/vector-stores/files.mjs
+var Files = class extends APIResource {
+  /**
+   * Create a vector store file by attaching a
+   * [File](https://platform.openai.com/docs/api-reference/files) to a
+   * [vector store](https://platform.openai.com/docs/api-reference/vector-stores/object).
+   */
+  create(vectorStoreId, body, options) {
+    return this._client.post(`/vector_stores/${vectorStoreId}/files`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieves a vector store file.
+   */
+  retrieve(vectorStoreId, fileId, options) {
+    return this._client.get(`/vector_stores/${vectorStoreId}/files/${fileId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(vectorStoreId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list(vectorStoreId, {}, query);
+    }
+    return this._client.getAPIList(`/vector_stores/${vectorStoreId}/files`, VectorStoreFilesPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Delete a vector store file. This will remove the file from the vector store but
+   * the file itself will not be deleted. To delete the file, use the
+   * [delete file](https://platform.openai.com/docs/api-reference/files/delete)
+   * endpoint.
+   */
+  del(vectorStoreId, fileId, options) {
+    return this._client.delete(`/vector_stores/${vectorStoreId}/files/${fileId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Attach a file to the given vector store and wait for it to be processed.
+   */
+  async createAndPoll(vectorStoreId, body, options) {
+    const file = await this.create(vectorStoreId, body, options);
+    return await this.poll(vectorStoreId, file.id, options);
+  }
+  /**
+   * Wait for the vector store file to finish processing.
+   *
+   * Note: this will return even if the file failed to process, you need to check
+   * file.last_error and file.status to handle these cases
+   */
+  async poll(vectorStoreId, fileId, options) {
+    const headers = { ...options?.headers, "X-Stainless-Poll-Helper": "true" };
+    if (options?.pollIntervalMs) {
+      headers["X-Stainless-Custom-Poll-Interval"] = options.pollIntervalMs.toString();
+    }
+    while (true) {
+      const fileResponse = await this.retrieve(vectorStoreId, fileId, {
+        ...options,
+        headers
+      }).withResponse();
+      const file = fileResponse.data;
+      switch (file.status) {
+        case "in_progress":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = fileResponse.response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep(sleepInterval);
+          break;
+        case "failed":
+        case "completed":
+          return file;
+      }
+    }
+  }
+  /**
+   * Upload a file to the `files` API and then attach it to the given vector store.
+   *
+   * Note the file will be asynchronously processed (you can use the alternative
+   * polling helper method to wait for processing to complete).
+   */
+  async upload(vectorStoreId, file, options) {
+    const fileInfo = await this._client.files.create({ file, purpose: "assistants" }, options);
+    return this.create(vectorStoreId, { file_id: fileInfo.id }, options);
+  }
+  /**
+   * Add a file to a vector store and poll until processing is complete.
+   */
+  async uploadAndPoll(vectorStoreId, file, options) {
+    const fileInfo = await this.upload(vectorStoreId, file, options);
+    return await this.poll(vectorStoreId, fileInfo.id, options);
+  }
+};
+var VectorStoreFilesPage = class extends CursorPage {
+};
+(function(Files3) {
+  Files3.VectorStoreFilesPage = VectorStoreFilesPage;
+})(Files || (Files = {}));
+
+// node_modules/openai/resources/beta/vector-stores/file-batches.mjs
+var FileBatches = class extends APIResource {
+  /**
+   * Create a vector store file batch.
+   */
+  create(vectorStoreId, body, options) {
+    return this._client.post(`/vector_stores/${vectorStoreId}/file_batches`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieves a vector store file batch.
+   */
+  retrieve(vectorStoreId, batchId, options) {
+    return this._client.get(`/vector_stores/${vectorStoreId}/file_batches/${batchId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Cancel a vector store file batch. This attempts to cancel the processing of
+   * files in this batch as soon as possible.
+   */
+  cancel(vectorStoreId, batchId, options) {
+    return this._client.post(`/vector_stores/${vectorStoreId}/file_batches/${batchId}/cancel`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Create a vector store batch and poll until all files have been processed.
+   */
+  async createAndPoll(vectorStoreId, body, options) {
+    const batch = await this.create(vectorStoreId, body);
+    return await this.poll(vectorStoreId, batch.id, options);
+  }
+  listFiles(vectorStoreId, batchId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.listFiles(vectorStoreId, batchId, {}, query);
+    }
+    return this._client.getAPIList(`/vector_stores/${vectorStoreId}/file_batches/${batchId}/files`, VectorStoreFilesPage, { query, ...options, headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers } });
+  }
+  /**
+   * Wait for the given file batch to be processed.
+   *
+   * Note: this will return even if one of the files failed to process, you need to
+   * check batch.file_counts.failed_count to handle this case.
+   */
+  async poll(vectorStoreId, batchId, options) {
+    const headers = { ...options?.headers, "X-Stainless-Poll-Helper": "true" };
+    if (options?.pollIntervalMs) {
+      headers["X-Stainless-Custom-Poll-Interval"] = options.pollIntervalMs.toString();
+    }
+    while (true) {
+      const { data: batch, response } = await this.retrieve(vectorStoreId, batchId, {
+        ...options,
+        headers
+      }).withResponse();
+      switch (batch.status) {
+        case "in_progress":
+          let sleepInterval = 5e3;
+          if (options?.pollIntervalMs) {
+            sleepInterval = options.pollIntervalMs;
+          } else {
+            const headerInterval = response.headers.get("openai-poll-after-ms");
+            if (headerInterval) {
+              const headerIntervalMs = parseInt(headerInterval);
+              if (!isNaN(headerIntervalMs)) {
+                sleepInterval = headerIntervalMs;
+              }
+            }
+          }
+          await sleep(sleepInterval);
+          break;
+        case "failed":
+        case "cancelled":
+        case "completed":
+          return batch;
+      }
+    }
+  }
+  /**
+   * Uploads the given files concurrently and then creates a vector store file batch.
+   *
+   * The concurrency limit is configurable using the `maxConcurrency` parameter.
+   */
+  async uploadAndPoll(vectorStoreId, { files, fileIds = [] }, options) {
+    if (files == null || files.length == 0) {
+      throw new Error(`No \`files\` provided to process. If you've already uploaded files you should use \`.createAndPoll()\` instead`);
+    }
+    const configuredConcurrency = options?.maxConcurrency ?? 5;
+    const concurrencyLimit = Math.min(configuredConcurrency, files.length);
+    const client = this._client;
+    const fileIterator = files.values();
+    const allFileIds = [...fileIds];
+    async function processFiles(iterator) {
+      for (let item of iterator) {
+        const fileObj = await client.files.create({ file: item, purpose: "assistants" }, options);
+        allFileIds.push(fileObj.id);
+      }
+    }
+    const workers = Array(concurrencyLimit).fill(fileIterator).map(processFiles);
+    await allSettledWithThrow(workers);
+    return await this.createAndPoll(vectorStoreId, {
+      file_ids: allFileIds
+    });
+  }
+};
+/* @__PURE__ */ (function(FileBatches2) {
+})(FileBatches || (FileBatches = {}));
+
+// node_modules/openai/resources/beta/vector-stores/vector-stores.mjs
+var VectorStores = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.files = new Files(this._client);
+    this.fileBatches = new FileBatches(this._client);
+  }
+  /**
+   * Create a vector store.
+   */
+  create(body, options) {
+    return this._client.post("/vector_stores", {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Retrieves a vector store.
+   */
+  retrieve(vectorStoreId, options) {
+    return this._client.get(`/vector_stores/${vectorStoreId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Modifies a vector store.
+   */
+  update(vectorStoreId, body, options) {
+    return this._client.post(`/vector_stores/${vectorStoreId}`, {
+      body,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  list(query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this._client.getAPIList("/vector_stores", VectorStoresPage, {
+      query,
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+  /**
+   * Delete a vector store.
+   */
+  del(vectorStoreId, options) {
+    return this._client.delete(`/vector_stores/${vectorStoreId}`, {
+      ...options,
+      headers: { "OpenAI-Beta": "assistants=v2", ...options?.headers }
+    });
+  }
+};
+var VectorStoresPage = class extends CursorPage {
+};
+(function(VectorStores2) {
+  VectorStores2.VectorStoresPage = VectorStoresPage;
+  VectorStores2.Files = Files;
+  VectorStores2.VectorStoreFilesPage = VectorStoreFilesPage;
+  VectorStores2.FileBatches = FileBatches;
+})(VectorStores || (VectorStores = {}));
+
+// node_modules/openai/resources/beta/beta.mjs
+var Beta = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.vectorStores = new VectorStores(this._client);
+    this.chat = new Chat2(this._client);
+    this.assistants = new Assistants(this._client);
+    this.threads = new Threads(this._client);
+  }
+};
+(function(Beta2) {
+  Beta2.VectorStores = VectorStores;
+  Beta2.VectorStoresPage = VectorStoresPage;
+  Beta2.Chat = Chat2;
+  Beta2.Assistants = Assistants;
+  Beta2.AssistantsPage = AssistantsPage;
+  Beta2.Threads = Threads;
+})(Beta || (Beta = {}));
+
+// node_modules/openai/resources/completions.mjs
+var Completions3 = class extends APIResource {
+  create(body, options) {
+    return this._client.post("/completions", { body, ...options, stream: body.stream ?? false });
+  }
+};
+/* @__PURE__ */ (function(Completions4) {
+})(Completions3 || (Completions3 = {}));
 
 // node_modules/openai/resources/embeddings.mjs
 var Embeddings = class extends APIResource {
@@ -7856,122 +13196,186 @@ var Embeddings = class extends APIResource {
    * Creates an embedding vector representing the input text.
    */
   create(body, options) {
-    return this.post("/embeddings", { body, ...options });
+    return this._client.post("/embeddings", { body, ...options });
   }
 };
 /* @__PURE__ */ (function(Embeddings2) {
 })(Embeddings || (Embeddings = {}));
 
-// node_modules/openai/resources/edits.mjs
-var Edits = class extends APIResource {
-  /**
-   * Creates a new edit for the provided input, instruction, and parameters.
-   *
-   * @deprecated The Edits API is deprecated; please use Chat Completions instead.
-   *
-   * https://openai.com/blog/gpt-4-api-general-availability#deprecation-of-the-edits-api
-   */
-  create(body, options) {
-    return this.post("/edits", { body, ...options });
-  }
-};
-/* @__PURE__ */ (function(Edits2) {
-})(Edits || (Edits = {}));
-
 // node_modules/openai/resources/files.mjs
-var Files = class extends APIResource {
+var Files2 = class extends APIResource {
   /**
-   * Upload a file that contains document(s) to be used across various
-   * endpoints/features. Currently, the size of all the files uploaded by one
-   * organization can be up to 1 GB. Please contact us if you need to increase the
-   * storage limit.
+   * Upload a file that can be used across various endpoints. Individual files can be
+   * up to 512 MB, and the size of all files uploaded by one organization can be up
+   * to 100 GB.
+   *
+   * The Assistants API supports files up to 2 million tokens and of specific file
+   * types. See the
+   * [Assistants Tools guide](https://platform.openai.com/docs/assistants/tools) for
+   * details.
+   *
+   * The Fine-tuning API only supports `.jsonl` files. The input also has certain
+   * required formats for fine-tuning
+   * [chat](https://platform.openai.com/docs/api-reference/fine-tuning/chat-input) or
+   * [completions](https://platform.openai.com/docs/api-reference/fine-tuning/completions-input)
+   * models.
+   *
+   * The Batch API only supports `.jsonl` files up to 100 MB in size. The input also
+   * has a specific required
+   * [format](https://platform.openai.com/docs/api-reference/batch/request-input).
+   *
+   * Please [contact us](https://help.openai.com/) if you need to increase these
+   * storage limits.
    */
   create(body, options) {
-    return this.post("/files", multipartFormRequestOptions({ body, ...options }));
+    return this._client.post("/files", multipartFormRequestOptions({ body, ...options }));
   }
   /**
    * Returns information about a specific file.
    */
   retrieve(fileId, options) {
-    return this.get(`/files/${fileId}`, options);
+    return this._client.get(`/files/${fileId}`, options);
   }
-  /**
-   * Returns a list of files that belong to the user's organization.
-   */
-  list(options) {
-    return this.getAPIList("/files", FileObjectsPage, options);
+  list(query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this._client.getAPIList("/files", FileObjectsPage, { query, ...options });
   }
   /**
    * Delete a file.
    */
   del(fileId, options) {
-    return this.delete(`/files/${fileId}`, options);
+    return this._client.delete(`/files/${fileId}`, options);
   }
   /**
-   * Returns the contents of the specified file
+   * Returns the contents of the specified file.
+   */
+  content(fileId, options) {
+    return this._client.get(`/files/${fileId}/content`, { ...options, __binaryResponse: true });
+  }
+  /**
+   * Returns the contents of the specified file.
+   *
+   * @deprecated The `.content()` method should be used instead
    */
   retrieveContent(fileId, options) {
-    return this.get(`/files/${fileId}/content`, {
+    return this._client.get(`/files/${fileId}/content`, {
       ...options,
-      headers: {
-        Accept: "application/json",
-        ...options === null || options === void 0 ? void 0 : options.headers
-      }
+      headers: { Accept: "application/json", ...options?.headers }
     });
+  }
+  /**
+   * Waits for the given file to be processed, default timeout is 30 mins.
+   */
+  async waitForProcessing(id, { pollInterval = 5e3, maxWait = 30 * 60 * 1e3 } = {}) {
+    const TERMINAL_STATES = /* @__PURE__ */ new Set(["processed", "error", "deleted"]);
+    const start = Date.now();
+    let file = await this.retrieve(id);
+    while (!file.status || !TERMINAL_STATES.has(file.status)) {
+      await sleep(pollInterval);
+      file = await this.retrieve(id);
+      if (Date.now() - start > maxWait) {
+        throw new APIConnectionTimeoutError({
+          message: `Giving up on waiting for file ${id} to finish processing after ${maxWait} milliseconds.`
+        });
+      }
+    }
+    return file;
   }
 };
 var FileObjectsPage = class extends Page {
 };
-/* @__PURE__ */ (function(Files2) {
-})(Files || (Files = {}));
+(function(Files3) {
+  Files3.FileObjectsPage = FileObjectsPage;
+})(Files2 || (Files2 = {}));
 
-// node_modules/openai/resources/fine-tunes.mjs
-var FineTunes = class extends APIResource {
+// node_modules/openai/resources/fine-tuning/jobs/checkpoints.mjs
+var Checkpoints = class extends APIResource {
+  list(fineTuningJobId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list(fineTuningJobId, {}, query);
+    }
+    return this._client.getAPIList(`/fine_tuning/jobs/${fineTuningJobId}/checkpoints`, FineTuningJobCheckpointsPage, { query, ...options });
+  }
+};
+var FineTuningJobCheckpointsPage = class extends CursorPage {
+};
+(function(Checkpoints2) {
+  Checkpoints2.FineTuningJobCheckpointsPage = FineTuningJobCheckpointsPage;
+})(Checkpoints || (Checkpoints = {}));
+
+// node_modules/openai/resources/fine-tuning/jobs/jobs.mjs
+var Jobs = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.checkpoints = new Checkpoints(this._client);
+  }
   /**
-   * Creates a job that fine-tunes a specified model from a given dataset.
+   * Creates a fine-tuning job which begins the process of creating a new model from
+   * a given dataset.
    *
    * Response includes details of the enqueued job including job status and the name
    * of the fine-tuned models once complete.
    *
-   * [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+   * [Learn more about fine-tuning](https://platform.openai.com/docs/guides/fine-tuning)
    */
   create(body, options) {
-    return this.post("/fine-tunes", { body, ...options });
+    return this._client.post("/fine_tuning/jobs", { body, ...options });
   }
   /**
-   * Gets info about the fine-tune job.
+   * Get info about a fine-tuning job.
    *
-   * [Learn more about Fine-tuning](/docs/guides/fine-tuning)
+   * [Learn more about fine-tuning](https://platform.openai.com/docs/guides/fine-tuning)
    */
-  retrieve(fineTuneId, options) {
-    return this.get(`/fine-tunes/${fineTuneId}`, options);
+  retrieve(fineTuningJobId, options) {
+    return this._client.get(`/fine_tuning/jobs/${fineTuningJobId}`, options);
   }
-  /**
-   * List your organization's fine-tuning jobs
-   */
-  list(options) {
-    return this.getAPIList("/fine-tunes", FineTunesPage, options);
+  list(query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.list({}, query);
+    }
+    return this._client.getAPIList("/fine_tuning/jobs", FineTuningJobsPage, { query, ...options });
   }
   /**
    * Immediately cancel a fine-tune job.
    */
-  cancel(fineTuneId, options) {
-    return this.post(`/fine-tunes/${fineTuneId}/cancel`, options);
+  cancel(fineTuningJobId, options) {
+    return this._client.post(`/fine_tuning/jobs/${fineTuningJobId}/cancel`, options);
   }
-  listEvents(fineTuneId, query, options) {
-    var _a2;
-    return this.get(`/fine-tunes/${fineTuneId}/events`, {
+  listEvents(fineTuningJobId, query = {}, options) {
+    if (isRequestOptions(query)) {
+      return this.listEvents(fineTuningJobId, {}, query);
+    }
+    return this._client.getAPIList(`/fine_tuning/jobs/${fineTuningJobId}/events`, FineTuningJobEventsPage, {
       query,
-      timeout: 864e5,
-      ...options,
-      stream: (_a2 = query === null || query === void 0 ? void 0 : query.stream) !== null && _a2 !== void 0 ? _a2 : false
+      ...options
     });
   }
 };
-var FineTunesPage = class extends Page {
+var FineTuningJobsPage = class extends CursorPage {
 };
-/* @__PURE__ */ (function(FineTunes2) {
-})(FineTunes || (FineTunes = {}));
+var FineTuningJobEventsPage = class extends CursorPage {
+};
+(function(Jobs2) {
+  Jobs2.FineTuningJobsPage = FineTuningJobsPage;
+  Jobs2.FineTuningJobEventsPage = FineTuningJobEventsPage;
+  Jobs2.Checkpoints = Checkpoints;
+  Jobs2.FineTuningJobCheckpointsPage = FineTuningJobCheckpointsPage;
+})(Jobs || (Jobs = {}));
+
+// node_modules/openai/resources/fine-tuning/fine-tuning.mjs
+var FineTuning = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.jobs = new Jobs(this._client);
+  }
+};
+(function(FineTuning2) {
+  FineTuning2.Jobs = Jobs;
+  FineTuning2.FineTuningJobsPage = FineTuningJobsPage;
+  FineTuning2.FineTuningJobEventsPage = FineTuningJobEventsPage;
+})(FineTuning || (FineTuning = {}));
 
 // node_modules/openai/resources/images.mjs
 var Images = class extends APIResource {
@@ -7979,19 +13383,19 @@ var Images = class extends APIResource {
    * Creates a variation of a given image.
    */
   createVariation(body, options) {
-    return this.post("/images/variations", multipartFormRequestOptions({ body, ...options }));
+    return this._client.post("/images/variations", multipartFormRequestOptions({ body, ...options }));
   }
   /**
    * Creates an edited or extended image given an original image and a prompt.
    */
   edit(body, options) {
-    return this.post("/images/edits", multipartFormRequestOptions({ body, ...options }));
+    return this._client.post("/images/edits", multipartFormRequestOptions({ body, ...options }));
   }
   /**
    * Creates an image given a prompt.
    */
   generate(body, options) {
-    return this.post("/images/generations", { body, ...options });
+    return this._client.post("/images/generations", { body, ...options });
   }
 };
 /* @__PURE__ */ (function(Images2) {
@@ -8004,38 +13408,122 @@ var Models = class extends APIResource {
    * the owner and permissioning.
    */
   retrieve(model2, options) {
-    return this.get(`/models/${model2}`, options);
+    return this._client.get(`/models/${model2}`, options);
   }
   /**
    * Lists the currently available models, and provides basic information about each
    * one such as the owner and availability.
    */
   list(options) {
-    return this.getAPIList("/models", ModelsPage, options);
+    return this._client.getAPIList("/models", ModelsPage, options);
   }
   /**
-   * Delete a fine-tuned model. You must have the Owner role in your organization.
+   * Delete a fine-tuned model. You must have the Owner role in your organization to
+   * delete a model.
    */
   del(model2, options) {
-    return this.delete(`/models/${model2}`, options);
+    return this._client.delete(`/models/${model2}`, options);
   }
 };
 var ModelsPage = class extends Page {
 };
-/* @__PURE__ */ (function(Models2) {
+(function(Models2) {
+  Models2.ModelsPage = ModelsPage;
 })(Models || (Models = {}));
 
 // node_modules/openai/resources/moderations.mjs
 var Moderations = class extends APIResource {
   /**
-   * Classifies if text violates OpenAI's Content Policy
+   * Classifies if text is potentially harmful.
    */
   create(body, options) {
-    return this.post("/moderations", { body, ...options });
+    return this._client.post("/moderations", { body, ...options });
   }
 };
 /* @__PURE__ */ (function(Moderations2) {
 })(Moderations || (Moderations = {}));
+
+// node_modules/openai/resources/uploads/parts.mjs
+var Parts = class extends APIResource {
+  /**
+   * Adds a
+   * [Part](https://platform.openai.com/docs/api-reference/uploads/part-object) to an
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object) object.
+   * A Part represents a chunk of bytes from the file you are trying to upload.
+   *
+   * Each Part can be at most 64 MB, and you can add Parts until you hit the Upload
+   * maximum of 8 GB.
+   *
+   * It is possible to add multiple Parts in parallel. You can decide the intended
+   * order of the Parts when you
+   * [complete the Upload](https://platform.openai.com/docs/api-reference/uploads/complete).
+   */
+  create(uploadId, body, options) {
+    return this._client.post(`/uploads/${uploadId}/parts`, multipartFormRequestOptions({ body, ...options }));
+  }
+};
+/* @__PURE__ */ (function(Parts2) {
+})(Parts || (Parts = {}));
+
+// node_modules/openai/resources/uploads/uploads.mjs
+var Uploads = class extends APIResource {
+  constructor() {
+    super(...arguments);
+    this.parts = new Parts(this._client);
+  }
+  /**
+   * Creates an intermediate
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object) object
+   * that you can add
+   * [Parts](https://platform.openai.com/docs/api-reference/uploads/part-object) to.
+   * Currently, an Upload can accept at most 8 GB in total and expires after an hour
+   * after you create it.
+   *
+   * Once you complete the Upload, we will create a
+   * [File](https://platform.openai.com/docs/api-reference/files/object) object that
+   * contains all the parts you uploaded. This File is usable in the rest of our
+   * platform as a regular File object.
+   *
+   * For certain `purpose`s, the correct `mime_type` must be specified. Please refer
+   * to documentation for the supported MIME types for your use case:
+   *
+   * - [Assistants](https://platform.openai.com/docs/assistants/tools/file-search/supported-files)
+   *
+   * For guidance on the proper filename extensions for each purpose, please follow
+   * the documentation on
+   * [creating a File](https://platform.openai.com/docs/api-reference/files/create).
+   */
+  create(body, options) {
+    return this._client.post("/uploads", { body, ...options });
+  }
+  /**
+   * Cancels the Upload. No Parts may be added after an Upload is cancelled.
+   */
+  cancel(uploadId, options) {
+    return this._client.post(`/uploads/${uploadId}/cancel`, options);
+  }
+  /**
+   * Completes the
+   * [Upload](https://platform.openai.com/docs/api-reference/uploads/object).
+   *
+   * Within the returned Upload object, there is a nested
+   * [File](https://platform.openai.com/docs/api-reference/files/object) object that
+   * is ready to use in the rest of the platform.
+   *
+   * You can specify the order of the Parts by passing in an ordered list of the Part
+   * IDs.
+   *
+   * The number of bytes uploaded upon completion must match the number of bytes
+   * initially specified when creating the Upload object. No Parts may be added after
+   * an Upload is completed.
+   */
+  complete(uploadId, body, options) {
+    return this._client.post(`/uploads/${uploadId}/complete`, { body, ...options });
+  }
+};
+(function(Uploads2) {
+  Uploads2.Parts = Parts;
+})(Uploads || (Uploads = {}));
 
 // node_modules/openai/index.mjs
 var _a;
@@ -8043,8 +13531,10 @@ var OpenAI = class extends APIClient {
   /**
    * API Client for interfacing with the OpenAI API.
    *
-   * @param {string} [opts.apiKey=process.env['OPENAI_API_KEY']] - The API Key to send to the API.
-   * @param {string} [opts.baseURL] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['OPENAI_API_KEY'] ?? undefined]
+   * @param {string | null | undefined} [opts.organization=process.env['OPENAI_ORG_ID'] ?? null]
+   * @param {string | null | undefined} [opts.project=process.env['OPENAI_PROJECT_ID'] ?? null]
+   * @param {string} [opts.baseURL=process.env['OPENAI_BASE_URL'] ?? https://api.openai.com/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -8052,68 +13542,67 @@ var OpenAI = class extends APIClient {
    * @param {Core.Headers} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
-   * @param {string | null} [opts.organization]
    */
-  constructor(_b) {
-    var _c, _d;
-    var {
-      apiKey = readEnv("OPENAI_API_KEY"),
-      organization = (_c = readEnv("OPENAI_ORG_ID")) !== null && _c !== void 0 ? _c : null,
-      ...opts
-    } = _b === void 0 ? {} : _b;
+  constructor({ baseURL = readEnv("OPENAI_BASE_URL"), apiKey = readEnv("OPENAI_API_KEY"), organization = readEnv("OPENAI_ORG_ID") ?? null, project = readEnv("OPENAI_PROJECT_ID") ?? null, ...opts } = {}) {
     if (apiKey === void 0) {
-      throw new Error(
-        "The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'my apiKey' })."
-      );
+      throw new OpenAIError("The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).");
     }
     const options = {
       apiKey,
       organization,
-      baseURL: `https://api.openai.com/v1`,
-      ...opts
+      project,
+      ...opts,
+      baseURL: baseURL || `https://api.openai.com/v1`
     };
     if (!options.dangerouslyAllowBrowser && isRunningInBrowser()) {
-      throw new Error(
-        "It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n"
-      );
+      throw new OpenAIError("It looks like you're running in a browser-like environment.\n\nThis is disabled by default, as it risks exposing your secret API credentials to attackers.\nIf you understand the risks and have appropriate mitigations in place,\nyou can set the `dangerouslyAllowBrowser` option to `true`, e.g.,\n\nnew OpenAI({ apiKey, dangerouslyAllowBrowser: true });\n\nhttps://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety\n");
     }
     super({
       baseURL: options.baseURL,
-      timeout: (_d = options.timeout) !== null && _d !== void 0 ? _d : 6e5,
+      timeout: options.timeout ?? 6e5,
       httpAgent: options.httpAgent,
       maxRetries: options.maxRetries,
       fetch: options.fetch
     });
-    this.completions = new Completions2(this);
+    this.completions = new Completions3(this);
     this.chat = new Chat(this);
-    this.edits = new Edits(this);
     this.embeddings = new Embeddings(this);
-    this.files = new Files(this);
+    this.files = new Files2(this);
     this.images = new Images(this);
     this.audio = new Audio(this);
     this.moderations = new Moderations(this);
     this.models = new Models(this);
-    this.fineTunes = new FineTunes(this);
+    this.fineTuning = new FineTuning(this);
+    this.beta = new Beta(this);
+    this.batches = new Batches(this);
+    this.uploads = new Uploads(this);
     this._options = options;
     this.apiKey = apiKey;
     this.organization = organization;
+    this.project = project;
   }
   defaultQuery() {
     return this._options.defaultQuery;
   }
-  defaultHeaders() {
+  defaultHeaders(opts) {
     return {
-      ...super.defaultHeaders(),
+      ...super.defaultHeaders(opts),
       "OpenAI-Organization": this.organization,
+      "OpenAI-Project": this.project,
       ...this._options.defaultHeaders
     };
   }
-  authHeaders() {
+  authHeaders(opts) {
     return { Authorization: `Bearer ${this.apiKey}` };
+  }
+  stringifyQuery(query) {
+    return qs.stringify(query, { arrayFormat: "brackets" });
   }
 };
 _a = OpenAI;
 OpenAI.OpenAI = _a;
+OpenAI.DEFAULT_TIMEOUT = 6e5;
+OpenAI.OpenAIError = OpenAIError;
 OpenAI.APIError = APIError;
 OpenAI.APIConnectionError = APIConnectionError;
 OpenAI.APIConnectionTimeoutError = APIConnectionTimeoutError;
@@ -8126,37 +13615,27 @@ OpenAI.AuthenticationError = AuthenticationError;
 OpenAI.InternalServerError = InternalServerError;
 OpenAI.PermissionDeniedError = PermissionDeniedError;
 OpenAI.UnprocessableEntityError = UnprocessableEntityError;
-var {
-  APIError: APIError2,
-  APIConnectionError: APIConnectionError2,
-  APIConnectionTimeoutError: APIConnectionTimeoutError2,
-  APIUserAbortError: APIUserAbortError2,
-  NotFoundError: NotFoundError2,
-  ConflictError: ConflictError2,
-  RateLimitError: RateLimitError2,
-  BadRequestError: BadRequestError2,
-  AuthenticationError: AuthenticationError2,
-  InternalServerError: InternalServerError2,
-  PermissionDeniedError: PermissionDeniedError2,
-  UnprocessableEntityError: UnprocessableEntityError2
-} = error_exports;
+OpenAI.toFile = toFile;
+OpenAI.fileFromPath = fileFromPath;
+var { OpenAIError: OpenAIError2, APIError: APIError2, APIConnectionError: APIConnectionError2, APIConnectionTimeoutError: APIConnectionTimeoutError2, APIUserAbortError: APIUserAbortError2, NotFoundError: NotFoundError2, ConflictError: ConflictError2, RateLimitError: RateLimitError2, BadRequestError: BadRequestError2, AuthenticationError: AuthenticationError2, InternalServerError: InternalServerError2, PermissionDeniedError: PermissionDeniedError2, UnprocessableEntityError: UnprocessableEntityError2 } = error_exports;
 (function(OpenAI2) {
-  OpenAI2.toFile = toFile;
-  OpenAI2.fileFromPath = fileFromPath2;
   OpenAI2.Page = Page;
-  OpenAI2.Completions = Completions2;
+  OpenAI2.CursorPage = CursorPage;
+  OpenAI2.Completions = Completions3;
   OpenAI2.Chat = Chat;
-  OpenAI2.Edits = Edits;
   OpenAI2.Embeddings = Embeddings;
-  OpenAI2.Files = Files;
+  OpenAI2.Files = Files2;
   OpenAI2.FileObjectsPage = FileObjectsPage;
   OpenAI2.Images = Images;
   OpenAI2.Audio = Audio;
   OpenAI2.Moderations = Moderations;
   OpenAI2.Models = Models;
   OpenAI2.ModelsPage = ModelsPage;
-  OpenAI2.FineTunes = FineTunes;
-  OpenAI2.FineTunesPage = FineTunesPage;
+  OpenAI2.FineTuning = FineTuning;
+  OpenAI2.Beta = Beta;
+  OpenAI2.Batches = Batches;
+  OpenAI2.BatchesPage = BatchesPage;
+  OpenAI2.Uploads = Uploads;
 })(OpenAI || (OpenAI = {}));
 var openai_default = OpenAI;
 
@@ -8167,7 +13646,7 @@ var model = "llama3.1";
 var openai = new openai_default({ apiKey: apikey, baseURL: endpoint });
 function activate(context) {
   vscode.window.showInformationMessage("Docstring-GPT Now Active!");
-  const disposable = vscode.commands.registerCommand("docstring-gpt.generateDocstring", async () => {
+  const docString = vscode.commands.registerCommand("docstring-gpt.generateDocstring", async () => {
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       const { insertSpaces, tabSize } = editor.options;
@@ -8202,7 +13681,34 @@ function activate(context) {
       }
     }
   });
-  context.subscriptions.push(disposable);
+  const ollamaChat = vscode.commands.registerCommand("docstring-gpt.ollamaChat", () => {
+    const panel = vscode.window.createWebviewPanel(
+      "ollamaChat",
+      // Identifies the type of the webview. Used internally
+      "Ollama Chat",
+      // Title of the panel displayed to the user
+      vscode.ViewColumn.Two,
+      // Editor column to show the new webview panel in.
+      {}
+      // Webview options. More on these later.
+    );
+    panel.webview.html = getWebviewContent();
+  });
+  context.subscriptions.push(docString);
+  context.subscriptions.push(ollamaChat);
+}
+function getWebviewContent() {
+  return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <title>Cat Coding</title>
+  </head>
+  <body>
+	  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+  </body>
+  </html>`;
 }
 async function api_call(function_definition) {
   const config = vscode.workspace.getConfiguration("Docstring-GPT");
@@ -8232,16 +13738,6 @@ function deactivate() {
 });
 /*! Bundled license information:
 
-humanize-ms/index.js:
-  (*!
-   * humanize-ms - index.js
-   * Copyright(c) 2014 dead_horse <dead_horse@qq.com>
-   * MIT Licensed
-   *)
-
-node-domexception/index.js:
-  (*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> *)
-
 web-streams-polyfill/dist/ponyfill.mjs:
   (**
    * @license
@@ -8256,5 +13752,15 @@ formdata-node/lib/esm/blobHelpers.js:
 
 formdata-node/lib/esm/Blob.js:
   (*! Based on fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> & David Frank *)
+
+humanize-ms/index.js:
+  (*!
+   * humanize-ms - index.js
+   * Copyright(c) 2014 dead_horse <dead_horse@qq.com>
+   * MIT Licensed
+   *)
+
+node-domexception/index.js:
+  (*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> *)
 */
 //# sourceMappingURL=extension.js.map
