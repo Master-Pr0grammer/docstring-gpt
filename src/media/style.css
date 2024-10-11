@@ -1,0 +1,85 @@
+html {
+    font-size: 22px;
+    font-family: Open Sans, sans-serif;
+    padding-inline: 2%;
+}
+
+body {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #f9f9f9;
+    background-color: #333;
+}
+
+.chat-bubble {
+    background-color:grey;
+    border-radius: 10px;
+    padding-inline: 2%;
+    padding-block: 0.1%;
+    margin-bottom: 2%; /* Adjust the margin-bottom value as needed */
+}
+
+#user_msg {
+    background-color: grey;
+    border-radius: 10px;
+
+    padding-inline: 2%;
+    padding-block: 1%;
+    height: 75px;
+    min-height: 75px;
+
+    width: 100%;
+    color: #f9f9f9;
+    box-sizing: border-box;
+    font-family: Open Sans, sans-serif; /* Change the font to Arial or any other desired font */
+    font-size: 16px;
+
+    resize: vertical;
+    overflow: hidden;
+}
+#user_msg::placeholder {
+    color: #f9f9f9;
+    font-family: Open Sans, sans-serif;
+    font-size: 16px;
+    opacity: 1; /* Firefox */
+}
+
+
+
+/* Style both button and input[type="button"] */
+button, input {
+    background-color: #434343;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Hover effect */
+button:hover, input:hover {
+    background-color: #555;
+}
+
+/* Active effect */
+button:active, input:active {
+    background-color: #222;
+}
+
+/* Styles for code blocks */
+.markdown-container pre {
+    background-color: #3c3c3c;
+    font-size: 16px;
+    color: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+/* .markdown-container code {
+    background-color: #2e2e2e;
+    padding: 5px;
+    border-radius: 3px;
+    font-family: monospace;
+} */

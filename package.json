@@ -31,8 +31,7 @@
         "category": "Chat"
       }
     ],
-
-    "keybindings":[
+    "keybindings": [
       {
         "command": "docstring-gpt.generateDocstring",
         "key": "ctrl+shift+.",
@@ -64,11 +63,10 @@
           "default": "Standard VS-Code docstring formatting. Make sure no line is too long.",
           "markdownDescription": "Specifies the specification for the docstrings to follow. Default is none."
         },
-        
         "Docstring-GPT.advanced.temperature": {
           "title": "LLM Temperature",
           "type": "number",
-          "default": 1.0,
+          "default": 1,
           "markdownDescription": "Temperature for LLM. The lower the temperature, the less random and better the responses. The higher the temperature, the higher the randomness, and the worse the responses. 0 gives optimal responses, giving the same response every time, and 2 is the recomended temperature upper limit."
         }
       }
@@ -102,6 +100,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "marked": "^14.1.2",
     "openai": "^4.0.0"
   }
 }
