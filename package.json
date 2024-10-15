@@ -26,9 +26,17 @@
         }
       },
       {
+        "command": "extension.showPreview",
+        "title": "show preview"
+      },
+      {
         "command": "docstring-gpt.ollamaChat",
         "title": "Ollama Chat",
-        "category": "Chat"
+        "category": "Chat",
+        "icon": {
+          "light": "images/chat_icon_light_mode.png",
+          "dark": "images/chat_icon_dark_mode.png"
+        }
       }
     ],
     "keybindings": [
@@ -36,6 +44,12 @@
         "command": "docstring-gpt.generateDocstring",
         "key": "ctrl+shift+.",
         "mac": "cmd+shift+.",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "docstring-gpt.ollamaChat",
+        "key": "ctrl+shift+l",
+        "mac": "cmd+shift+l",
         "when": "editorTextFocus"
       }
     ],
@@ -45,6 +59,10 @@
           "command": "docstring-gpt.generateDocstring",
           "group": "navigation",
           "when": "resourceLangId == python"
+        },
+        {
+          "command": "docstring-gpt.ollamaChat",
+          "group": "navigation"
         }
       ]
     },

@@ -8,7 +8,7 @@ import { marked } from 'marked'; // Convert Markdown text to HTML
 //Local LLM info
 const ENDPOINT = "http://localhost:11434/v1";
 const APIKEY = "ollama";
-const MODEL = "llama3.1";
+const MODEL = "llama3.2:3b";
 
 const openai = new OpenAI({apiKey:APIKEY, baseURL:ENDPOINT});
 
@@ -72,17 +72,20 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	let currentPanel: vscode.WebviewPanel | undefined = undefined;
+	var history:OpenAI.Chat.Completions.ChatCompletionMessage[] = [];
 	const ollamaChat = vscode.commands.registerCommand('docstring-gpt.ollamaChat', () => {
-		var history:OpenAI.Chat.Completions.ChatCompletionMessage[] = [];
+		
 		const editor = vscode.window.activeTextEditor;
 		var code = editor?.document.getText();
-		history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+editor?.document.fileName+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + '\n```'});
-		history.push({role:'assistant', content:'Hello! How can I assist you today?'});
+		console.log(history.length);
+		if (history.length === 0){
+			history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+editor?.document.fileName+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + '\n```'});
+			history.push({role:'assistant', content:'Hello! How can I assist you today?'});
+		}
 		
 
 		if (currentPanel) {
-			// If we already have a panel, show it in the target column
-			currentPanel.reveal(vscode.ViewColumn.Two);
+			currentPanel.dispose(); //Close pannel if already open
 		}
 		else {
 			// Create and show a new webview
@@ -163,7 +166,7 @@ export function activate(context: vscode.ExtensionContext) {
 								history[history.length-1].content += chunk.choices[0].delta.content;
 							}
 
-							vscode.commands.executeCommand('docstring-gpt.doUpdateContent', currentPanel, String(marked(String(history[history.length-1].content))));
+							vscode.commands.executeCommand('docstring-gpt.doUpdateContent', currentPanel, String(marked(String(history[history.length-1].content)+' ⬤')));
 						}
 						if (currentPanel){currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);}
 						return;
@@ -175,7 +178,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Register the command once in the activate function
+	// Register the update command to update webview
 	let update = vscode.commands.registerCommand('docstring-gpt.doUpdateContent', (panel: vscode.WebviewPanel, chunkContent: string) => {
 		if (!currentPanel) {
 			return;

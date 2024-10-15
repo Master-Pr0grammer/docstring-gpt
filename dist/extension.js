@@ -10232,7 +10232,7 @@ var lexer = _Lexer.lex;
 // src/extension.ts
 var ENDPOINT = "http://localhost:11434/v1";
 var APIKEY = "ollama";
-var MODEL = "llama3.1";
+var MODEL = "llama3.2:3b";
 var openai = new openai_default({ apiKey: APIKEY, baseURL: ENDPOINT });
 function activate(context) {
   vscode.window.showInformationMessage("Docstring-GPT Now Active!");
@@ -10272,14 +10272,17 @@ function activate(context) {
     }
   });
   let currentPanel = void 0;
+  var history = [];
   const ollamaChat = vscode.commands.registerCommand("docstring-gpt.ollamaChat", () => {
-    var history = [];
     const editor = vscode.window.activeTextEditor;
     var code = editor?.document.getText();
-    history.push({ role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + editor?.document.fileName + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + "\n```" });
-    history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
+    console.log(history.length);
+    if (history.length === 0) {
+      history.push({ role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + editor?.document.fileName + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + "\n```" });
+      history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
+    }
     if (currentPanel) {
-      currentPanel.reveal(vscode.ViewColumn.Two);
+      currentPanel.dispose();
     } else {
       currentPanel = vscode.window.createWebviewPanel(
         "ollamaChat",
@@ -10344,7 +10347,7 @@ function activate(context) {
                 if (chunk.choices[0].delta.content) {
                   history[history.length - 1].content += chunk.choices[0].delta.content;
                 }
-                vscode.commands.executeCommand("docstring-gpt.doUpdateContent", currentPanel, String(marked(String(history[history.length - 1].content))));
+                vscode.commands.executeCommand("docstring-gpt.doUpdateContent", currentPanel, String(marked(String(history[history.length - 1].content) + " \u2B24")));
               }
               if (currentPanel) {
                 currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);
