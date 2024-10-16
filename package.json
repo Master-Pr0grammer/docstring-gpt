@@ -81,6 +81,24 @@
           "default": "Standard VS-Code docstring formatting. Make sure no line is too long.",
           "markdownDescription": "Specifies the specification for the docstrings to follow. Default is none."
         },
+        "Docstring-GPT.llm.endpoint": {
+          "title": "LLM Endpoint",
+          "type": "string",
+          "default": "http://localhost:11434/v1",
+          "markdownDescription": "This is the endpoint for the LLM, to use Openai models, change this to \"https://api.openai.com/v1\""
+        },
+        "Docstring-GPT.llm.apikey": {
+          "title": "LLM API key",
+          "type": "string",
+          "default": "ollama",
+          "markdownDescription": "This is the API key for the LLM service, the default for this is the ollama api key. If you want to use Openai models, you must provide your unique Openai API key here."
+        },
+        "Docstring-GPT.llm.model": {
+          "title": "LLM model name",
+          "type": "string",
+          "default": "llama3.1",
+          "markdownDescription": "This is the name of the model that you would like to use. The default mode is llama3.1 self hosten on ollama. You can change this to any ollama models you have installed or any Openai models you would like."
+        },
         "Docstring-GPT.advanced.temperature": {
           "title": "LLM Temperature",
           "type": "number",

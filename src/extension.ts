@@ -5,12 +5,11 @@ import OpenAI from "openai";
 import { marked } from 'marked'; // Convert Markdown text to HTML 
 
 
-//Local LLM info
-const ENDPOINT = "http://localhost:11434/v1";
-const APIKEY = "ollama";
-const MODEL = "llama3.2:3b";
-
-const openai = new OpenAI({apiKey:APIKEY, baseURL:ENDPOINT});
+//LLM info
+var config = vscode.workspace.getConfiguration('Docstring-GPT');
+var ENDPOINT:string = String(config.get('llm.endpoint'));
+var APIKEY:string = String(config.get('llm.apikey'));
+var MODEL:string = String(config.get('llm.model'));
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -19,6 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Docsring generation command definition
 	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
+
 		const editor = vscode.window.activeTextEditor;
 
 		if (editor) {
@@ -77,7 +77,6 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		const editor = vscode.window.activeTextEditor;
 		var code = editor?.document.getText();
-		console.log(history.length);
 		if (history.length === 0){
 			history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+editor?.document.fileName+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + '\n```'});
 			history.push({role:'assistant', content:'Hello! How can I assist you today?'});
@@ -141,12 +140,26 @@ export function activate(context: vscode.ExtensionContext) {
 							history.push({role:'user', content:message.text});
 						}
 
+						if (message.text === "/clear"){
+							history = [];
+							history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+editor?.document.fileName+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + '\n```'});
+							history.push({role:'assistant', content:'Hello! How can I assist you today?'});
+							if (currentPanel){
+								currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);}
+							return;
+						}
+
 						// Render user's prompt in chat history
 						if (currentPanel){
 							currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);
 						}
 
-
+						//Get LLM info
+						const config = vscode.workspace.getConfiguration('Docstring-GPT');
+						ENDPOINT = String(config.get('llm.endpoint'));
+						APIKEY = String(config.get('llm.apikey'));
+						MODEL = String(config.get('llm.model'));
+						var openai = new OpenAI({apiKey:APIKEY, baseURL:ENDPOINT});
 						const generator = await openai.chat.completions.create({
 							model: MODEL,
 							messages: history,
@@ -255,7 +268,13 @@ async function api_call(function_definition: string): Promise<AsyncIterable<any>
 	const config = vscode.workspace.getConfiguration('Docstring-GPT');
 	const system_prompt:string = String(config.get('systemPrompt'));
 	const format_specs:string = String(config.get("documentationSpecification"));
-	const temperature:Number = Number(config.get('advanced.temperature'));
+	const temp:number = Number(config.get('advanced.temperature'));
+
+	//Get LLM info
+	var ENDPOINT:string = String(config.get('llm.endpoint'));
+	var APIKEY:string = String(config.get('llm.apikey'));
+	var MODEL:string = String(config.get('llm.model'));
+	var openai = new OpenAI({apiKey:APIKEY, baseURL:ENDPOINT});
 
 	const completion = await openai.chat.completions.create({
 		model: MODEL,
@@ -264,7 +283,7 @@ async function api_call(function_definition: string): Promise<AsyncIterable<any>
 			{"role":"user", "content":function_definition}
 		],
 		stream:true,
-		temperature:0.0
+		temperature:temp
 	});
 	return completion;
 }
