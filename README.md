@@ -32,7 +32,7 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Issues
 
 ## Release Notes
 
