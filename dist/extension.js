@@ -8165,63 +8165,109 @@ var endpoint = "http://localhost:11434/v1";
 var apikey = "ollama";
 var model = "llama3.1";
 var openai = new openai_default({ apiKey: apikey, baseURL: endpoint });
+var LLM = class {
+  endpoint;
+  apikey;
+  model;
+  temperature;
+  client;
+  constructor(endpoint2, apikey2, model2, temperature) {
+    this.endpoint = endpoint2;
+    this.apikey = apikey2;
+    this.model = model2;
+    this.temperature = temperature;
+    this.client = new openai_default({ apiKey: this.apikey, baseURL: this.endpoint });
+  }
+  set_endpoint(endpoint2) {
+    this.endpoint = endpoint2;
+    this.client = new openai_default({ apiKey: this.apikey, baseURL: this.endpoint });
+  }
+  set_apikey(apikey2) {
+    this.apikey = apikey2;
+    this.client = new openai_default({ apiKey: this.apikey, baseURL: this.endpoint });
+  }
+  set_model(model2) {
+    this.model = model2;
+  }
+  set_temperature(temperature) {
+    this.temperature = temperature;
+  }
+  //Call LLM
+  async api_call(function_definition) {
+    const config = vscode.workspace.getConfiguration("Docstring-GPT");
+    const system_prompt = String(config.get("systemPrompt"));
+    const format_specs = String(config.get("documentationSpecification"));
+    const temperature = Number(config.get("advanced.temperature"));
+    console.log("System Prompt:", system_prompt);
+    console.log("Documentation Specification:", format_specs);
+    console.log("Temperature:", temperature);
+    const completion = await this.client.chat.completions.create({
+      model,
+      messages: [
+        { "role": "system", "content": system_prompt + "\n\n" + format_specs },
+        { "role": "user", "content": function_definition }
+      ],
+      stream: true,
+      temperature: this.temperature
+    });
+    return completion;
+  }
+};
+var Editor = class {
+  editor;
+  indent;
+  constructor(editor) {
+    this.editor = editor;
+    const { insertSpaces, tabSize } = this.editor.options;
+    this.indent = "";
+    if (typeof insertSpaces === "boolean") {
+      const indentStyle = insertSpaces ? "Spaces" : "Tabs";
+      if (indentStyle === "Tabs") {
+        this.indent = "	";
+      } else if (typeof tabSize === "number") {
+        this.indent = " ".repeat(tabSize);
+      }
+    }
+  }
+  get_selection_text() {
+    const document = this.editor.document;
+    const current_selection = this.editor.selection;
+    return document.getText(current_selection);
+  }
+  async insert_docstring(generator) {
+    const document = this.editor.document;
+    var current_selection = this.editor.selection;
+    var text = document.getText(current_selection);
+    const text_arr = text.split("\n");
+    const num_indent = text_arr[1].split(this.indent).length - 1;
+    var docstring = "";
+    for await (const chunk of generator) {
+      docstring += chunk.choices[0].delta.content;
+      const temp = text.split("\n");
+      const Lines = temp.length - 1;
+      const newEndPosition = new vscode.Position(current_selection.start.line + Lines, temp.slice(-1)[0].length);
+      const selection_range = new vscode.Range(current_selection.start, newEndPosition);
+      const temp_docstring = docstring.replaceAll('"""', "").replaceAll("\n", "\n" + this.indent.repeat(num_indent));
+      const new_text = text_arr[0] + "\n" + this.indent.repeat(num_indent) + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join("\n");
+      this.editor.edit((editBuilder) => {
+        editBuilder.replace(selection_range, new_text);
+      });
+      text = new_text;
+    }
+  }
+};
 function activate(context) {
   vscode.window.showInformationMessage("Docstring-GPT Now Active!");
+  const user_LLM = new LLM(endpoint, apikey, model, 0);
   const disposable = vscode.commands.registerCommand("docstring-gpt.generateDocstring", async () => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-      const { insertSpaces, tabSize } = editor.options;
-      var indent = "";
-      if (typeof insertSpaces === "boolean") {
-        const indentStyle = insertSpaces ? "Spaces" : "Tabs";
-        if (indentStyle === "Tabs") {
-          indent = "	";
-        } else if (typeof tabSize === "number") {
-          indent = " ".repeat(tabSize);
-        }
-      }
-      const document = editor.document;
-      const selection = editor.selection;
-      var text = document.getText(selection);
-      const text_arr = text.split("\n");
-      const num_indent = text_arr[1].split(indent).length - 1;
-      const generator = await api_call(text);
-      var docstring = "";
-      for await (const chunk of generator) {
-        docstring += chunk.choices[0].delta.content;
-        const temp = text.split("\n");
-        const Lines = temp.length - 1;
-        const newEndPosition = new vscode.Position(selection.start.line + Lines, temp.slice(-1)[0].length);
-        const selection_range = new vscode.Range(selection.start, newEndPosition);
-        const temp_docstring = docstring.replaceAll('"""', "").replaceAll("\n", "\n" + indent.repeat(num_indent));
-        const new_text = text_arr[0] + "\n" + indent.repeat(num_indent) + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join("\n");
-        editor.edit((editBuilder) => {
-          editBuilder.replace(selection_range, new_text);
-        });
-        text = new_text;
-      }
+    if (vscode.window.activeTextEditor) {
+      const editor = new Editor(vscode.window.activeTextEditor);
+      const function_def = editor.get_selection_text();
+      const generator = await user_LLM.api_call(function_def);
+      editor.insert_docstring(generator);
     }
   });
   context.subscriptions.push(disposable);
-}
-async function api_call(function_definition) {
-  const config = vscode.workspace.getConfiguration("Docstring-GPT");
-  const system_prompt = String(config.get("systemPrompt"));
-  const format_specs = String(config.get("documentationSpecification"));
-  const temperature = Number(config.get("advanced.temperature"));
-  console.log("System Prompt:", system_prompt);
-  console.log("Documentation Specification:", format_specs);
-  console.log("Temperature:", temperature);
-  const completion = await openai.chat.completions.create({
-    model,
-    messages: [
-      { "role": "system", "content": system_prompt + "\n\n" + format_specs },
-      { "role": "user", "content": function_definition }
-    ],
-    stream: true,
-    temperature: 0
-  });
-  return completion;
 }
 function deactivate() {
 }
