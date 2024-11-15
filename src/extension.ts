@@ -17,7 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Docstring-GPT Now Active!');
 
 	// Docsring generation command definition
+	var isGenerating:boolean = false;
 	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
+		console.log('help\n');
 
 		const editor = vscode.window.activeTextEditor;
 
@@ -44,6 +46,12 @@ export function activate(context: vscode.ExtensionContext) {
 			const text_arr = text.split('\n');
 			const num_indent = text_arr[1].split(indent).length - 1;
 
+			//Wait until not generating
+			console.log(isGenerating);
+			console.log('hello\n');
+			while (isGenerating===true){}
+			
+			isGenerating = true;
 			const generator = await api_call(text);
 			var docstring = "";
 
@@ -68,6 +76,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 				text = new_text;
 			}
+
+			isGenerating = false;
 		}
 	});
 

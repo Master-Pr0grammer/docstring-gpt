@@ -3,7 +3,7 @@
   "displayName": "Docstring-GPT",
   "description": "An extension to automaticially generate docstrings for functions and classes with AI.",
   "icon": "images/icon.png",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -24,10 +24,6 @@
           "light": "images/light_button.png",
           "dark": "images/dark_button.png"
         }
-      },
-      {
-        "command": "extension.showPreview",
-        "title": "show preview"
       },
       {
         "command": "docstring-gpt.ollamaChat",
