@@ -3,13 +3,14 @@
 import * as vscode from 'vscode';
 import OpenAI from "openai";
 import { marked } from 'marked'; // Convert Markdown text to HTML 
+import { setFlagsFromString } from 'v8';
 
 
 //LLM info
-var config = vscode.workspace.getConfiguration('Docstring-GPT');
-var ENDPOINT:string = String(config.get('llm.endpoint'));
-var APIKEY:string = String(config.get('llm.apikey'));
-var MODEL:string = String(config.get('llm.model'));
+// var config = vscode.workspace.getConfiguration('Docstring-GPT');
+// var ENDPOINT:string = String(config.get('llm.endpoint'));
+// var APIKEY:string = String(config.get('llm.apikey'));
+// var MODEL:string = String(config.get('llm.model'));
 
 //Define class for LLM
 class LLM {
@@ -20,31 +21,24 @@ class LLM {
 
 	client:OpenAI;
 
-	constructor(endpoint:string, apikey:string, model:string, temperature:number) {
-	  this.endpoint = endpoint;
-	  this.apikey = apikey;
-	  this.model = model;
-	  this.temperature = temperature;
+	constructor() {
+		const config = vscode.workspace.getConfiguration('Docstring-GPT');
+		this.endpoint = String(config.get('llm.endpoint'));
+		this.apikey = String(config.get('llm.apikey'));
+		this.model = String(config.get('llm.model'));
+		this.temperature = Number(config.get('advanced.temperature'));
 
-	  this.client = new OpenAI({apiKey:this.apikey, baseURL:this.endpoint});
-	}
-
-	public set_endpoint(endpoint:string){
-		this.endpoint = endpoint;
 		this.client = new OpenAI({apiKey:this.apikey, baseURL:this.endpoint});
 	}
 
-	public set_apikey(apikey:string){
-		this.apikey = apikey;
+	public update_settings(){
+		const config = vscode.workspace.getConfiguration('Docstring-GPT');
+		this.endpoint = String(config.get('llm.endpoint'));
+		this.apikey = String(config.get('llm.apikey'));
+		this.model = String(config.get('llm.model'));
+		this.temperature = Number(config.get('advanced.temperature'));
+
 		this.client = new OpenAI({apiKey:this.apikey, baseURL:this.endpoint});
-	}
-
-	public set_model(model:string){
-		this.model = model;
-	}
-
-	public set_temperature(temperature:number){
-		this.temperature = temperature;
 	}
 
 	//Call LLM
@@ -52,14 +46,13 @@ class LLM {
 		const config = vscode.workspace.getConfiguration('Docstring-GPT');
 		const system_prompt:string = String(config.get('systemPrompt'));
 		const format_specs:string = String(config.get("documentationSpecification"));
-		const temperature:Number = Number(config.get('advanced.temperature'));
 	
 		console.log('System Prompt:', system_prompt);
 		console.log('Documentation Specification:', format_specs);
-		console.log('Temperature:', temperature);
+		console.log('Temperature:', this.temperature);
 	
 		const completion = await this.client.chat.completions.create({
-			model: MODEL,
+			model: this.model,
 			messages: [
 				{"role": "system", "content": system_prompt + "\n\n" + format_specs},
 				{"role":"user", "content":function_definition}
@@ -142,7 +135,14 @@ class Editor {
 export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Docstring-GPT Now Active!');
 
-	const user_LLM = new LLM(ENDPOINT, APIKEY, MODEL, 0.0);
+	const user_LLM = new LLM();
+
+	// Listener for configuration changes
+    vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration('Docstring-GPT')) {
+			user_LLM.update_settings();
+        }
+    });
 
 	// Docsring generation command definition
 	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
@@ -207,7 +207,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const script_path = vscode.Uri.joinPath(context.extensionUri, 'src', 'media', 'script.js');
 			const script_Uri = currentPanel.webview.asWebviewUri(script_path);
-			currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);
+			currentPanel.webview.html = getWebviewContent(user_LLM, imageUri, css_Uri, script_Uri, history);
 
 			// Handle messages from the webview
 			currentPanel.webview.onDidReceiveMessage(
@@ -230,23 +230,19 @@ export function activate(context: vscode.ExtensionContext) {
 							history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+editor?.document.fileName+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + code + '\n```'});
 							history.push({role:'assistant', content:'Hello! How can I assist you today?'});
 							if (currentPanel){
-								currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);}
+								currentPanel.webview.html = getWebviewContent(user_LLM, imageUri, css_Uri, script_Uri, history);}
 							return;
 						}
 
 						// Render user's prompt in chat history
 						if (currentPanel){
-							currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);
+							currentPanel.webview.html = getWebviewContent(user_LLM, imageUri, css_Uri, script_Uri, history);
 						}
 
 						//Get LLM info
-						const config = vscode.workspace.getConfiguration('Docstring-GPT');
-						ENDPOINT = String(config.get('llm.endpoint'));
-						APIKEY = String(config.get('llm.apikey'));
-						MODEL = String(config.get('llm.model'));
-						var openai = new OpenAI({apiKey:APIKEY, baseURL:ENDPOINT});
+						var openai = new OpenAI({apiKey:user_LLM.apikey, baseURL:user_LLM.endpoint});
 						const generator = await openai.chat.completions.create({
-							model: MODEL,
+							model: user_LLM.model,
 							messages: history,
 							stream:true,
 							temperature:0.0
@@ -258,7 +254,7 @@ export function activate(context: vscode.ExtensionContext) {
 						context.subscriptions.push(update);
 
 						//Update content to create new chat
-						if (currentPanel){currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);}
+						if (currentPanel){currentPanel.webview.html = getWebviewContent(user_LLM, imageUri, css_Uri, script_Uri, history);}
 						for await (const chunk of generator) {
 							if (chunk.choices[0].delta.content){
 								history[history.length-1].content += chunk.choices[0].delta.content;
@@ -266,7 +262,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 							vscode.commands.executeCommand('docstring-gpt.doUpdateContent', currentPanel, String(marked(String(history[history.length-1].content)+' ⬤')));
 						}
-						if (currentPanel){currentPanel.webview.html = getWebviewContent(MODEL, imageUri, css_Uri, script_Uri, history);}
+						if (currentPanel){currentPanel.webview.html = getWebviewContent(user_LLM, imageUri, css_Uri, script_Uri, history);}
 						return;
 				  }
 				},
@@ -290,7 +286,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(ollamaChat);
 }
 
-function getWebviewContent(model:string, image:vscode.Uri, css:vscode.Uri, script:vscode.Uri, messages:Array<OpenAI.Chat.Completions.ChatCompletionMessage>) {
+function getWebviewContent(user_LLM:LLM, image:vscode.Uri, css:vscode.Uri, script:vscode.Uri, messages:Array<OpenAI.Chat.Completions.ChatCompletionMessage>) {
 	//Build message bubbles to insert
 	var chat_string = '';
 
@@ -300,7 +296,7 @@ function getWebviewContent(model:string, image:vscode.Uri, css:vscode.Uri, scrip
 			name = 'You';
 		}
 		else {
-			name = model;
+			name = user_LLM.model;
 		}
 
 		let message = messages[i].content;
