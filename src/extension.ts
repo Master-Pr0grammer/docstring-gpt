@@ -59,7 +59,7 @@ class LLM {
 		console.log('Temperature:', temperature);
 	
 		const completion = await this.client.chat.completions.create({
-			model: model,
+			model: MODEL,
 			messages: [
 				{"role": "system", "content": system_prompt + "\n\n" + format_specs},
 				{"role":"user", "content":function_definition}
@@ -142,10 +142,10 @@ class Editor {
 export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Docstring-GPT Now Active!');
 
-	const user_LLM = new LLM(endpoint, apikey, model, 0.0);
+	const user_LLM = new LLM(ENDPOINT, APIKEY, MODEL, 0.0);
 
 	// Docsring generation command definition
-	const disposable = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
+	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
 		if (vscode.window.activeTextEditor){
 			const editor = new Editor(vscode.window.activeTextEditor);
 
