@@ -1,10 +1,14 @@
 # DSG [BETA RELEASE]
 
-DSG is a VSCode extension that assists programmers in generating useful and consistent docstrings for functions and classes in any codebase. Using large language models that are from OpenAI or supported by Ollama, the extension will automate and standardize the process of writing docstrings. The tool aims to improve documentation quality, reduce manual effort, and improve code maintainability. 
+DSG is a VSCode extension that helps programmers generate useful and consistent docstrings for functions and classes in any codebase. By leveraging large language models from OpenAI or those supported by Ollama, the extension automates and standardizes the process of writing docstrings. This tool aims to improve documentation quality, reduce manual effort, and improve code maintainability. 
 
 ## Features
 
-Generate docstrings.
+Generate docstrings: Automatically generate docstrings for Python, JavaScript, Java, and C++.
+
+Customizable models: Choose between OpenAI and Llama-based models for docstring generation.
+
+Style options: Select from various docstring styles such as Google, Javadoc, and more.
 
 <!-- Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file. -->
 
@@ -17,36 +21,41 @@ Generate docstrings.
 ## Requirements
 
 <!-- If you have any requirements or dependencies, add a section describing those and how to install and configure them. -->
-N/A?
+- VSCode Version: 1.93.0+ 
+- LLM model: A compatible LLM model (e.g., OpenAI or Ollama) is required for the extension to function.
 
-<!-- ## Extension Settings
+## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+<!-- Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
 For example:
 
 This extension contributes the following settings:
 
 * `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something. -->
+* `myExtension.thing`: Set to `blah` to do something.  -->
+The extension provides the following settings:
+
+- LLM Model: Select your preferred LLM model (e.g., OpenAI or Ollama).
+- Docstring Style: Choose from predefined styles like Google, NumPy, or Javadoc.
 
 ## Known Issues
 
-Issues
+No major issues reported yet.
 
 ## Release Notes
 
 ### 1.0.0
 
-Initial release of ...
+Initial release of DSG extension with basic UI functionality.
 
 ### 1.0.1
 
-Fixed issue #.
+Fixed UI bug.
 
 ### 1.1.0
 
-Added features X, Y, and Z.
+Added regenerate docstring and programming language support for Python, JavaScript, Java, and C++.
 
 <!-- ---
 
