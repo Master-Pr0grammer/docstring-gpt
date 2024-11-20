@@ -7,7 +7,7 @@ export class Editor {
 	constructor(editor:vscode.TextEditor|undefined) {
 		this.editor = editor;
 
-		//Set correct tab
+		// Set correct tab
 		this.indent = this.editor ? this.calculateIndent() : '';
 
 	}
@@ -66,11 +66,11 @@ export class Editor {
                 const newEndPosition = new vscode.Position(current_selection.start.line + Lines, temp.slice(-1)[0].length);
                 const selection_range = new vscode.Range(current_selection.start, newEndPosition);
                 
-                //create replacement string
+                // Create replacement string
                 const temp_docstring = docstring.replaceAll('"""', '').replaceAll('\n','\n'+this.indent.repeat(num_indent)); // Get rid of generated comment tags & fix tabs
                 const new_text = text_arr[0] + '\n' + this.indent.repeat(num_indent) + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join('\n');
                 
-                //replace current text with updated text
+                // Replace current text with updated text
                 this.editor.edit(editBuilder => {
                     editBuilder.replace(selection_range, new_text);
                 });

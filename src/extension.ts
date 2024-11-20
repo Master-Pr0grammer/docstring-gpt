@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
 	
-	// Docsring generation command definition
+	// Docstring generation command definition
 	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
 		if (vscode.window.activeTextEditor){
 			const editor = new Editor(vscode.window.activeTextEditor);
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	//var history:OpenAI.Chat.Completions.ChatCompletionMessage[] = [];
+	// var history:OpenAI.Chat.Completions.ChatCompletionMessage[] = [];
 	const ollamaChat = vscode.commands.registerCommand('docstring-gpt.ollamaChat', () => {
 		chat_webview.toggle_veiw();
 	});

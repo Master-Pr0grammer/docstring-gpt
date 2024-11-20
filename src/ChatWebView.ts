@@ -25,7 +25,7 @@ export class ChatWebView {
 	}
 
 	public toggle_veiw(){
-		//Close pannel if already open
+		// Close pannel if already open
 		if (this.panel) {
 			this.panel.dispose();
 		}
@@ -53,20 +53,20 @@ export class ChatWebView {
 				}
 			);
 
-			//Set currentPannel to null if disposed by user
+			// Set currentPannel to null if disposed by user
 			this.panel.onDidDispose(
 				() => {this.panel = undefined;},
 				null,
 				this.context.subscriptions
 			);
 			
-			//Then Render the content
+			// Then render the content
 			this.render_content();
 		}
 	}
 
 	private render_content(){
-		//Render content
+		// Render content
 		if (this.panel){
 			this.panel.iconPath = vscode.Uri.joinPath(this.context.extensionUri, "images", "dark_button.png");
 
@@ -93,7 +93,7 @@ export class ChatWebView {
 
 	private async generate_response_request(message:any){
 
-		//Prevent unnecicary code updates
+		// Prevent unnecessary code updates
 		if (this.history.length===2 && this.editor.get_all_text()!==this.code){
 			this.code = this.editor.get_all_text();
 			this.history.push({role:'system', content:'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "'+this.editor.get_document_filename()+'" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + '\n```'});
@@ -114,7 +114,7 @@ export class ChatWebView {
 
 				case 'user_msg':
 
-					//Update system prompt in case code has changed
+					// Update system prompt in case code has changed
 					const new_code = this.editor.get_all_text();
 					console.log(new_code);
 					console.log(this.code);
@@ -141,7 +141,7 @@ export class ChatWebView {
 						this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
 					}
 
-					//Get LLM info
+					// Get LLM info
 					const generator = await this.user_LLM.generate_chat_response(this.history);
 
 					this.history.push({role:'assistant', content:''});
@@ -149,7 +149,7 @@ export class ChatWebView {
 					// Push the command to the subscriptions array
 					this.context.subscriptions.push(this.update_command);
 
-					//Update content to create new chat
+					// Update content to create new chat
 					if (this.panel){this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);}
 					for await (const chunk of generator) {
 						if (chunk.choices[0].delta.content){
@@ -165,7 +165,7 @@ export class ChatWebView {
 	}
 
 	private getWebviewContent(image:vscode.Uri, css:vscode.Uri, script:vscode.Uri) {
-		//Build message bubbles to insert
+		// Build message bubbles to insert
 		var chat_string = '';
 	
 		for (let i=1; i<this.history.length; i++){
@@ -186,7 +186,7 @@ export class ChatWebView {
 				<div class="markdown-container" id="markdownContent">${String(marked(String(message)))}</div>
 			</div>`;
 			
-			//Append chat bubble to chat history
+			// Append chat bubble to chat history
 			chat_string+=chat_bubble;
 		}
 	

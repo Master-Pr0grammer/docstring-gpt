@@ -26,7 +26,7 @@ export class LLM {
 		this.client = new OpenAI({apiKey:this.apikey, baseURL:this.endpoint});
 	}
 
-	//Update settings
+	// Update settings
 	public update_settings(){
 		const config = vscode.workspace.getConfiguration('Docstring-GPT');
 		this.endpoint = String(config.get('llm.endpoint'));
@@ -40,7 +40,7 @@ export class LLM {
 		this.client = new OpenAI({apiKey:this.apikey, baseURL:this.endpoint});
 	}
 
-	//Generate a docstring
+	// Generate a docstring
 	public async generate_docstring(function_definition: string): Promise<AsyncIterable<any>>{
 		const generator = await this.client.chat.completions.create({
 			model: this.model,
@@ -54,7 +54,7 @@ export class LLM {
 		return generator;
 	}
 
-	//Generate chat response
+	// Generate chat response
 	public async generate_chat_response(chat_history:OpenAI.Chat.Completions.ChatCompletionMessage[]): Promise<AsyncIterable<any>>{
 		const generator = await this.client.chat.completions.create({
 			model: this.model,
