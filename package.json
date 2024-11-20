@@ -54,7 +54,7 @@
         {
           "command": "docstring-gpt.generateDocstring",
           "group": "navigation",
-          "when": "resourceLangId == python"
+          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == java || resourceLangId == csharp || resourceLangId == cpp"
         },
         {
           "command": "docstring-gpt.ollamaChat",
