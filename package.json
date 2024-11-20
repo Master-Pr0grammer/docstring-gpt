@@ -66,8 +66,8 @@
       "title": "Docstring-GPT",
       "properties": {
         "Docstring-GPT.systemPrompt": {
-          "title": "System1 Prompt",
-          "type": "string",
+          "title": "System Prompt",
+          "type":"string",
           "default": "You are a expert docstring generator. You are given a function, and tasked with generating a docstring for the function. Only output the content of the docstring, nothing else. Generate the docstrings according to the following specification:",
           "markdownDescription": "Specifies the system prompt for Docstring-GPT. It is recomended to keep the default setting, with minor modifications."
         },
