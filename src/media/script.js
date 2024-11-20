@@ -34,7 +34,7 @@ window.addEventListener('message', event => {
 
                 // Change the text inside the <p> tag
                 const lastBubbleText = lastBubble.querySelector('.markdown-container');
-                lastBubbleText.innerHTML = '<button id="stop-btn">▢</button>\n'+ message.content; // Update the text here
+                lastBubbleText.innerHTML = message.content; // Update the text here
             }
             break;
     }

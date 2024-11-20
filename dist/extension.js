@@ -8182,7 +8182,7 @@ var LLM = class {
     this.format_specs = String(config.get("documentationSpecification"));
     this.client = new openai_default({ apiKey: this.apikey, baseURL: this.endpoint });
   }
-  //Update settings
+  // Update settings
   update_settings() {
     const config = vscode.workspace.getConfiguration("Docstring-GPT");
     this.endpoint = String(config.get("llm.endpoint"));
@@ -8193,7 +8193,7 @@ var LLM = class {
     this.format_specs = String(config.get("documentationSpecification"));
     this.client = new openai_default({ apiKey: this.apikey, baseURL: this.endpoint });
   }
-  //Generate a docstring
+  // Generate a docstring
   async generate_docstring(function_definition) {
     const generator = await this.client.chat.completions.create({
       model: this.model,
@@ -8206,7 +8206,7 @@ var LLM = class {
     });
     return generator;
   }
-  //Generate chat response
+  // Generate chat response
   async generate_chat_response(chat_history) {
     const generator = await this.client.chat.completions.create({
       model: this.model,
