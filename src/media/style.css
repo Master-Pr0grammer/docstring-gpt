@@ -1,7 +1,6 @@
 html {
     font-size: 22px;
     font-family: Open Sans, sans-serif;
-    padding-inline: 2%;
 }
 
 body {
@@ -9,64 +8,160 @@ body {
     line-height: 1.5;
     color: #f9f9f9;
     background-color: #333;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 100px;
+    scroll-behavior: smooth;
 }
 
 .chat-bubble {
-    background-color:grey;
+    background-color: grey;
     border-radius: 10px;
-    padding-inline: 2%;
-    padding-block: 0.1%;
-    margin-bottom: 2%; /* Adjust the margin-bottom value as needed */
+    padding: 15px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.edit-button {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.chat-bubble:hover .edit-button {
+    opacity: 1;
+}
+
+.edit-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.edit-button svg {
+    width: 16px;
+    height: 16px;
+    color: #f9f9f9;
+}
+
+.input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #2d2d2d;
+    padding: 20px;
+    border-top: 1px solid #444;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 50px;  /* Add padding for the stop button */
 }
 
 #user_msg {
     background-color: grey;
     border-radius: 10px;
-
-    padding-inline: 2%;
-    padding-block: 1%;
-    height: 75px;
-    min-height: 75px;
-
+    padding: 12px;
+    height: 44px;
+    min-height: 44px;
+    max-height: 200px;
     width: 100%;
     color: #f9f9f9;
     box-sizing: border-box;
-    font-family: Open Sans, sans-serif; /* Change the font to Arial or any other desired font */
+    font-family: Open Sans, sans-serif;
     font-size: 16px;
-
-    resize: vertical;
-    overflow: hidden;
+    resize: none;
+    overflow: auto;
+    margin: 0;
+    line-height: 1.5;
 }
 
 #user_msg::placeholder {
     color: #f9f9f9;
-    font-family: Open Sans, sans-serif;
-    font-size: 16px;
-    opacity: 1; /* Firefox */
+    opacity: 0.7;
 }
 
-/* Style both button and input[type="button"] */
-button, input {
+.submit-button {
     background-color: #434343;
     color: white;
-    padding: 10px 20px;
+    padding: 8px;
+    width: 32px;
+    height: 32px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-/* Hover effect */
-button:hover, input:hover {
+.submit-button:hover {
     background-color: #555;
 }
 
-/* Active effect */
-button:active, input:active {
-    background-color: #222;
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-/* Styles for code blocks */
+.submit-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.stop-generating {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #c53030;
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    z-index: 10;
+}
+
+.stop-generating:hover {
+    background-color: #9b2c2c;
+}
+
+.stop-generating svg {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
 .markdown-container pre {
     background-color: #3c3c3c;
     font-size: 16px;
@@ -76,9 +171,22 @@ button:active, input:active {
     overflow-x: auto;
 }
 
-/* .markdown-container code {
-    background-color: #2e2e2e;
-    padding: 5px;
-    border-radius: 3px;
-    font-family: monospace;
-} */
+.editable-content {
+    min-height: 24px;
+    padding: 4px;
+    border-radius: 4px;
+    outline: none;
+}
+
+.editable-content:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hide edit buttons except for last user message */
+.chat-bubble .edit-button {
+    display: none;
+}
+
+.chat-bubble.last-user-message .edit-button {
+    display: flex;
+}

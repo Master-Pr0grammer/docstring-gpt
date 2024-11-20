@@ -10361,6 +10361,7 @@ var ChatWebView = class {
   code;
   update_command;
   history;
+  currentGenerator = null;
   constructor(context, update_command, user_LLM, editor) {
     this.context = context;
     this.user_LLM = user_LLM;
@@ -10375,18 +10376,17 @@ var ChatWebView = class {
     } else {
       if (this.history.length === 0) {
         this.code = this.editor.get_all_text();
-        this.history.push({ role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + this.editor.get_document_filename() + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```" });
+        this.history.push({
+          role: "system",
+          content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```"
+        });
         this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
       }
       this.panel = vscode3.window.createWebviewPanel(
         "ollamaChat",
-        // Identifies the type of the webview. Used internally
         "Ollama Chat",
-        // Title of the panel displayed to the user
         vscode3.ViewColumn.Two,
-        // Editor column to show the new webview panel in.
         {
-          // And restrict the webview to only loading content from our extension's `images` directory.
           localResourceRoots: [
             vscode3.Uri.joinPath(this.context.extensionUri, "images"),
             vscode3.Uri.joinPath(this.context.extensionUri, "src", "media")
@@ -10397,6 +10397,7 @@ var ChatWebView = class {
       this.panel.onDidDispose(
         () => {
           this.panel = void 0;
+          this.currentGenerator = null;
         },
         null,
         this.context.subscriptions
@@ -10424,60 +10425,64 @@ var ChatWebView = class {
     }
   }
   async generate_response_request(message) {
-    if (this.history.length === 2 && this.editor.get_all_text() !== this.code) {
-      this.code = this.editor.get_all_text();
-      this.history.push({ role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + this.editor.get_document_filename() + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```" });
-      this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
+    if (!this.panel) {
+      return;
     }
-    if (this.panel) {
-      const image_path = vscode3.Uri.joinPath(this.context.extensionUri, "images", "icon.png");
-      const imageUri = this.panel.webview.asWebviewUri(image_path);
-      const css_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "style.css");
-      const css_Uri = this.panel.webview.asWebviewUri(css_path);
-      const script_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "script.js");
-      const script_Uri = this.panel.webview.asWebviewUri(script_path);
-      switch (message.command) {
-        case "stop":
-        case "user_msg":
+    const image_path = vscode3.Uri.joinPath(this.context.extensionUri, "images", "icon.png");
+    const imageUri = this.panel.webview.asWebviewUri(image_path);
+    const css_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "style.css");
+    const css_Uri = this.panel.webview.asWebviewUri(css_path);
+    const script_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "script.js");
+    const script_Uri = this.panel.webview.asWebviewUri(script_path);
+    switch (message.command) {
+      case "stop":
+        this.currentGenerator = null;
+        this.panel.webview.postMessage({ command: "generationComplete" });
+        break;
+      case "user_msg":
+        if (message.isEdit && this.history.length >= 2) {
+          if (this.history[this.history.length - 1].role === "assistant") {
+            this.history.pop();
+          }
+          this.history[this.history.length - 1].content = message.text;
+        } else {
           const new_code = this.editor.get_all_text();
-          console.log(new_code);
-          console.log(this.code);
-          if (!(new_code === this.code)) {
+          if (new_code !== this.code) {
             this.code = new_code;
-            this.history[0] = { role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + this.editor.get_document_filename() + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```" };
+            this.history[0] = {
+              role: "system",
+              content: "You are a helpful AI assistant helping a programmer work on their code..."
+            };
             this.history.push({ role: "user", content: message.text + ["\n\n**[CODE UPDATED]**"] });
           } else {
             this.history.push({ role: "user", content: message.text });
           }
-          if (message.text === "/clear") {
-            this.history = [];
-            this.history.push({ role: "system", content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is there most recent, updated version of their "' + this.editor.get_document_filename() + '" code for refference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```" });
-            this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
-            if (this.panel) {
-              this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        }
+        this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        this.currentGenerator = await this.user_LLM.generate_chat_response(this.history);
+        this.history.push({ role: "assistant", content: "" });
+        this.context.subscriptions.push(this.update_command);
+        this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        try {
+          for await (const chunk of this.currentGenerator) {
+            if (!this.currentGenerator) {
+              break;
             }
-            return;
-          }
-          if (this.panel) {
-            this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
-          }
-          const generator = await this.user_LLM.generate_chat_response(this.history);
-          this.history.push({ role: "assistant", content: "" });
-          this.context.subscriptions.push(this.update_command);
-          if (this.panel) {
-            this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
-          }
-          for await (const chunk of generator) {
             if (chunk.choices[0].delta.content) {
               this.history[this.history.length - 1].content += chunk.choices[0].delta.content;
             }
-            vscode3.commands.executeCommand("docstring-gpt.doUpdateContent", this.panel, String(marked(String(this.history[this.history.length - 1].content) + " \u2B24")));
+            vscode3.commands.executeCommand(
+              "docstring-gpt.doUpdateContent",
+              this.panel,
+              String(marked(String(this.history[this.history.length - 1].content) + " \u2B24"))
+            );
           }
-          if (this.panel) {
-            this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
-          }
-          return;
-      }
+        } finally {
+          this.currentGenerator = null;
+          this.panel.webview.postMessage({ command: "generationComplete" });
+          this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        }
+        break;
     }
   }
   getWebviewContent(image, css, script) {
@@ -10486,18 +10491,27 @@ var ChatWebView = class {
       var name;
       if (this.history[i2].role === "user") {
         name = "You";
+        const chat_bubble = `
+				<div class="chat-bubble" data-message-id="${i2}">
+					<h2>${name}</h2>
+					<div class="markdown-container" contenteditable="false">${String(marked(String(this.history[i2].content)))}</div>
+					<button class="edit-button" title="Edit message">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+						</svg>
+					</button>
+				</div>`;
+        chat_string += chat_bubble;
       } else {
         name = this.user_LLM.model;
+        const chat_bubble = `
+				<div class="chat-bubble">
+					<h2>${name}</h2>
+					<div class="markdown-container">${String(marked(String(this.history[i2].content)))}</div>
+				</div>`;
+        chat_string += chat_bubble;
       }
-      let message = this.history[i2].content;
-      const chat_bubble = `
-			<div class="chat-bubble">
-				<h2>
-					${name}
-				</h2>
-				<div class="markdown-container" id="markdownContent">${String(marked(String(message)))}</div>
-			</div>`;
-      chat_string += chat_bubble;
     }
     return `<!DOCTYPE html>
 		<html lang="en">
@@ -10508,25 +10522,42 @@ var ChatWebView = class {
 			<title>Ollama Chat</title>
 		</head>
 		<body>
-				<br>
-				<img src="${image.toString()}" width="25%" />
-				<br>
-				<br>
-	
-				<div id="chat-container">
-					${chat_string}
-				</div>
-	
+			<img src="${image.toString()}" width="25%" />
+			
+			<div id="chat-container">
+				${chat_string}
+			</div>
+
+			<div class="input-container">
 				<form id="chat-form">
-					<hr>
-					<p>
-						<textarea id="user_msg" name="user_msg" placeholder="Type a message..."></textarea>
-						<input type="submit" value="Send">
-					</p>
+					<div class="input-wrapper">
+						<button 
+							type="button" 
+							class="stop-generating" 
+							title="Stop generating">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<rect x="6" y="6" width="12" height="12"></rect>
+							</svg>
+						</button>
+						
+						<textarea 
+							id="user_msg" 
+							name="user_msg" 
+							placeholder="Type a message..."
+							rows="1"
+						></textarea>
+						
+						<button type="submit" class="submit-button" title="Send message">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+								<path d="M22 2L11 13"></path>
+								<path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+							</svg>
+						</button>
+					</div>
 				</form>
-	
-		<script src="${script.toString()}"></script>
-		</script>
+			</div>
+
+			<script src="${script.toString()}"></script>
 		</body>
 		</html>`;
   }
