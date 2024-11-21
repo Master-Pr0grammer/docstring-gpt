@@ -10,17 +10,15 @@ export class ChatWebView {
     private user_LLM: LLM;
     private editor: Editor;
     private code: string;
-    private update_command: vscode.Disposable;
     public history: OpenAI.Chat.Completions.ChatCompletionMessage[];
     private currentGenerator: AsyncIterable<any> | null = null;
 
-    constructor(context: vscode.ExtensionContext, update_command: vscode.Disposable, user_LLM: LLM, editor: Editor) {
+    constructor(context: vscode.ExtensionContext, user_LLM: LLM, editor: Editor) {
         this.context = context;
         this.user_LLM = user_LLM;
         this.editor = editor;
         this.code = this.editor.get_all_text();
         this.history = [];
-        this.update_command = update_command;
     }
 
 	public toggle_veiw() {
@@ -97,8 +95,28 @@ export class ChatWebView {
         const css_Uri = this.panel.webview.asWebviewUri(css_path);
         const script_path = vscode.Uri.joinPath(this.context.extensionUri, 'src', 'media', 'script.js');
         const script_Uri = this.panel.webview.asWebviewUri(script_path);
+		
+		//If first message, make sure to use updated code
+		if (this.history.length===2){
+			this.history = [];
+			this.history.push({
+				role: 'system',
+				content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + '\n```'
+			});
+			this.history.push({ role: 'assistant', content: 'Hello! How can I assist you today?' });
+		}
 
         switch (message.command) {
+			case 'clear':
+				this.code = this.editor.get_all_text();
+				this.history = [];
+                this.history.push({
+                    role: 'system',
+                    content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + '\n```'
+                });
+                this.history.push({ role: 'assistant', content: 'Hello! How can I assist you today?' });
+				this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+
             case 'stop':
                 this.currentGenerator = null;
                 this.panel.webview.postMessage({ command: 'generationComplete' });
@@ -128,11 +146,12 @@ export class ChatWebView {
 
                 // Continue with generation...
                 this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+				this.panel.webview.postMessage({ command: 'toggleGenerating', content:true });
                 this.currentGenerator = await this.user_LLM.generate_chat_response(this.history);
                 this.history.push({ role: 'assistant', content: '' });
 
-                this.context.subscriptions.push(this.update_command);
                 this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+				this.panel.webview.postMessage({ command: 'toggleGenerating', content:true });
 
                 try {
                     for await (const chunk of this.currentGenerator) {
@@ -141,12 +160,13 @@ export class ChatWebView {
                         if (chunk.choices[0].delta.content) {
                             this.history[this.history.length - 1].content += chunk.choices[0].delta.content;
                         }
-
-                        vscode.commands.executeCommand(
-                            'docstring-gpt.doUpdateContent',
-                            this.panel,
-                            String(marked(String(this.history[this.history.length - 1].content) + ' ⬤'))
-                        );
+						
+						this.panel.webview.postMessage({ command: 'doUpdateContent', content:String(marked(String(this.history[this.history.length - 1].content) + ' ⬤')) });
+                        // vscode.commands.executeCommand(
+                        //     'docstring-gpt.doUpdateContent',
+                        //     this.panel,
+                        //     String(marked(String(this.history[this.history.length - 1].content) + ' ⬤'))
+                        // );
                     }
                 } finally {
                     this.currentGenerator = null;
@@ -157,7 +177,7 @@ export class ChatWebView {
         }
     }
 
-	private getWebviewContent(image: vscode.Uri, css: vscode.Uri, script: vscode.Uri) {
+	private getWebviewContent(image: vscode.Uri, css: vscode.Uri, script: vscode.Uri, is_generating:boolean=false) {
 		// Build message bubbles to insert
 		var chat_string = '';
 	
@@ -197,7 +217,7 @@ export class ChatWebView {
 			<title>Ollama Chat</title>
 		</head>
 		<body>
-			<img src="${image.toString()}" width="25%" />
+			<img src="${image.toString()}" width="100px" />
 			
 			<div id="chat-container">
 				${chat_string}
@@ -213,6 +233,13 @@ export class ChatWebView {
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 								<rect x="6" y="6" width="12" height="12"></rect>
 							</svg>
+						</button>
+
+						<button 
+							type="button" 
+							class="clear-context" 
+							title="Clear">
+						Clear
 						</button>
 						
 						<textarea 

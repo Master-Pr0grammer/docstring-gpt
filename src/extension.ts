@@ -8,20 +8,18 @@ import { ChatWebView } from './ChatWebView';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	vscode.window.showInformationMessage('Docstring-GPT Now Active!');
+	// vscode.window.showInformationMessage('Docstring-GPT Now Active!');
 	console.log('activate');
 
-	// Register the update command to update webview
+	// Send a message to the webview to update the content
 	let update = vscode.commands.registerCommand('docstring-gpt.doUpdateContent', (panel: vscode.WebviewPanel, chunkContent: string) => {
 		if (!panel) { return; }
-	
-		// Send a message to the webview to update the content
 		panel.webview.postMessage({ command: 'doUpdateContent', content: chunkContent });
 	});
 
 	const user_LLM = new LLM();
 	const editor = new Editor(vscode.window.activeTextEditor);
-	const chat_webview = new ChatWebView(context, update, user_LLM, editor);
+	const chat_webview = new ChatWebView(context, user_LLM, editor);
 
 
 	// Listen for editor changes
