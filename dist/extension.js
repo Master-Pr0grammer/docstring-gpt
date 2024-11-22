@@ -8222,14 +8222,17 @@ var LLM = class {
 var vscode2 = __toESM(require("vscode"));
 var Editor = class {
   editor;
+  notebook_editor;
   indent;
-  constructor(editor) {
+  constructor(editor, notebook_editor) {
     this.editor = editor;
+    this.notebook_editor = notebook_editor;
     this.indent = this.editor ? this.calculateIndent() : "";
   }
   // Update active document editor
-  update_editor(editor) {
+  update_editor(editor, notebook_editor) {
     this.editor = editor;
+    this.notebook_editor = notebook_editor;
   }
   calculateIndent() {
     if (!this.editor) {
@@ -8246,10 +8249,47 @@ var Editor = class {
     return "";
   }
   get_document_filename() {
-    return this.editor ? this.editor.document.fileName : "ERROR: No File Open";
+    var fileName;
+    if (this.notebook_editor) {
+      fileName = this.notebook_editor.notebook.uri.fsPath;
+    } else if (this.editor) {
+      fileName = this.editor.document.fileName;
+    } else {
+      fileName = "[ERROR: NO FILE OPEN]";
+      console.log("[EDITOR ERROR: NO FILE OPEN]");
+    }
+    return fileName;
   }
   get_all_text() {
-    return this.editor ? this.editor.document.getText() : "";
+    var text;
+    if (this.notebook_editor) {
+      text = "";
+      const notebook_type = this.notebook_editor.notebook.notebookType;
+      const cells = this.notebook_editor.notebook.getCells();
+      for (var i2 = 0; i2 < cells.length; i2++) {
+        var cell_type = cells[i2].kind.toString();
+        if (notebook_type === "jupyter-notebook" && cell_type === "1") {
+          cell_type = "markdown";
+        } else if (notebook_type === "jupyter-notebook" && cell_type === "2") {
+          cell_type = "python";
+        }
+        const cell_content = cells[i2].document.getText();
+        text += `[CELL #${i2}, CELL TYPE: ${cell_type}]
+
+\`\`\`
+${cell_content}
+\`\`\`
+
+
+`;
+      }
+    } else if (this.editor) {
+      text = this.editor.document.getText();
+    } else {
+      text = "";
+      console.log("[EDITOR ERROR: NO TEXT READ]");
+    }
+    return text;
   }
   get_selection_text() {
     return this.editor ? this.editor.document.getText(this.editor.selection) : "";
@@ -10359,27 +10399,24 @@ var ChatWebView = class {
   user_LLM;
   editor;
   code;
-  history;
   currentGenerator = null;
+  current_file;
+  imageUri = void 0;
+  css_Uri = void 0;
+  script_Uri = void 0;
+  all_chats = {};
   constructor(context, user_LLM, editor) {
     this.context = context;
     this.user_LLM = user_LLM;
     this.editor = editor;
+    this.current_file = editor.get_document_filename();
+    this.all_chats[this.current_file] = [];
     this.code = this.editor.get_all_text();
-    this.history = [];
   }
   toggle_veiw() {
     if (this.panel) {
       this.panel.dispose();
     } else {
-      if (this.history.length === 0) {
-        this.code = this.editor.get_all_text();
-        this.history.push({
-          role: "system",
-          content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```"
-        });
-        this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
-      }
       this.panel = vscode3.window.createWebviewPanel(
         "ollamaChat",
         "Ollama Chat",
@@ -10400,19 +10437,12 @@ var ChatWebView = class {
         null,
         this.context.subscriptions
       );
-      this.render_content();
-    }
-  }
-  render_content() {
-    if (this.panel) {
-      this.panel.iconPath = vscode3.Uri.joinPath(this.context.extensionUri, "images", "dark_button.png");
       const image_path = vscode3.Uri.joinPath(this.context.extensionUri, "images", "icon.png");
-      const imageUri = this.panel.webview.asWebviewUri(image_path);
+      this.imageUri = this.panel.webview.asWebviewUri(image_path);
       const css_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "style.css");
-      const css_Uri = this.panel.webview.asWebviewUri(css_path);
+      this.css_Uri = this.panel.webview.asWebviewUri(css_path);
       const script_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "script.js");
-      const script_Uri = this.panel.webview.asWebviewUri(script_path);
-      this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+      this.script_Uri = this.panel.webview.asWebviewUri(script_path);
       this.panel.webview.onDidReceiveMessage(
         async (message) => {
           this.generate_response_request(message);
@@ -10420,64 +10450,70 @@ var ChatWebView = class {
         void 0,
         this.context.subscriptions
       );
+      this.panel.webview.html = this.getWebviewContent();
+    }
+  }
+  update_view() {
+    this.currentGenerator = null;
+    this.current_file = this.editor.get_document_filename();
+    if (this.panel) {
+      if (!(this.current_file in this.all_chats)) {
+        this.all_chats[this.current_file] = [];
+      }
+      this.code = this.editor.get_all_text();
+      this.panel.webview.html = this.getWebviewContent();
     }
   }
   async generate_response_request(message) {
     if (!this.panel) {
       return;
     }
-    const image_path = vscode3.Uri.joinPath(this.context.extensionUri, "images", "icon.png");
-    const imageUri = this.panel.webview.asWebviewUri(image_path);
-    const css_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "style.css");
-    const css_Uri = this.panel.webview.asWebviewUri(css_path);
-    const script_path = vscode3.Uri.joinPath(this.context.extensionUri, "src", "media", "script.js");
-    const script_Uri = this.panel.webview.asWebviewUri(script_path);
-    if (this.history.length === 2) {
-      this.history = [];
-      this.history.push({
+    if (this.all_chats[this.current_file].length === 2) {
+      this.all_chats[this.current_file] = [];
+      this.all_chats[this.current_file].push({
         role: "system",
         content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```"
       });
-      this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
+      this.all_chats[this.current_file].push({ role: "assistant", content: "Hello! How can I assist you today?" });
     }
     switch (message.command) {
       case "clear":
         this.code = this.editor.get_all_text();
-        this.history = [];
-        this.history.push({
+        this.all_chats[this.current_file] = [];
+        this.all_chats[this.current_file].push({
           role: "system",
           content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```"
         });
-        this.history.push({ role: "assistant", content: "Hello! How can I assist you today?" });
-        this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        this.all_chats[this.current_file].push({ role: "assistant", content: "Hello! How can I assist you today?" });
+        this.panel.webview.html = this.getWebviewContent();
       case "stop":
         this.currentGenerator = null;
         this.panel.webview.postMessage({ command: "generationComplete" });
         break;
       case "user_msg":
-        if (message.isEdit && this.history.length >= 2) {
-          if (this.history[this.history.length - 1].role === "assistant") {
-            this.history.pop();
+        if (message.isEdit && this.all_chats[this.current_file].length >= 2) {
+          if (this.all_chats[this.current_file][this.all_chats[this.current_file].length - 1].role === "assistant") {
+            this.all_chats[this.current_file].pop();
           }
-          this.history[this.history.length - 1].content = message.text;
+          this.all_chats[this.current_file][this.all_chats[this.current_file].length - 1].content = message.text;
         } else {
           const new_code = this.editor.get_all_text();
           if (new_code !== this.code) {
             this.code = new_code;
-            this.history[0] = {
+            this.all_chats[this.current_file][0] = {
               role: "system",
               content: "You are a helpful AI assistant helping a programmer work on their code..."
             };
-            this.history.push({ role: "user", content: message.text + ["\n\n**[CODE UPDATED]**"] });
+            this.all_chats[this.current_file].push({ role: "user", content: message.text + ["\n\n**[CODE UPDATED]**"] });
           } else {
-            this.history.push({ role: "user", content: message.text });
+            this.all_chats[this.current_file].push({ role: "user", content: message.text });
           }
         }
-        this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        this.panel.webview.html = this.getWebviewContent();
         this.panel.webview.postMessage({ command: "toggleGenerating", content: true });
-        this.currentGenerator = await this.user_LLM.generate_chat_response(this.history);
-        this.history.push({ role: "assistant", content: "" });
-        this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+        this.currentGenerator = await this.user_LLM.generate_chat_response(this.all_chats[this.current_file]);
+        this.all_chats[this.current_file].push({ role: "assistant", content: "" });
+        this.panel.webview.html = this.getWebviewContent();
         this.panel.webview.postMessage({ command: "toggleGenerating", content: true });
         try {
           for await (const chunk of this.currentGenerator) {
@@ -10485,119 +10521,133 @@ var ChatWebView = class {
               break;
             }
             if (chunk.choices[0].delta.content) {
-              this.history[this.history.length - 1].content += chunk.choices[0].delta.content;
+              this.all_chats[this.current_file][this.all_chats[this.current_file].length - 1].content += chunk.choices[0].delta.content;
             }
-            this.panel.webview.postMessage({ command: "doUpdateContent", content: String(marked(String(this.history[this.history.length - 1].content) + " \u2B24")) });
+            this.panel.webview.postMessage({ command: "doUpdateContent", content: String(marked(String(this.all_chats[this.current_file][this.all_chats[this.current_file].length - 1].content) + " \u2B24")) });
           }
         } finally {
           this.currentGenerator = null;
           this.panel.webview.postMessage({ command: "generationComplete" });
-          this.panel.webview.html = this.getWebviewContent(imageUri, css_Uri, script_Uri);
+          this.panel.webview.html = this.getWebviewContent();
         }
         break;
     }
   }
-  getWebviewContent(image, css, script, is_generating = false) {
-    var chat_string = "";
-    for (let i2 = 1; i2 < this.history.length; i2++) {
-      var name;
-      if (this.history[i2].role === "user") {
-        name = "You";
-        const chat_bubble = `
-				<div class="chat-bubble" data-message-id="${i2}">
-					<h2>${name}</h2>
-					<div class="markdown-container" contenteditable="false">${String(marked(String(this.history[i2].content)))}</div>
-					<button class="edit-button" title="Edit message">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-							<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-						</svg>
-					</button>
-				</div>`;
-        chat_string += chat_bubble;
-      } else {
-        name = this.user_LLM.model;
-        const chat_bubble = `
-				<div class="chat-bubble">
-					<h2>${name}</h2>
-					<div class="markdown-container">${String(marked(String(this.history[i2].content)))}</div>
-				</div>`;
-        chat_string += chat_bubble;
-      }
+  getWebviewContent() {
+    if (this.all_chats[this.current_file].length === 0) {
+      this.code = this.editor.get_all_text();
+      this.all_chats[this.current_file].push({
+        role: "system",
+        content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + "\n```"
+      });
+      this.all_chats[this.current_file].push({ role: "assistant", content: "Hello! How can I assist you today?" });
     }
-    return `<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-			<link rel="stylesheet" href="${css.toString()}">
-			<title>Ollama Chat</title>
-		</head>
-		<body>
-			<img src="${image.toString()}" width="100px" />
-			
-			<div id="chat-container">
-				${chat_string}
-			</div>
-
-			<div class="input-container">
-				<form id="chat-form">
-					<div class="input-wrapper">
-						<button 
-							type="button" 
-							class="stop-generating" 
-							title="Stop generating">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<rect x="6" y="6" width="12" height="12"></rect>
+    if (this.panel && this.imageUri && this.css_Uri && this.script_Uri) {
+      var chat_string = "";
+      for (let i2 = 1; i2 < this.all_chats[this.current_file].length; i2++) {
+        var name;
+        if (this.all_chats[this.current_file][i2].role === "user") {
+          name = "You";
+          const chat_bubble = `
+					<div class="chat-bubble" data-message-id="${i2}">
+						<h2>${name}</h2>
+						<div class="markdown-container" contenteditable="false">${String(marked(String(this.all_chats[this.current_file][i2].content)))}</div>
+						<button class="edit-button" title="Edit message">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+								<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
 							</svg>
 						</button>
+					</div>`;
+          chat_string += chat_bubble;
+        } else {
+          name = this.user_LLM.model;
+          const chat_bubble = `
+					<div class="chat-bubble">
+						<h2>${name}</h2>
+						<div class="markdown-container">${String(marked(String(this.all_chats[this.current_file][i2].content)))}</div>
+					</div>`;
+          chat_string += chat_bubble;
+        }
+      }
+      return `<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<link rel="stylesheet" href="${this.css_Uri.toString()}">
+				<title>Ollama Chat</title>
+			</head>
+			<body>
+				<img src="${this.imageUri.toString()}" width="100px" />
+				
+				<div id="chat-container">
+					${chat_string}
+				</div>
 
-						<button 
-							type="button" 
-							class="clear-context" 
-							title="Clear">
-						Clear
-						</button>
-						
-						<textarea 
-							id="user_msg" 
-							name="user_msg" 
-							placeholder="Type a message..."
-							rows="1"
-						></textarea>
-						
-						<button type="submit" class="submit-button" title="Send message">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-								<path d="M22 2L11 13"></path>
-								<path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-							</svg>
-						</button>
-					</div>
-				</form>
-			</div>
+				<div class="input-container">
+					<form id="chat-form">
+						<div class="input-wrapper">
+							<button 
+								type="button" 
+								class="stop-generating" 
+								title="Stop generating">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<rect x="6" y="6" width="12" height="12"></rect>
+								</svg>
+							</button>
 
-			<script src="${script.toString()}"></script>
-		</body>
-		</html>`;
+							<button 
+								type="button" 
+								class="clear-context" 
+								title="Clear">
+							Clear
+							</button>
+							
+							<textarea 
+								id="user_msg" 
+								name="user_msg" 
+								placeholder="Type a message..."
+								rows="1"
+							></textarea>
+							
+							<button type="submit" class="submit-button" title="Send message">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M22 2L11 13"></path>
+									<path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+								</svg>
+							</button>
+						</div>
+					</form>
+				</div>
+
+				<script src="${this.script_Uri.toString()}"></script>
+			</body>
+			</html>`;
+    } else {
+      throw new Error("Objects Failed to Load");
+    }
   }
 };
 
 // src/extension.ts
 function activate(context) {
   console.log("activate");
-  let update = vscode4.commands.registerCommand("docstring-gpt.doUpdateContent", (panel, chunkContent) => {
-    if (!panel) {
-      return;
-    }
-    panel.webview.postMessage({ command: "doUpdateContent", content: chunkContent });
-  });
   const user_LLM = new LLM();
-  const editor = new Editor(vscode4.window.activeTextEditor);
+  const editor = new Editor(vscode4.window.activeTextEditor, vscode4.window.activeNotebookEditor);
   const chat_webview = new ChatWebView(context, user_LLM, editor);
+  vscode4.window.onDidChangeActiveNotebookEditor(() => {
+    const new_notebook_editor = vscode4.window.activeNotebookEditor;
+    if (new_notebook_editor) {
+      editor.update_editor(void 0, new_notebook_editor);
+      chat_webview.update_view();
+    }
+  });
   vscode4.window.onDidChangeActiveTextEditor(() => {
     const new_editor = vscode4.window.activeTextEditor;
     if (new_editor) {
-      editor.update_editor(vscode4.window.activeTextEditor);
+      editor.update_editor(vscode4.window.activeTextEditor, void 0);
+      chat_webview.update_view();
     }
   });
   vscode4.workspace.onDidChangeConfiguration((event) => {
@@ -10606,12 +10656,9 @@ function activate(context) {
     }
   });
   const docString = vscode4.commands.registerCommand("docstring-gpt.generateDocstring", async () => {
-    if (vscode4.window.activeTextEditor) {
-      const editor2 = new Editor(vscode4.window.activeTextEditor);
-      const function_def = editor2.get_selection_text();
-      const generator = await user_LLM.generate_docstring(function_def);
-      editor2.insert_docstring(generator);
-    }
+    const function_def = editor.get_selection_text();
+    const generator = await user_LLM.generate_docstring(function_def);
+    editor.insert_docstring(generator);
   });
   const ollamaChat = vscode4.commands.registerCommand("docstring-gpt.ollamaChat", () => {
     chat_webview.toggle_veiw();

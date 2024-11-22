@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
 
 export class Editor {
-	editor:vscode.TextEditor|undefined;
+	private editor:vscode.TextEditor|undefined;
+    private notebook_editor:vscode.NotebookEditor|undefined;
 	indent:string;
 
-	constructor(editor:vscode.TextEditor|undefined) {
+	constructor(editor:vscode.TextEditor|undefined, notebook_editor:vscode.NotebookEditor|undefined) {
 		this.editor = editor;
+        this.notebook_editor = notebook_editor;
 
 		// Set correct tab
 		this.indent = this.editor ? this.calculateIndent() : '';
@@ -13,8 +15,9 @@ export class Editor {
 	}
 
     // Update active document editor
-    public update_editor(editor:vscode.TextEditor|undefined){
+    public update_editor(editor:vscode.TextEditor|undefined, notebook_editor:vscode.NotebookEditor|undefined){
         this.editor = editor;
+        this.notebook_editor = notebook_editor;
     }
 
     private calculateIndent(): string {
@@ -32,11 +35,46 @@ export class Editor {
     }
 
     public get_document_filename():string {
-        return this.editor ? this.editor.document.fileName : 'ERROR: No File Open';
+        var fileName:string;
+        if (this.notebook_editor){
+            fileName = this.notebook_editor.notebook.uri.fsPath;
+        }
+        else if (this.editor){
+            fileName = this.editor.document.fileName;
+        }
+        else{
+            fileName = '[ERROR: NO FILE OPEN]';
+            console.log('[EDITOR ERROR: NO FILE OPEN]');
+        }
+        return fileName;
     }
 
     public get_all_text():string {
-        return this.editor ? this.editor.document.getText(): '';
+        var text:string;
+        if (this.notebook_editor){
+            text = '';
+            const notebook_type = this.notebook_editor.notebook.notebookType;
+            const cells = this.notebook_editor.notebook.getCells();
+            for (var i=0; i<cells.length; i++){
+                var cell_type = cells[i].kind.toString();
+                if (notebook_type==='jupyter-notebook' && cell_type==='1'){
+                    cell_type = 'markdown';
+                }
+                else if (notebook_type==='jupyter-notebook' && cell_type==='2'){
+                    cell_type = 'python';
+                }
+                const cell_content = cells[i].document.getText();
+
+                text+=`[CELL #${i}, CELL TYPE: ${cell_type}]\n\n\`\`\`\n${cell_content}\n\`\`\`\n\n\n`;
+            }
+        }
+        else if (this.editor){
+            text = this.editor.document.getText();
+        }
+        else { text = ''; 
+            console.log('[EDITOR ERROR: NO TEXT READ]');
+        }
+        return text;
     }
 
 	public get_selection_text():string {
