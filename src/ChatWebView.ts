@@ -81,11 +81,11 @@ export class ChatWebView {
 		this.currentGenerator = null;
 		this.current_file = this.editor.get_document_filename();
 
-		if (this.panel){
-			if (!(this.current_file in this.all_chats)){
-				this.all_chats[this.current_file] = [];
-			}
+		if (!(this.current_file in this.all_chats)){
+			this.all_chats[this.current_file] = [];
+		}
 
+		if (this.panel){
 			this.code = this.editor.get_all_text();
 			this.panel.webview.html = this.getWebviewContent();
 		}

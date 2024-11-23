@@ -3,7 +3,7 @@
   "displayName": "Docstring-GPT",
   "description": "An extension to automaticially generate docstrings for functions and classes with AI.",
   "icon": "images/icon.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -54,7 +54,7 @@
         {
           "command": "docstring-gpt.generateDocstring",
           "group": "navigation",
-          "when": "resourceLangId == python || resourceLangId == javascript || resourceLangId == java || resourceLangId == csharp || resourceLangId == cpp"
+          "when": "resourceLangId == python || resourceLangId == cpp || resourceLangId == c || resourceLangId == java || resourceLangId == javascript || resourceLangId == typescript || resourceLangId == typescriptreact"
         },
         {
           "command": "docstring-gpt.ollamaChat",
@@ -68,14 +68,14 @@
         "Docstring-GPT.systemPrompt": {
           "title": "System Prompt",
           "type":"string",
-          "default": "You are a expert docstring generator. You are given a function, and tasked with generating a docstring for the function. Only output the content of the docstring, nothing else. Generate the docstrings according to the following specification:",
+          "default": "You are a docstring content generator. You must:\n1. Generate ONLY ONE docstring\n3. Never generate multiple docstring variations\n4. Never include ANY explanatory text or metadata; ONLY include the docstring\n5. Never include the code\n6. Always start at column 0 (no leading spaces/indentation)\n7. Unless otherwise told to, NEVER use ANY documentation syntax or tags, including but not limited to:\n   - No single line comment markers (///, #, etc.)\n   - No XML tags (<summary>, <param>, <returns>)\n   - No JSDoc tags (@param, @returns)\n   - No restructuredText (:param:, :returns:)\n\nThe content structure is:\n1. Single-line summary\n2. Extended description (if needed)\n3. Parameters/Args section\n4. Returns section\n5. Raises/Throws/Exceptions section (if applicable)\n6. Examples section (if needed)\n\nFormat requirements:\n- Only indent nested content (parameter descriptions, etc.) with 4 spaces\n- Start all sections at column 0\n- Match type hints with language conventions\n- Maintain consistent spacing between sections",
           "markdownDescription": "Specifies the system prompt for Docstring-GPT. It is recomended to keep the default setting, with minor modifications."
         },
         "Docstring-GPT.documentationSpecification": {
           "title": "Docstring1 Specification",
           "type": "string",
-          "default": "Standard VS-Code docstring formatting. Make sure no line is too long.",
-          "markdownDescription": "Specifies the specification for the docstrings to follow. Default is none."
+          "default": "Generate a VSCode-compatible docstring following the language-specific format:\n- For Python: Use Google-style format\n- For JavaScript/TypeScript: Use JSDoc-compatible format\n- For C/C++: Use triple-slash compatible format",
+          "markdownDescription": "Specifies the specification for the docstrings to follow."
         },
         "Docstring-GPT.llm.endpoint": {
           "title": "LLM Endpoint",

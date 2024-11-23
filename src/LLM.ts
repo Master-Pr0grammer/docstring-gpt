@@ -41,12 +41,14 @@ export class LLM {
 	}
 
 	// Generate a docstring
-	public async generate_docstring(function_definition: string): Promise<AsyncIterable<any>>{
+	public async generate_docstring(function_definition: string, language:string): Promise<AsyncIterable<any>>{
+		const input = `Language: ${language}\n\nFunction to document:\n\`\`\`\n${function_definition}\n\`\`\`\n\n${this.format_specs}`;
+
 		const generator = await this.client.chat.completions.create({
 			model: this.model,
 			messages: [
-				{"role": "system", "content": this.system_prompt + "\n\n" + this.format_specs},
-				{"role":"user", "content":function_definition}
+				{"role": "system", "content": this.system_prompt},
+				{"role":"user", "content":input}
 			],
 			stream:true,
 			temperature:this.temperature

@@ -1,18 +1,35 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 
 export class Editor {
 	private editor:vscode.TextEditor|undefined;
     private notebook_editor:vscode.NotebookEditor|undefined;
-	indent:string;
 
-	constructor(editor:vscode.TextEditor|undefined, notebook_editor:vscode.NotebookEditor|undefined) {
+	private indent:string;
+    private language_comments:any;
+
+	constructor(editor:vscode.TextEditor|undefined, notebook_editor:vscode.NotebookEditor|undefined, context: vscode.ExtensionContext) {
 		this.editor = editor;
         this.notebook_editor = notebook_editor;
 
 		// Set correct tab
 		this.indent = this.editor ? this.calculateIndent() : '';
 
+
+        const filePath = vscode.Uri.joinPath(context.extensionUri, 'src', 'languages.json');
+        const languagesJsonData = fs.readFileSync(filePath.fsPath, 'utf8');
+        this.language_comments = JSON.parse(languagesJsonData);
+
 	}
+
+    public get_languageID():string {
+        if (this.editor){
+            return this.editor.document.languageId;
+        }
+        else{
+            return 'NONE';
+        }
+    }
 
     // Update active document editor
     public update_editor(editor:vscode.TextEditor|undefined, notebook_editor:vscode.NotebookEditor|undefined){
@@ -82,31 +99,37 @@ export class Editor {
 		return this.editor ? this.editor.document.getText(this.editor.selection) : '';
 	}
 
-	public async insert_docstring(generator:AsyncIterable<any>) {
+	public async insert_docstring(generator:AsyncIterable<any>):Promise<void> {
         if (this.editor)
         {
             const document = this.editor.document;
-            var current_selection = this.editor.selection;
-            var text = document.getText(current_selection);
+            var original_selection = this.editor.selection;
+            var text = document.getText(original_selection);
 
-            const text_arr = text.split('\n');
-            const num_indent = text_arr[1].split(this.indent).length - 1;
+            const origional_text_arr = text.split('\n');
+            const num_indent = this.get_num_indent(text);
 
             var docstring = "";
 
+            if (!(this.editor.document.languageId in this.language_comments)){
+                console.log('Language Unsupported for Docstring Generation!');
+                vscode.window.showInformationMessage('Language Unsupported for Docstring Generation!');
+                return;
+            }
+
             for await (const chunk of generator) {
-                docstring += chunk.choices[0].delta.content;  // Do something with each chunk
+                docstring += chunk.choices[0].delta.content;  // Append chunk to docstring
 
                 // Calculate the new range (we assume the docstring is inserted at the start of the selection)
-                const temp =  text.split('\n');
-                const Lines = temp.length - 1;
+                const lines =  text.split('\n');
                 
-                const newEndPosition = new vscode.Position(current_selection.start.line + Lines, temp.slice(-1)[0].length);
-                const selection_range = new vscode.Range(current_selection.start, newEndPosition);
+                const newEndPosition = new vscode.Position(original_selection.start.line + lines.length - 1, lines.slice(-1)[0].length); // = move end position to include newly generated content
+                const selection_range = new vscode.Range(original_selection.start, newEndPosition);
                 
                 // Create replacement string
-                const temp_docstring = docstring.replaceAll('"""', '').replaceAll('\n','\n'+this.indent.repeat(num_indent)); // Get rid of generated comment tags & fix tabs
-                const new_text = text_arr[0] + '\n' + this.indent.repeat(num_indent) + '"""' + temp_docstring + '"""\n\n' + text_arr.slice(1, text_arr.length).join('\n');
+                const formated_docstring = this.enforce_format_docstring(docstring, this.editor.document.languageId); // Format docstring
+                const indented_formated_docstring = formated_docstring.replaceAll('\n', '\n' + this.indent.repeat(num_indent)); // Indent docstring
+                const new_text = origional_text_arr[0] + '\n' + this.indent.repeat(num_indent) + indented_formated_docstring + '\n\n' + origional_text_arr.slice(1, origional_text_arr.length).join('\n');
                 
                 // Replace current text with updated text
                 this.editor.edit(editBuilder => {
@@ -117,4 +140,60 @@ export class Editor {
             }
         }
 	}
+
+    private get_num_indent(text:string):number {
+        const text_arr = text.split('\n');
+
+        var count = 0;
+        for (var i = 1; i<text_arr.length; i++){
+            count = text_arr[i].split(this.indent).length-1;
+            if (count!==0){ break; }
+        }
+
+        return count;
+    }
+
+    private enforce_format_docstring(docstring:string, languageId:string):string {
+        var text = '';
+
+        // Remove first comment tag, and extra text before docstring
+        var sliced = docstring.split(this.language_comments[languageId]['comment_start']);
+        if (sliced.length===1){ text = sliced[0]; }
+        else{ text = sliced.splice(1).join(''); }
+
+        // Remove second coment tag, and extra text following docstring
+        var sliced = text.split(this.language_comments[languageId]['comment_end']);
+        if (sliced.length===1){ text = sliced[0]; }
+        else { text = sliced[0]; }
+
+        //Remove any markdown text container
+        text = text.replace("```", '');
+
+        // Remove trailing newlines
+        text = text.trim();
+
+        // Wrap any line over 80 characters
+        const wrapLine = (line: string, maxLength: number): string => {
+            const indent = line.match(/^\s*/)?.[0] || ''; // Preserve leading whitespace
+            let wrapped = '';
+            while (line.length > maxLength) {
+                let breakIndex = line.lastIndexOf(' ', maxLength);
+                if (breakIndex === -1) {breakIndex = maxLength;} // If no spaces found, force split
+                wrapped += indent + line.slice(0, breakIndex).trim() + '\n';
+                line = indent + line.slice(breakIndex).trim();
+            }
+            return wrapped + line; // Add the remaining part
+        };
+
+        text = text
+            .split('\n') // Split into individual lines
+            .map(line => wrapLine(line, 80)) // Apply wrapping to each line
+            .join('\n'); // Join the wrapped lines back
+
+
+        // Append comment tags to docstring
+        text = this.language_comments[languageId]['comment_start'] + '\n' + text + '\n' + this.language_comments[languageId]['comment_end'];
+
+        return text;
+    }
 }

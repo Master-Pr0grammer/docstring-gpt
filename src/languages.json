@@ -1,0 +1,30 @@
+{
+    "python":{
+        "comment_start":"\"\"\"",
+        "comment_end":"\"\"\""
+    },
+    "cpp":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    },
+    "c":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    },
+    "java":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    },
+    "javascript":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    },
+    "typescript":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    },
+    "typescriptreact":{
+        "comment_start":"/*",
+        "comment_end":"*/"
+    }
+}
