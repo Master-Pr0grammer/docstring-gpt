@@ -105,8 +105,8 @@ export class Editor {
             const document = this.editor.document;
             var original_selection = this.editor.selection;
             var text = document.getText(original_selection);
+            var origional_text_arr = text.split('\n');
 
-            const origional_text_arr = text.split('\n');
             const num_indent = this.get_num_indent(text);
 
             var docstring = "";
@@ -116,6 +116,17 @@ export class Editor {
                 vscode.window.showInformationMessage('Language Unsupported for Docstring Generation!');
                 return;
             }
+
+            //Remove any old docstrings
+            const comment_start = this.language_comments[this.editor.document.languageId]['comment_start'];
+            const comment_end = this.language_comments[this.editor.document.languageId]['comment_end'];
+            const idx1 = text.indexOf(comment_start);
+            const idx2 = text.substring(idx1+comment_start.length).indexOf(comment_end) + idx1+comment_start.length;
+            if (idx1!==-1 && idx2!==-1){
+                const new_text = text.substring(0, idx1) + text.substring(idx2+comment_end.length).trim();
+                origional_text_arr = new_text.split('\n');
+            }
+
 
             for await (const chunk of generator) {
                 docstring += chunk.choices[0].delta.content;  // Append chunk to docstring
