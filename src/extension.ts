@@ -42,6 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Docstring generation function
 	const docString = vscode.commands.registerCommand('docstring-gpt.generateDocstring', async () => {
+		vscode.window.showInformationMessage('Generating Docstring...');
 		const function_def = editor.get_selection_text();
 		const generator = await user_LLM.generate_docstring(function_def, editor.get_languageID());
 		
