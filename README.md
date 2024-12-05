@@ -1,14 +1,20 @@
-# DSG [BETA RELEASE]
+# DSG
 
 DSG is a VSCode extension that helps programmers generate useful and consistent docstrings for functions and classes in any codebase. By leveraging large language models from OpenAI or those supported by Ollama, the extension automates and standardizes the process of writing docstrings. This tool aims to improve documentation quality, reduce manual effort, and improve code maintainability. 
 
 ## Features
 
-Generate docstrings: Automatically generate docstrings for Python, JavaScript, Java, and C++.
+**Generate docstring**: Automatically generate docstrings for Python, JavaScript, Java, C/C++, Typescript, and React.
 
-Customizable models: Choose between OpenAI and Llama-based models for docstring generation.
+![DocStringGenerationPython](images/python_generation.gif)
 
-Style options: Select from various docstring styles such as Google, Javadoc, and more.
+**Customizable models**: Choose between OpenAI and Llama-based models for docstring generation.
+
+![DocStringRegenerationPython](images/python_regeneration.gif)
+
+**Style options**: Select from various docstring styles such as Google, Javadoc, and more.
+
+![DocStringSettings](images/settings.gif)
 
 <!-- Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file. -->
 
@@ -37,7 +43,25 @@ This extension contributes the following settings:
 The extension provides the following settings:
 
 - LLM Model: Select your preferred LLM model (e.g., OpenAI or Ollama).
-- Docstring Style: Choose from predefined styles like Google, NumPy, or Javadoc.
+- Docstring Style: Choose from styles like Google, NumPy, or Javadoc.
+- Temperature: Temperature for LLM.
+
+## Setup
+1. Download the appropriate `.vsix` file.
+2. In VS Code:
+    1. Go to Extensions page
+    2. Click on the <…> at the top right corner of the extensions page
+    3. Click on <Install from VSIX…> 
+    4. Choose the downloaded file in step 1
+3. Set up the chosen LLM (Further instructions below.)
+
+### Ollama
+1. Install Ollama: [Ollama Installation](https://ollama.com/download)
+2. In the terminal, run <ollama run llama3.1>
+3. Close the terminal once its done
+4. Go back to VS Code to start using the extension
+
+[Ollama Setup Video](https://drive.google.com/file/d/1wmaOL-TEaxp7JJLhTJ5AsyUZUy919R0r/view?usp=sharing)
 
 ## Known Issues
 
@@ -49,13 +73,16 @@ No major issues reported yet.
 
 Initial release of DSG extension with basic UI functionality.
 
-### 1.0.1
-
-Fixed UI bug.
-
 ### 1.1.0
 
-Added regenerate docstring and programming language support for Python, JavaScript, Java, and C++.
+Added regenerate docstring and programming language support for Python, JavaScript, Java, and C++. Added customization for LLM and Docstring style.
+
+### 1.1.1
+
+Added programming language support for React, Typescript, and C. Added customization for LLM temperature.
+
+## Acknowledgements
+This project leverages [Ollama](https://ollama.ai) for the logo and as an LLM.
 
 <!-- ---
 

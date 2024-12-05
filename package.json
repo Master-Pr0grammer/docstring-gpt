@@ -1,14 +1,15 @@
 {
   "name": "docstring-gpt",
-  "displayName": "Docstring-GPT",
-  "description": "An extension to automaticially generate docstrings for functions and classes with AI.",
+  "displayName": "DocString Generator",
+  "description": "An extension to automaticially generate docstrings for functions and classes using AI.",
   "icon": "images/icon.png",
-  "version": "0.0.5",
+  "publisher": "DSG Team",
+  "version": "1.1.1",
   "engines": {
     "vscode": "^1.93.0"
   },
   "categories": [
-    "Other"
+    "Other", "Programming Languages", "Machine Learning", "AI", "Chat"
   ],
   "activationEvents": [
     "onLanguage:python"
@@ -87,7 +88,7 @@
           "title": "LLM API key",
           "type": "string",
           "default": "ollama",
-          "markdownDescription": "This is the API key for the LLM service, the default for this is the ollama api key. If you want to use Openai models, you must provide your unique Openai API key here."
+          "markdownDescription": "This is the API key for the LLM service, the default for this is the ollama api key. If you want to use OpenAI models, you must provide your unique OpenAI API key here."
         },
         "Docstring-GPT.llm.model": {
           "title": "LLM model name",
