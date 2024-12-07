@@ -8,9 +8,11 @@ DSG is a VSCode extension that helps programmers generate useful and consistent 
 
 ![DocStringGenerationPython](images/python_generation.gif)
 
-**Customizable models**: Choose between OpenAI and Llama-based models for docstring generation.
+**Regenerate docstrings**: Regenerate docstrings for supported languages.
 
 ![DocStringRegenerationPython](images/python_regeneration.gif)
+
+**Customizable models**: Choose between OpenAI and Llama-based models for docstring generation.
 
 **Style options**: Select from various docstring styles such as Google, Javadoc, and more.
 
@@ -59,9 +61,17 @@ The extension provides the following settings:
 1. Install Ollama: [Ollama Installation](https://ollama.com/download)
 2. In the terminal, run <ollama run llama3.1>
 3. Close the terminal once its done
-4. Go back to VS Code to start using the extension
+4. Update your VS Code Settings (Ollama models are listed in the Ollama Library)
+![VSCodeOllama](images/settings_ollama.png)
 
 [Ollama Setup Video](https://drive.google.com/file/d/1wmaOL-TEaxp7JJLhTJ5AsyUZUy919R0r/view?usp=sharing)
+
+### OpenAI
+1. Visit the [“API keys” section on OpenAI's developer platform](https://platform.openai.com/settings/organization/api-keys)
+2. Create a key
+![OpenAIKey](images/openai_key.png)
+3. Update your VS Code Settings (OpenAI models are listed in the [“Models” section on OpenAI's developer platform](https://platform.openai.com/docs/models/))
+![VSCodeOpenAI](images/settings_openai.png)
 
 ## Known Issues
 
