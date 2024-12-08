@@ -79,6 +79,7 @@ The extension provides the following settings:
 * Double clicking the generate docstring will generate two docstrings at the same time overlaping each other
 * Generate docstring function does not yet work for jupyter notebook
 * Switching file whith chat interface open may not work correctly for edited code
+* If the LLM is too fast, docstring generation may not work correctly
 
 ## Release Notes
 
