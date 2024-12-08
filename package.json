@@ -3,7 +3,7 @@
   "displayName": "DocString Generator",
   "description": "An extension to automaticially generate docstrings for functions and classes using AI.",
   "icon": "images/icon.png",
-  "publisher": "DSG Team",
+  "publisher": "DSG-Team",
   "version": "1.1.1",
   "engines": {
     "vscode": "^1.93.0"
