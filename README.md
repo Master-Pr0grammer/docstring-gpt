@@ -6,17 +6,17 @@ DSG is a VSCode extension that helps programmers generate useful and consistent 
 
 **Generate docstring**: Automatically generate docstrings for Python, JavaScript, Java, C/C++, Typescript, and React.
 
-![DocStringGenerationPython](images/python_generation.gif)
+![DocStringGenerationPython](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/python_generation.gif)
 
 **Regenerate docstrings**: Regenerate docstrings for supported languages.
 
-![DocStringRegenerationPython](images/python_regeneration.gif)
+![DocStringRegenerationPython](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/python_regeneration.gif)
 
 **Customizable models**: Choose between OpenAI and Llama-based models for docstring generation.
 
 **Style options**: Select from various docstring styles such as Google, Javadoc, and more.
 
-![DocStringSettings](images/settings.gif)
+![DocStringSettings](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/settings.gif)
 
 <!-- Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file. -->
 
