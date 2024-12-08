@@ -6,17 +6,17 @@ DSG is a VSCode extension that helps programmers generate useful and consistent 
 
 **Generate docstring**: Automatically generate docstrings for Python, JavaScript, Java, C/C++, Typescript, and React.
 
-![DocStringGenerationPython](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/python_generation.gif)
+![DocStringGenerationPython](images/python_generation.gif)
 
 **Regenerate docstrings**: Regenerate docstrings for supported languages.
 
-![DocStringRegenerationPython](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/python_regeneration.gif)
+![DocStringRegenerationPython](images/python_regeneration.gif)
 
 **Customizable models**: Choose between OpenAI and Llama-based models for docstring generation.
 
 **Style options**: Select from various docstring styles such as Google, Javadoc, and more.
 
-![DocStringSettings](https://github.com/Master-Pr0grammer/docstring-gpt/blob/Beta/images/settings.gif)
+![DocStringSettings](images/settings.gif)
 
 <!-- Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file. -->
 
@@ -58,13 +58,14 @@ The extension provides the following settings:
 3. Set up the chosen LLM (Further instructions below.)
 
 ### Ollama
+![Ollama Setup Video](images/ollama_setup_spedup.gif)
+
 1. Install Ollama: [Ollama Installation](https://ollama.com/download)
 2. In the terminal, run <ollama run llama3.1>
 3. Close the terminal once its done
 4. Update your VS Code Settings (Ollama models are listed in the Ollama Library)
 ![VSCodeOllama](images/settings_ollama.png)
 
-[Ollama Setup Video](https://drive.google.com/file/d/1wmaOL-TEaxp7JJLhTJ5AsyUZUy919R0r/view?usp=sharing)
 
 ### OpenAI
 1. Visit the [“API keys” section on OpenAI's developer platform](https://platform.openai.com/settings/organization/api-keys)
@@ -75,7 +76,9 @@ The extension provides the following settings:
 
 ## Known Issues
 
-No major issues reported yet.
+* Double clicking the generate docstring will generate two docstrings at the same time overlaping each other
+* Generate docstring function does not yet work for jupyter notebook
+* Switching file whith chat interface open may not work correctly for edited code
 
 ## Release Notes
 

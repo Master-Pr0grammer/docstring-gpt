@@ -134,7 +134,7 @@ export class ChatWebView {
                         this.code = new_code;
                         this.all_chats[this.current_file][0] = {
                             role: 'system',
-                            content: 'You are a helpful AI assistant helping a programmer work on their code...'
+                            content: 'You are a helpful AI assistant helping a programmer work on their code. For reference, here is their most recent, updated version of their "' + this.editor.get_document_filename() + '" code for reference (NOTE: changes may have been made since the start of the conversation, again this is the most updated version so previous messages might not agree with this code): ```\n' + this.code + '\n```'
                         };
                         this.all_chats[this.current_file].push({ role: 'user', content: message.text + ['\n\n**[CODE UPDATED]**'] });
                     } else {

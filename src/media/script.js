@@ -3,6 +3,7 @@ const form = document.getElementById('chat-form');
 var isGenerating = false;
 let userScrolled = false;
 
+scrollIfNeeded();
 //document.querySelector('.clear-context').style.display = 'flex';
 
 // Auto-resize textarea
