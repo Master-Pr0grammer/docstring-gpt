@@ -109,7 +109,7 @@ export class Editor {
 
             const num_indent = this.get_num_indent(text);
 
-            var docstring = "";
+            var response = "";
 
             if (!(this.editor.document.languageId in this.language_comments)){
                 console.log('Language Unsupported for Docstring Generation!');
@@ -127,9 +127,10 @@ export class Editor {
                 origional_text_arr = new_text.split('\n');
             }
 
-
+            let docstring:string = '';
             for await (const chunk of generator) {
-                docstring += chunk.choices[0].delta.content;  // Append chunk to docstring
+                response += chunk.choices[0].delta.content;  // Append chunk to docstring
+                docstring = this.
 
                 // Calculate the new range (we assume the docstring is inserted at the start of the selection)
                 const lines =  text.split('\n');
@@ -153,6 +154,16 @@ export class Editor {
 	}
 
     private get_num_indent(text:string):number {
+        /*
+         * Returns the number of leading indentations in the given text.
+         *
+         * This function splits the input text into lines and counts the number of leading
+         * indentations by splitting each line with the current indentation character.
+         *
+         * @param {string} text The input text to analyze.
+         * @returns {number} The number of leading indentations, or 0 if no indentations are found.
+        */
+
         const text_arr = text.split('\n');
 
         var count = 0;

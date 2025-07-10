@@ -69,17 +69,23 @@
     "configuration": {
       "title": "Docstring-GPT",
       "properties": {
-        "Docstring-GPT.systemPrompt": {
+        "Docstring-GPT.docstring.systemPrompt": {
           "title": "System Prompt",
           "type":"string",
           "default": "You are a docstring content generator. You must:\n1. Generate ONLY ONE docstring\n3. Never generate multiple docstring variations\n4. Never include ANY explanatory text or metadata; ONLY include the docstring\n5. Never include the code\n6. Always start at column 0 (no leading spaces/indentation)\n7. If a function already has a docstring, attempt to improve it or correct mistakes\n8. Unless otherwise told to, NEVER use ANY documentation syntax or tags, including but not limited to:\n   - No single line comment markers (///, #, etc.)\n   - No XML tags (<summary>, <param>, <returns>)\n   - No JSDoc tags (@param, @returns)\n   - No restructuredText (:param:, :returns:)\n\nThe content structure is:\n1. Single-line summary\n2. Extended description (if needed)\n3. Parameters/Args section\n4. Returns section\n5. Raises/Throws/Exceptions section (if applicable)\n6. Examples section (if needed)\n\nFormat requirements:\n- Only indent nested content (parameter descriptions, etc.) with 4 spaces\n- Start all sections at column 0\n- Match type hints with language conventions\n- Maintain consistent spacing between sections",
           "markdownDescription": "Specifies the system prompt for Docstring-GPT. It is recomended to keep the default setting, with minor modifications."
         },
-        "Docstring-GPT.documentationSpecification": {
-          "title": "Docstring1 Specification",
+        "Docstring-GPT.docstring.documentationSpecification": {
+          "title": "Docstring Specification",
           "type": "string",
           "default": "Generate a VSCode-compatible docstring following the language-specific format:\n- For Python: Use Google-style format\n- For JavaScript/TypeScript: Use JSDoc-compatible format\n- For C/C++: Use triple-slash compatible format",
           "markdownDescription": "Specifies the specification for the docstrings to follow."
+        },
+        "Docstring-GPT.docstring.documentationWrap": {
+          "title": "Docstring text wrap length",
+          "type": "integer",
+          "default": -1,
+          "markdownDescription": "Specifies the text wrap length for generated docstrings. -1 for no wrapping (default), otherwise enter the number of characters for each line."
         },
         "Docstring-GPT.llm.endpoint": {
           "title": "LLM Endpoint",
@@ -93,17 +99,41 @@
           "default": "ollama",
           "markdownDescription": "This is the API key for the LLM service, the default for this is the ollama api key. If you want to use OpenAI models, you must provide your unique OpenAI API key here."
         },
+        "Docstring-GPT.llm.useOllamaApi": {
+          "title": "Use ollama api",
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Forces extension to use ollama's api over OpenAI, allows for more control over llm if using ollama. However, OpenAI api is more adopted and can be used by any OpenAI API compatible backend."
+        },
         "Docstring-GPT.llm.model": {
           "title": "LLM model name",
           "type": "string",
           "default": "llama3.1",
           "markdownDescription": "This is the name of the model that you would like to use. The default mode is llama3.1 self hosten on ollama. You can change this to any ollama models you have installed or any Openai models you would like."
         },
+        "Docstring-GPT.llm.contentLength": {
+          "title": "Context Length (Ollama only)",
+          "type": "integer",
+          "default": 2048,
+          "markdownDescription": "This is the context length in tokens to be used for ollama models. The larger the context length, the larger the input the model can take, but it also takes up a considerable amount of memory."
+        },
         "Docstring-GPT.advanced.temperature": {
           "title": "LLM Temperature",
           "type": "number",
           "default": 1,
-          "markdownDescription": "Temperature for LLM. The lower the temperature, the less random and better the responses. The higher the temperature, the higher the randomness, and the worse the responses. 0 gives optimal responses, giving the same response every time, and 2 is the recomended temperature upper limit."
+          "markdownDescription": "Temperature for LLM. The lower the temperature, the less random and better the responses. The higher the temperature, the higher the randomness, and the worse the responses. 0 gives optimal responses, giving the same response almost every time, and 2 is the recomended temperature upper limit."
+        },
+        "Docstring-GPT.advanced.beginThinkTag": {
+          "title": "LLM begin thinknig tag",
+          "type": "string",
+          "default": "<think>",
+          "markdownDescription": "If using a reasoning/thinking model, this is the tag the model uses to mark the begining of its thinking proccess. Set to \"null\" to ignore."
+        },
+        "Docstring-GPT.advanced.endThinkTag": {
+          "title": "LLM end thinknig tag",
+          "type": "string",
+          "default": "</think>",
+          "markdownDescription": "If using a reasoning/thinking model, this is the tag the model uses to mark the end of its thinking proccess. Set to \"null\" to ignore."
         }
       }
     }

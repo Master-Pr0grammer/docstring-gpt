@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('activate');
 
 	// Create main objectss
-	const user_LLM = new LLM();
+	let user_LLM = new LLM();
 	const editor = new Editor(vscode.window.activeTextEditor, vscode.window.activeNotebookEditor, context);
 	const chat_webview = new ChatWebView(context, user_LLM, editor);
 
@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Listener for configuration changes
     vscode.workspace.onDidChangeConfiguration(event => {
-        if (event.affectsConfiguration('Docstring-GPT')) {  user_LLM.update_settings();  }
+        if (event.affectsConfiguration('Docstring-GPT')) {  user_LLM = new LLM(); /* reconstruct user LLM with updated settings */  }
     });
 	// -------------------- /\ Helper Functions /\ --------------------
 
